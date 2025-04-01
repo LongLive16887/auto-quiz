@@ -7,6 +7,7 @@ import { persist } from 'zustand/middleware'
 type UserStore = {
 	user: {
 		username?: string
+		full_name?: string
 	}
 	token: string
 	setUser: (val: any) => void

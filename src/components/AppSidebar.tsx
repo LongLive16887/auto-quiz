@@ -13,7 +13,7 @@ import {
 } from './ui/sidebar'
 
 const items = [
-	{ title: 'Shablon Test', url: '/', icon: Lightbulb },
+	{ title: 'Shablon Testlar', url: '/', icon: Lightbulb },
 	{ title: 'Sinov Test', url: '/test', icon: Lightbulb },
 	{ title: 'Fan Testlar', url: '/fan-test', icon: Lightbulb },
 ]
@@ -30,7 +30,7 @@ const AppSidebar = () => {
 								<User size={40} />
 							</div>
 							<div className='flex flex-col justify-center items-center mb-3'>
-								<p className='text-lg font-semibold'>{user.username}</p>
+								<p className='text-lg text-center font-semibold'>{user.full_name}</p>
 							</div>
 						</div>
 						<hr />

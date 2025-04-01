@@ -226,8 +226,8 @@ const AppQuiz = ({ quiz }: AppQuizProps) => {
 						<AccordionItem value='item-1'>
 							<AccordionTrigger>
 								{activeLang === 'ru' && 'Описание'}
-								{activeLang === 'uz' && 'Tavsif'}
-								{activeLang === 'la' && 'Description'}
+								{activeLang === 'uz' && 'Тавсиф'}
+								{activeLang === 'la' && 'Tavsif'}
 							</AccordionTrigger>
 							<AccordionContent>
 								<div

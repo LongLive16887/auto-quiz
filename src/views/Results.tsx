@@ -27,7 +27,7 @@ export const ResultsPage = () => {
 					<p className='text-red-600'>Noto'g'ri javoblar: {incorrectCount}</p>
 					<p className='text-gray-600'>Jami savollar: {total}</p>
 					<p className='text-blue-600 font-bold'>
-						Foiz: {((correctCount / total) * 100 || 0).toFixed(1)}%
+						Foiz: {((correctCount / total) * 100 || 0).toFixed(0)}%
 					</p>
 				</div>
 				<Button onClick={handleClick}>Asosiy menyu</Button>

@@ -14,8 +14,6 @@ import {
 export function FanTestBlock({
 	id,
 	name_uz,
-	name_la,
-	name_ru,
 }: {
 	id: number
 	name_uz: string
@@ -35,20 +33,19 @@ export function FanTestBlock({
 	return (
 		<Dialog open={open} onOpenChange={setOpen}>
 			<DialogTrigger asChild>
-				<div className='flex flex-col items-center p-5 bg-white cursor-pointer gap-4 max-w-[360px] min-h-[300px] w-full border rounded-lg hover:shadow-sm transition'>
-					<p className='text-lg font-semibold'>{id} - Bilet</p>
+				<div className='flex flex-col justify-center items-center p-2 bg-white cursor-pointer gap-4 max-w-[380px] min-h-[300px] w-full border rounded-lg hover:shadow-sm transition'>
 					<p
 						className='text-center'
 						dangerouslySetInnerHTML={{ __html: name_uz }}
 					></p>
-					<p
+					{/* <p
 						className='text-center'
 						dangerouslySetInnerHTML={{ __html: name_la }}
 					></p>
 					<p
 						className='text-center'
 						dangerouslySetInnerHTML={{ __html: name_ru }}
-					></p>
+					></p> */}
 				</div>
 			</DialogTrigger>
 			<DialogContent className='sm:max-w-[425px]'>
