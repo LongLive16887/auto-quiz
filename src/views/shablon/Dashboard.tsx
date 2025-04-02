@@ -1,19 +1,17 @@
-import api from '@/api/axios'
+import { useQuizStore } from '@/store/quiz'
 import { Loader2 } from 'lucide-react'
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { TestBlock } from '../../components/TestBlock'
 import MainLayout from '../../layouts/MainLayout'
 
 const Dashboard = () => {
-	const [testQuantity, setTestQuantity] = useState(0)
+	const { maxQuizCount, setMaxQuizCount } = useQuizStore()
 
 	useEffect(() => {
-		api.get('/api/groups/maxId').then(res => {
-			setTestQuantity(res.data.data.max_group_iD)
-		})
+		setMaxQuizCount()
 	}, [])
 
-	if (!testQuantity) {
+	if (!maxQuizCount) {
 		return (
 			<MainLayout>
 				<Loader2
@@ -27,7 +25,7 @@ const Dashboard = () => {
 	return (
 		<MainLayout>
 			<div className='flex justify-center flex-wrap gap-3.5'>
-				{[...Array(testQuantity)].map((_, index) => (
+				{[...Array(maxQuizCount)].map((_, index) => (
 					<TestBlock id={index + 1} key={index} />
 				))}
 			</div>

@@ -12,12 +12,18 @@ import {
 	DialogTitle,
 } from '@/components/ui/dialog'
 import { Label } from '@/components/ui/label'
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
+import { RadioGroup } from '@/components/ui/radio-group'
 import { useQuizStore } from '@/store/quiz'
 import { Answer, Question } from '@/types'
 import { Loader2 } from 'lucide-react'
 import { useEffect, useState } from 'react'
-import { useBlocker, useNavigate, useParams } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
+import {
+	useBlocker,
+	useLocation,
+	useNavigate,
+	useParams,
+} from 'react-router-dom'
 import { Button } from '../ui/button'
 import Tabs from './Tabs'
 
@@ -27,10 +33,10 @@ type AppQuizProps = {
 
 const AppQuiz = ({ quiz }: AppQuizProps) => {
 	const { id } = useParams()
+	const { i18n, t } = useTranslation()
+	const location = useLocation()
 	const navigate = useNavigate()
 	const {
-		activeLang,
-		setActiveLang,
 		currentQuestionIndex,
 		setCurrentQuestionIndex,
 		userAnswers,
@@ -39,6 +45,8 @@ const AppQuiz = ({ quiz }: AppQuizProps) => {
 		incorrectCount,
 		reset,
 	} = useQuizStore()
+
+	const TypeThemeParam = new URLSearchParams(location.search).get('type')
 
 	const [showConfirm, setShowConfirm] = useState(false)
 	const [showExitConfirm, setShowExitConfirm] = useState(false)
@@ -52,7 +60,7 @@ const AppQuiz = ({ quiz }: AppQuizProps) => {
 		prefix: 'question' | 'question_description' | 'answer',
 		obj: Question | Answer
 	) => {
-		const langKey = `${prefix}_${activeLang}` as keyof typeof obj
+		const langKey = `${prefix}_${i18n.language}` as keyof typeof obj
 		const text = obj[langKey] || ''
 		return { __html: text }
 	}
@@ -86,8 +94,6 @@ const AppQuiz = ({ quiz }: AppQuizProps) => {
 			)
 		}
 	}
-
-
 
 	useEffect(() => {
 		if (quiz.length > 0) {
@@ -127,26 +133,17 @@ const AppQuiz = ({ quiz }: AppQuizProps) => {
 		<div className='flex flex-col h-[calc(100vh-110px)] gap-3.5'>
 			{/* Header */}
 			<div className='flex items-center px-3.5 justify-between flex-wrap'>
-				<p className='text-2xl font-semibold'>{id}-Bilet</p>
-				<div className='flex items-center gap-2'>
-					{['la', 'uz', 'ru'].map(lang => (
-						<Button
-							key={lang}
-							variant={activeLang === lang ? 'default' : 'outline'}
-							onClick={() => setActiveLang(lang)}
-						>
-							{lang === 'la' && 'Latin'}
-							{lang === 'uz' && 'Uzbek'}
-							{lang === 'ru' && 'Russian'}
-						</Button>
-					))}
-				</div>
+				{!TypeThemeParam ? (
+					<p className='text-2xl font-semibold'>
+						{id}-{t('bilet')}
+					</p>
+				) : null}
 				<Button
 					variant='destructive'
-					className='self-center'
+					className='ml-auto'
 					onClick={() => setShowConfirm(true)}
 				>
-					Yakunlash
+					{t('finish')}
 				</Button>
 			</div>
 
@@ -179,41 +176,34 @@ const AppQuiz = ({ quiz }: AppQuizProps) => {
 				{/* Answers */}
 				<div className='question-container w-[500px] bg-white p-3.5 rounded-lg flex flex-col'>
 					<RadioGroup>
-						{currentQuestion.answers.map(answer => {
+						{currentQuestion.answers.map((answer, i) => {
 							const isSelected =
 								userAnswers[currentQuestion.id]?.answerId === answer.id
 							const isAnswered = !!userAnswers[currentQuestion.id]
-							const isCorrectAnswer = currentQuestion.answers.some(
-								a => a.is_correct && a.id === answer.id
-							)
+							const isCorrectAnswer = answer.is_correct
+							const isUserWrongAnswer =
+								isSelected && !isCorrectAnswer && isAnswered
+							const isCorrectHighlight = isCorrectAnswer && isAnswered
 
 							return (
 								<div
 									key={answer.id}
-									className={`flex items-start space-x-2 p-2 rounded ${
-										isAnswered
-											? isCorrectAnswer
-												? 'bg-green-50 border border-green-200'
-												: 'bg-red-50 border border-red-200'
-											: ''
-									} ${isSelected ? 'ring-2 ring-blue-500' : ''}`}
+									className={`flex items-center space-x-2 p-2 rounded cursor-pointer
+									${!isAnswered ? 'hover:bg-gray-100' : ''} 
+									${isUserWrongAnswer ? 'bg-red-50 border border-red-200' : ''} 
+									${isCorrectHighlight ? 'bg-green-50 border border-green-200' : ''} 
+									${isSelected ? 'ring-2 ring-blue-500' : ''}
+								`}
+									onClick={() => handleAnswerSelect(answer)}
 								>
-									<RadioGroupItem
-										value={answer.id.toString()}
-										id={`answer-${answer.id}`}
-										checked={isSelected}
-										onClick={() => handleAnswerSelect(answer)}
-										disabled={isAnswered}
-									/>
-									<Label htmlFor={`answer-${answer.id}`} className='flex-1'>
+									<p className='font-semibold leading-4'>F{i + 1}</p>
+									<Label className='flex-1'>
 										<div
 											dangerouslySetInnerHTML={getTranslationHTML(
 												'answer',
 												answer
 											)}
-											className={
-												isAnswered && !isCorrectAnswer ? 'text-red-600' : ''
-											}
+											className={isUserWrongAnswer ? 'text-red-600' : ''}
 										/>
 									</Label>
 								</div>
@@ -222,12 +212,17 @@ const AppQuiz = ({ quiz }: AppQuizProps) => {
 					</RadioGroup>
 
 					{/* Question Description */}
-					<Accordion type='single' collapsible className='w-full mt-auto'>
+					<Accordion
+						type='single'
+						disabled={!userAnswers[currentQuestion.id]}
+						collapsible
+						className='w-full mt-auto'
+					>
 						<AccordionItem value='item-1'>
 							<AccordionTrigger>
-								{activeLang === 'ru' && 'Описание'}
-								{activeLang === 'uz' && 'Тавсиф'}
-								{activeLang === 'la' && 'Tavsif'}
+								{i18n.language === 'ru' && 'Описание'}
+								{i18n.language === 'uz' && 'Тавсиф'}
+								{i18n.language === 'la' && 'Tavsif'}
 							</AccordionTrigger>
 							<AccordionContent>
 								<div
@@ -252,14 +247,14 @@ const AppQuiz = ({ quiz }: AppQuizProps) => {
 			<Dialog open={showConfirm} onOpenChange={setShowConfirm}>
 				<DialogContent>
 					<DialogHeader>
-						<DialogTitle>Testni yakunlashni istaysizmi?</DialogTitle>
+						<DialogTitle>{t('finish_test')}?</DialogTitle>
 					</DialogHeader>
 					<DialogFooter className='flex justify-center gap-2'>
 						<Button onClick={handleFinishTest} variant='destructive'>
-							Ha
+							{t('yes')}
 						</Button>
 						<Button variant='outline' onClick={() => setShowConfirm(false)}>
-							Yo'q
+							{t('no')}
 						</Button>
 					</DialogFooter>
 				</DialogContent>
@@ -269,17 +264,17 @@ const AppQuiz = ({ quiz }: AppQuizProps) => {
 			<Dialog open={showExitConfirm} onOpenChange={setShowExitConfirm}>
 				<DialogContent>
 					<DialogHeader>
-						<DialogTitle>Testni yakunlashni istaysizmi?</DialogTitle>
+						<DialogTitle>{t('finish_test')}?</DialogTitle>
 					</DialogHeader>
 					<DialogFooter className='flex justify-center gap-2'>
 						<Button
 							variant='destructive'
 							onClick={() => handleExitConfirm(true)}
 						>
-							Ha
+							{t('yes')}
 						</Button>
 						<Button variant='outline' onClick={() => handleExitConfirm(false)}>
-							Davom etish
+							{t('no')}
 						</Button>
 					</DialogFooter>
 				</DialogContent>

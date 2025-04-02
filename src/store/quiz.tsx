@@ -6,7 +6,7 @@ import { persist } from 'zustand/middleware'
 type QuizStore = {
 	quiz: Question[]
 	loadQuiz: (id: number) => void
-  loadFanQuiz: (id: number) => void
+	loadFanQuiz: (id: number) => void
 	activeLang: string
 	setActiveLang: (lang: string) => void
 	currentQuestionIndex: number
@@ -20,6 +20,8 @@ type QuizStore = {
 		isCorrect: boolean
 	) => void
 	reset: (clearQuiz?: boolean) => void
+	maxQuizCount: number
+	setMaxQuizCount: () => void
 }
 
 export const useQuizStore = create<QuizStore>()(
@@ -31,25 +33,29 @@ export const useQuizStore = create<QuizStore>()(
 			userAnswers: {},
 			correctCount: 0,
 			incorrectCount: 0,
+			maxQuizCount: 0,
 			loadQuiz: id => {
 				api
 					.get(`/api/v1/question?groupId=${id}&page=1073741824&size=1073741824`)
 					.then(res => {
 						set({ quiz: res.data.data.results })
 					})
-					.catch(error => {
-						console.error('Error loading quiz:', error)
-					})
+					.catch()
 			},
-      loadFanQuiz: id => {
+			loadFanQuiz: id => {
 				api
-					.get(`/api/v1/question?lessonId=${id}&page=1073741824&size=1073741824`)
+					.get(
+						`/api/v1/question?lessonId=${id}&page=1073741824&size=1073741824`
+					)
 					.then(res => {
 						set({ quiz: res.data.data.results })
 					})
-					.catch(error => {
-						console.error('Error loading quiz:', error)
-					})
+					.catch()
+			},
+			setMaxQuizCount: () => {
+				api.get('/api/groups/maxId').then(res => {
+					set({ maxQuizCount: res.data.data.max_group_iD })
+				})
 			},
 
 			setActiveLang: lang => set({ activeLang: lang }),
@@ -65,14 +71,14 @@ export const useQuizStore = create<QuizStore>()(
 						? state.incorrectCount + 1
 						: state.incorrectCount,
 				})),
-        reset: (clearQuiz = false) =>
-          set(state => ({
-            quiz: clearQuiz ? [] : state.quiz, 
-            userAnswers: {},
-            correctCount: 0,
-            incorrectCount: 0,
-            currentQuestionIndex: 0,
-          })),
+			reset: (clearQuiz = false) =>
+				set(state => ({
+					quiz: clearQuiz ? [] : state.quiz,
+					userAnswers: {},
+					correctCount: 0,
+					incorrectCount: 0,
+					currentQuestionIndex: 0,
+				})),
 		}),
 		{
 			name: 'Quiz',
@@ -81,6 +87,7 @@ export const useQuizStore = create<QuizStore>()(
 				activeLang: state.activeLang,
 				correctCount: state.correctCount,
 				incorrectCount: state.incorrectCount,
+				maxQuizCount: state.maxQuizCount,
 			}),
 		}
 	)

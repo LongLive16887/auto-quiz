@@ -10,7 +10,7 @@ const Tabs = ({ quantity, onTabChange }: {
   const getButtonVariant = (index: number) => {
     const answer = userAnswers[quiz[index]?.id]
     if (!answer) return 'outline'
-    return answer.isCorrect ? 'succes' : 'destructive'
+    return answer.isCorrect ? 'succes' : 'error'
   }
 
   return (

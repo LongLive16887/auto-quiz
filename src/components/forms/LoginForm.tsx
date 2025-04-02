@@ -21,6 +21,7 @@ const LoginForm = () => {
 	const { authUser } = useUserStore()
 	const navigate = useNavigate()
 	const [loading, setLoading] = useState(false)
+	
 
 	const form = useForm<z.infer<typeof loginShema>>({
 		resolver: zodResolver(loginShema),
@@ -39,6 +40,15 @@ const LoginForm = () => {
 			})
 			.catch(() => {
 				setLoading(false)
+				form.setError('username', {
+					type: 'manual',
+					message: "Notog'ri login yoki parol",
+				})
+				form.setError('password', {
+					type: 'manual',
+					message: "Notog'ri login yoki parol",
+				})
+
 			})
 	}
 

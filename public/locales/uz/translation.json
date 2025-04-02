@@ -1,0 +1,19 @@
+{
+	"shablon_test": "Шаблон Тестлар",
+	"sinov_test": "Синов Тест",
+	"theme_test": "Мавзулаштирилган Тестлар",
+	"bilet": "Билет",
+	"start": "Бошлаш",
+	"start_test": "Тест бошлаш",
+	"back": "Орқага",
+	"test_results": "Тест натижалари",
+	"right_answers": "Тўғри жавоблар",
+  "percent": "Фоиз",
+	"incorrect_answers": "Нотўғри жавоблар",
+	"all_questions": "Жами саволлар",
+	"main_menu": "Асосий меню",
+	"finish": "Якунлаш",
+	"finish_test": "Тестни якунлашни истайсизми",
+	"yes": "Ҳа",
+	"no": "Йўқ"
+}

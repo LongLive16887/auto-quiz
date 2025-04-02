@@ -37,7 +37,7 @@ export const useUserStore = create<UserStore>()(
 					Cookies.set('token', token, { expires: 1, path: '/' })
 					set({ token, user: res.data.data.user })
 				} catch (error) {
-					console.error(error)
+					throw error
 				}
 			},
 			lougoutUser: () => {

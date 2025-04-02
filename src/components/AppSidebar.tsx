@@ -1,3 +1,4 @@
+import { useQuizStore } from '@/store/quiz'
 import { useUserStore } from '@/store/user'
 import { Lightbulb, User } from 'lucide-react'
 import {
@@ -11,15 +12,19 @@ import {
 	SidebarMenuButton,
 	SidebarMenuItem,
 } from './ui/sidebar'
+import { useTranslation } from 'react-i18next'
 
-const items = [
-	{ title: 'Shablon Testlar', url: '/', icon: Lightbulb },
-	{ title: 'Sinov Test', url: '/test', icon: Lightbulb },
-	{ title: 'Fan Testlar', url: '/fan-test', icon: Lightbulb },
-]
 
 const AppSidebar = () => {
+	const { maxQuizCount } = useQuizStore()
+	const { t } = useTranslation() 
 	const { user } = useUserStore()
+	const items = [
+		{ title: `${t('shablon_test')} (${maxQuizCount})`, url: '/', icon: Lightbulb },
+		{ title: `${t('sinov_test')} (20/50)`, url: '/test', icon: Lightbulb },
+		{ title: t('theme_test'), url: '/fan-test', icon: Lightbulb },
+	]
+
 	return (
 		<Sidebar>
 			<SidebarHeader>
@@ -30,7 +35,9 @@ const AppSidebar = () => {
 								<User size={40} />
 							</div>
 							<div className='flex flex-col justify-center items-center mb-3'>
-								<p className='text-lg text-center font-semibold'>{user.full_name}</p>
+								<p className='text-lg text-center font-semibold'>
+									{user.full_name}
+								</p>
 							</div>
 						</div>
 						<hr />

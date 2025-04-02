@@ -1,0 +1,19 @@
+{
+	"shablon_test": "Shablon Testlar",
+	"sinov_test": "Sinov Test",
+	"theme_test": "Mavzulashtirilgan Testlar",
+	"bilet": "Bilet",
+	"start": "Boshlash",
+	"start_test": "Test boshlash",
+	"back": "Orqaga",
+	"test_results": "Test natijalari",
+	"right_answers": "To'g'ri javoblar",
+	"percent": "Foiz",
+	"incorrect_answers": "Noto'g'ri javoblar",
+	"all_questions": "Jami savollar",
+	"main_menu": "Asosiy menyu",
+	"finish": "Yakunlash",
+	"finish_test": "Testni yakunlashni istaysizmi",
+	"yes": "Ha",
+	"no": "Yo'q"
+}
