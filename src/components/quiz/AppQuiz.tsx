@@ -190,8 +190,8 @@ const AppQuiz = ({ quiz }: AppQuizProps) => {
 									key={answer.id}
 									className={`flex items-center space-x-2 p-2 rounded cursor-pointer
 									${!isAnswered ? 'hover:bg-gray-100' : ''} 
-									${isUserWrongAnswer ? 'bg-red-50 border border-red-200' : ''} 
-									${isCorrectHighlight ? 'bg-green-50 border border-green-200' : ''} 
+									${isUserWrongAnswer ? 'bg-red-500 border border-red-200' : ''} 
+									${isCorrectHighlight ? 'bg-green-400 border border-green-400' : ''} 
 									${isSelected ? 'ring-2 ring-blue-500' : ''}
 								`}
 									onClick={() => handleAnswerSelect(answer)}
@@ -203,7 +203,6 @@ const AppQuiz = ({ quiz }: AppQuizProps) => {
 												'answer',
 												answer
 											)}
-											className={isUserWrongAnswer ? 'text-red-600' : ''}
 										/>
 									</Label>
 								</div>

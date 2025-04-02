@@ -8,7 +8,7 @@ i18n
   .use(LanguageDetector) // Автоматически определяет язык
   .use(initReactI18next) // Подключаем к React
   .init({
-    fallbackLng: "ru", // Язык по умолчанию
+    fallbackLng: "uz", // Язык по умолчанию
     debug: true,
     interpolation: {
       escapeValue: false, // Отключаем экранирование HTML

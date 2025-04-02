@@ -24,7 +24,9 @@ const AppNav = () => {
 		<div className='flex items-center justify-between p-3.5 bg-white rounded-lg'>
 			<div className='flex items-center gap-3'>
 				<SidebarTrigger />
-				<div className='flex items-center'>
+			</div>
+			<div className='flex items-center gap-3.5'>
+			<div className='flex gap-2 items-center'>
 					<a
 						className='cursor-pointer'
 						href='https://www.instagram.com/avtotest_begzod/'
@@ -42,11 +44,11 @@ const AppNav = () => {
 						<img className='w-8' src='telegram.svg' alt='' />
 					</a>
 				</div>
-			</div>
-			<div className='flex items-center gap-3.5'>
-				<Select
-					onValueChange={value => i18n.changeLanguage(value)}
-					defaultValue={i18n.language}
+			<Select
+					value={i18n.language}  // Используйте value вместо defaultValue
+					onValueChange={value => {
+						i18n.changeLanguage(value);  // Меняем язык при выборе
+					}}
 				>
 					<SelectTrigger className='w-[110px]'>
 						<SelectValue placeholder='Выбери язык' />
