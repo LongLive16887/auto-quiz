@@ -192,7 +192,7 @@ const AppQuiz = ({ quiz }: AppQuizProps) => {
 									${!isAnswered ? 'hover:bg-gray-100' : ''} 
 									${isUserWrongAnswer ? 'bg-red-500 border border-red-200' : ''} 
 									${isCorrectHighlight ? 'bg-green-400 border border-green-400' : ''} 
-									${isSelected ? 'ring-2 ring-blue-500' : ''}
+									${isSelected ? 'ring-2 ring-blue-500 border-none' : ''}
 								`}
 									onClick={() => handleAnswerSelect(answer)}
 								>
