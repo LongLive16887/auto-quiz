@@ -70,10 +70,10 @@ export const useQuizStore = create<QuizStore>()(
 					.get(`/api/v1/user/statistics?type=${theme ? 100 : 102}`)
 					.then(res => {
 						const { data } = res.data
-						set({
+						set(state => ({
 							statistics: data,
-							maxQuizCount: data.length,
-						})
+							maxQuizCount: theme ? state.maxQuizCount : data.length, 
+						}))
 					})
 					.catch(error => {
 						console.error('Error fetching statistics:', error)
