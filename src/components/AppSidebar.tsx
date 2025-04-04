@@ -1,6 +1,7 @@
 import { useQuizStore } from '@/store/quiz'
 import { useUserStore } from '@/store/user'
 import { Lightbulb, User } from 'lucide-react'
+import { useTranslation } from 'react-i18next'
 import {
 	Sidebar,
 	SidebarContent,
@@ -12,30 +13,32 @@ import {
 	SidebarMenuButton,
 	SidebarMenuItem,
 } from './ui/sidebar'
-import { useTranslation } from 'react-i18next'
-
 
 const AppSidebar = () => {
 	const { maxQuizCount } = useQuizStore()
-	const { t } = useTranslation() 
+	const { t } = useTranslation()
 	const { user } = useUserStore()
 	const items = [
-		{ title: `${t('shablon_test')} (${maxQuizCount})`, url: '/', icon: Lightbulb },
+		{
+			title: `${t('shablon_test')} (${maxQuizCount})`,
+			url: '/',
+			icon: Lightbulb,
+		},
 		{ title: `${t('sinov_test')} (20/50)`, url: '/test', icon: Lightbulb },
 		{ title: t('theme_test'), url: '/fan-test', icon: Lightbulb },
 	]
 
 	return (
-		<Sidebar>
+		<Sidebar variant='floating'>
 			<SidebarHeader>
 				<SidebarMenu>
 					<SidebarMenuItem>
 						<div className='flex flex-col items-center gap-2 justify-center'>
-							<div className='w-[80px] h-[80px] flex items-center justify-center bg-gray-50 rounded-full'>
-								<User size={40} />
+							<div className='w-[80px] h-[80px] flex items-center justify-center bg-primary rounded-full'>
+								<User color='white' size={40} />
 							</div>
 							<div className='flex flex-col justify-center items-center mb-3'>
-								<p className='text-lg text-center font-semibold'>
+								<p className='text-lg text-center font-semibold text-white'>
 									{user.full_name}
 								</p>
 							</div>
@@ -59,7 +62,7 @@ const AppSidebar = () => {
 										}
 										asChild
 									>
-										<a href={item.url} className='font-semibold text-lg'>
+										<a href={item.url} className='font-semibold text-lg text-white'>
 											<item.icon size={30} />
 											<span>{item.title}</span>
 										</a>
@@ -75,7 +78,11 @@ const AppSidebar = () => {
 				<SidebarMenu>
 					<SidebarMenuItem>
 						<div className='flex justify-center'>
-							<img className='w-36 h-36 object-cover' src='/logo.png' alt='' />
+							<img
+								className='w-40 h-40 object-cover rounded-full bg-white'
+								src='/logo.png'
+								alt=''
+							/>
 						</div>
 					</SidebarMenuItem>
 				</SidebarMenu>

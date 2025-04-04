@@ -1,6 +1,10 @@
+import { Badge } from '@/components/ui/badge'
 import { useQuizStore } from '@/store/quiz'
+import { BlockData } from '@/types'
+import { Check, X } from 'lucide-react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import 'react-rater/lib/react-rater.css'
 import { useNavigate } from 'react-router-dom'
 import { Button } from './ui/button'
 import {
@@ -12,7 +16,7 @@ import {
 	DialogTrigger,
 } from './ui/dialog'
 
-export function TestBlock({ id }: { id: number }) {
+export function TestBlock({ data }: { data: BlockData }) {
 	const [open, setOpen] = useState(false)
 	const { t } = useTranslation()
 	const navigate = useNavigate()
@@ -20,17 +24,28 @@ export function TestBlock({ id }: { id: number }) {
 
 	const handleStartTest = () => {
 		setOpen(false)
-		loadQuiz(id)
-		navigate(`/template/${id}`)
+		loadQuiz(data.id)
+		navigate(`/template/${data.id}`)
 	}
 
 	return (
 		<Dialog open={open} onOpenChange={setOpen}>
 			<DialogTrigger asChild>
-				<div className='flex flex-col items-center py-10 bg-white cursor-pointer gap-2 max-w-[160px] w-full rounded-lg border hover:shadow-sm transition'>
-					<p className='text-lg'>
-						{id} - {t('bilet')}
+				<div className='flex flex-col relative items-center py-10 bg-white/30 backdrop-blur-md cursor-pointer gap-2 max-w-[150px] w-full rounded-lg border hover:shadow-sm transition'>
+					<p className='text-lg text-white'>
+						{data.id} - {t('bilet')}
 					</p>
+					{data.correct_answer !== 0 && data.wrong_answer !== 0 ? (
+						<div className='flex items-center gap-1 absolute top-1 right-1'>
+							<Badge variant='succes'>
+								<Check size={15} /> {data.wrong_answer}
+							</Badge>
+
+							<Badge variant='error'>
+								<X size={15} /> {data.wrong_answer}
+							</Badge>
+						</div>
+					) : null}
 				</div>
 			</DialogTrigger>
 			<DialogContent className='sm:max-w-[425px]'>

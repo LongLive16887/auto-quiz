@@ -91,7 +91,7 @@ const LoginForm = () => {
 					disabled={loading}
 				>
 					Kirish
-					{loading ? <Loader2 className='animate-spin' /> : <LogIn />}
+					{loading ? <Loader2 color='white' className='animate-spin' /> : <LogIn />}
 				</Button>
 			</form>
 		</Form>

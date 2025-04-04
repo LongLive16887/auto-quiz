@@ -1,23 +1,21 @@
-import api from '@/api/axios'
 import { FanTestBlock } from '@/components/FanTestBlock'
-import { FanTestData } from '@/types'
+import { useQuizStore } from '@/store/quiz'
 import { Loader2 } from 'lucide-react'
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import MainLayout from '../../layouts/MainLayout'
 
 const FanTestDashboard = () => {
-	const [fanTestData, setFanTestData] = useState<FanTestData[]>([])
+	const { statistics, setStatistics } = useQuizStore()
 
 	useEffect(() => {
-		api.get('/api/groups?type_id=100').then(res => {
-			setFanTestData(res.data.data)
-		})
+		setStatistics(true)
 	}, [])
 
-	if (!fanTestData.length) {
+	if (!statistics.length) {
 		return (
 			<MainLayout>
 				<Loader2
+					color='white'
 					size={70}
 					className='animate-spin h-[calc(100vh-150px)] mx-auto'
 				/>
@@ -28,14 +26,8 @@ const FanTestDashboard = () => {
 	return (
 		<MainLayout>
 			<div className='flex justify-center flex-wrap gap-3.5'>
-				{fanTestData.map(test => (
-					<FanTestBlock
-						key={test.id}
-						id={test.id}
-						name_uz={test.name_uz}
-						name_la={test.name_la}
-						name_ru={test.name_ru}
-					/>
+				{statistics.map(test => (
+					<FanTestBlock key={test.id} data={test} />
 				))}
 			</div>
 		</MainLayout>

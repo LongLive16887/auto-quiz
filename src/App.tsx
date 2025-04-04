@@ -5,6 +5,9 @@ import FanTestDashboard from './views/fan-test/FanTestDashboard'
 import { ResultsPage } from './views/Results'
 import Dashboard from './views/shablon/Dashboard'
 import TemplateTest from './views/shablon/TemplateTest'
+import SinovTestDashboard from './views/sinov-test/SinovTestDashboard'
+
+
 
 const router = createBrowserRouter([
 	{
@@ -26,6 +29,10 @@ const router = createBrowserRouter([
 			{
 				path: '/template/:id',
 				element: <TemplateTest />,
+			},
+			{
+				path: '/test',
+				element: <SinovTestDashboard />,
 			},
 			{
 				path: '/fan-test',

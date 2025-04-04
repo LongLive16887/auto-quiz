@@ -5,16 +5,17 @@ import { TestBlock } from '../../components/TestBlock'
 import MainLayout from '../../layouts/MainLayout'
 
 const Dashboard = () => {
-	const { maxQuizCount, setMaxQuizCount } = useQuizStore()
+	const { statistics, setStatistics } = useQuizStore()
 
 	useEffect(() => {
-		setMaxQuizCount()
+		setStatistics()
 	}, [])
 
-	if (!maxQuizCount) {
+	if (!statistics.length) {
 		return (
 			<MainLayout>
 				<Loader2
+				color='white'
 					size={70}
 					className='animate-spin h-[calc(100vh-150px)] mx-auto'
 				/>
@@ -25,9 +26,12 @@ const Dashboard = () => {
 	return (
 		<MainLayout>
 			<div className='flex justify-center flex-wrap gap-3.5'>
-				{[...Array(maxQuizCount)].map((_, index) => (
-					<TestBlock id={index + 1} key={index} />
+				{statistics.map((item, index) => (
+					<TestBlock data={item} key={index} />
 				))}
+			</div>
+			<div>
+
 			</div>
 		</MainLayout>
 	)

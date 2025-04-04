@@ -6,7 +6,7 @@ const api = axios.create({
   baseURL: "https://backend.avtotest-begzod.uz/",
   headers: { "Content-Type": "application/json" },
 });
-
+//https://backend.avtotest-begzod.uz/avtotest/
 api.interceptors.request.use(config => {
   const token = useUserStore.getState().token
   

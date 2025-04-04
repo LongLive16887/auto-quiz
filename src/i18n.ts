@@ -1,18 +1,28 @@
 import i18n from 'i18next'
 import HttpBackend from 'i18next-http-backend'
 import { initReactI18next } from 'react-i18next'
+import LanguageDetector from 'i18next-browser-languagedetector'
 
 i18n
-	.use(HttpBackend) // Подключаем загрузку переводов
-	.use(initReactI18next) // Подключаем к React
+	.use(HttpBackend) 
+	.use(initReactI18next) 
+	.use(LanguageDetector) 
 	.init({
-		fallbackLng: 'la', // Язык по умолчанию
+		fallbackLng: 'la', 
+		lng: 'la',
 		debug: true,
 		interpolation: {
-			escapeValue: false, // Отключаем экранирование HTML
+			escapeValue: false, 
 		},
 		backend: {
-			loadPath: '/locales/{{lng}}/translation.json', // Где лежат файлы переводов
+			loadPath: '/locales/{{lng}}/translation.json', 
+		},
+		react: {
+			useSuspense: false, 
+		},
+		detection: {
+			order: ['localStorage', 'navigator'], 
+			caches: ['localStorage'], 
 		},
 	})
 

@@ -1,7 +1,10 @@
 import { useQuizStore } from '@/store/quiz'
+import { BlockData } from '@/types'
+import { Check, X } from 'lucide-react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
+import { Badge } from './ui/badge'
 import { Button } from './ui/button'
 import {
 	Dialog,
@@ -12,17 +15,7 @@ import {
 	DialogTrigger,
 } from './ui/dialog'
 
-export function FanTestBlock({
-	id,
-	name_uz,
-	name_la,
-	name_ru,
-}: {
-	id: number
-	name_uz: string
-	name_la: string
-	name_ru: string
-}) {
+export function FanTestBlock({ data }: { data: BlockData }) {
 	const [open, setOpen] = useState(false)
 	const navigate = useNavigate()
 	const { loadFanQuiz } = useQuizStore()
@@ -31,30 +24,41 @@ export function FanTestBlock({
 	const getLanguageName = () => {
 		switch (i18n.language) {
 			case 'uz':
-				return name_uz
+				return data.name_uz
 			case 'la':
-				return name_la
+				return data.name_la
 			case 'ru':
-				return name_ru
+				return data.name_ru
 			default:
-				return name_uz
+				return data.name_uz
 		}
 	}
 
 	const handleStartTest = () => {
 		setOpen(false)
-		loadFanQuiz(id)
-		navigate(`/template/${id}?type=theme`)
+		loadFanQuiz(data.id)
+		navigate(`/template/${data.id}?type=theme`)
 	}
 
 	return (
 		<Dialog open={open} onOpenChange={setOpen}>
 			<DialogTrigger asChild>
-				<div className='flex flex-col justify-center items-center p-2 bg-white cursor-pointer gap-4 max-w-[380px] min-h-[300px] w-full border rounded-lg hover:shadow-sm transition'>
+				<div className='flex relative flex-col justify-center items-center p-2 bg-white/30 backdrop-blur-md text-white cursor-pointer gap-4 max-w-[370px] min-h-[300px] w-full border rounded-lg hover:shadow-sm transition'>
 					<p
 						className='text-center'
 						dangerouslySetInnerHTML={{ __html: getLanguageName() }}
 					></p>
+					{data.correct_answer !== 0 && data.wrong_answer !== 0 ? (
+						<div className='flex items-center gap-1 absolute top-1 right-1'>
+							<Badge variant='succes'>
+								<Check size={15} /> {data.wrong_answer}
+							</Badge>
+
+							<Badge variant='error'>
+								<X size={15} /> {data.wrong_answer}
+							</Badge>
+						</div>
+					) : null}
 				</div>
 			</DialogTrigger>
 			<DialogContent className='sm:max-w-[425px]'>

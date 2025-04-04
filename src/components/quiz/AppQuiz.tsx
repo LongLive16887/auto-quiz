@@ -1,3 +1,4 @@
+import api from '@/api/axios'
 import {
 	Accordion,
 	AccordionContent,
@@ -36,6 +37,8 @@ const AppQuiz = ({ quiz }: AppQuizProps) => {
 	const { i18n, t } = useTranslation()
 	const location = useLocation()
 	const navigate = useNavigate()
+	const TypeThemeParam = new URLSearchParams(location.search).get('type')
+
 	const {
 		currentQuestionIndex,
 		setCurrentQuestionIndex,
@@ -46,16 +49,38 @@ const AppQuiz = ({ quiz }: AppQuizProps) => {
 		reset,
 	} = useQuizStore()
 
-	const TypeThemeParam = new URLSearchParams(location.search).get('type')
-
+	// States
 	const [showConfirm, setShowConfirm] = useState(false)
 	const [showExitConfirm, setShowExitConfirm] = useState(false)
+	const [openAccordion, setOpenAccordion] = useState<string | undefined>(
+		undefined
+	)
 
 	const blocker = useBlocker(
 		() => Object.keys(userAnswers).length < quiz.length
 	)
 	const currentQuestion = quiz[currentQuestionIndex]
 
+	// Effects
+	useEffect(() => {
+		if (quiz.length > 0) {
+			setCurrentQuestionIndex(0)
+			reset()
+		}
+	}, [quiz])
+
+	useEffect(() => {
+		setOpenAccordion(undefined)
+	}, [currentQuestionIndex])
+
+	useEffect(() => {
+		if (blocker.state === 'blocked') {
+			setShowExitConfirm(true)
+			blocker.reset()
+		}
+	}, [blocker.state])
+
+	// Helper Functions
 	const getTranslationHTML = (
 		prefix: 'question' | 'question_description' | 'answer',
 		obj: Question | Answer
@@ -70,60 +95,39 @@ const AppQuiz = ({ quiz }: AppQuizProps) => {
 		submitAnswer(currentQuestion.id, answer.id, answer.is_correct)
 	}
 
+	const submitQuizData = async () => {
+		const type = TypeThemeParam ? 100 : 102
+		const requestData = {
+			type,
+			external_id: id,
+			correct_answer: correctCount,
+			wrong_answer: incorrectCount,
+			skipped_answer: quiz.length - Object.keys(userAnswers).length,
+		}
+
+		await api.post('/api/v1/user/statistics', requestData).then(res => {
+			navigate('/results', { state: { data: res.data.data } })
+		})
+	}
+
 	const handleFinishTest = () => {
 		reset(true)
-		setTimeout(
-			() =>
-				navigate('/results', {
-					state: { correctCount, incorrectCount, total: quiz.length },
-				}),
-			0
-		)
+		submitQuizData()
 	}
 
 	const handleExitConfirm = (confirmed: boolean) => {
 		setShowExitConfirm(false)
 		if (confirmed) {
 			reset(true)
-			setTimeout(
-				() =>
-					navigate('/results', {
-						state: { correctCount, incorrectCount, total: quiz.length },
-					}),
-				0
-			)
+			submitQuizData()
 		}
 	}
 
-	useEffect(() => {
-		if (quiz.length > 0) {
-			setCurrentQuestionIndex(0)
-			reset()
-		}
-	}, [quiz])
-
-	useEffect(() => {
-		if (blocker.state === 'blocked') {
-			setShowExitConfirm(true)
-			blocker.reset()
-		}
-	}, [blocker.state])
-
-	useEffect(() => {
-		const handlePopState = () => {
-			if (Object.keys(userAnswers).length < quiz.length) {
-				setShowExitConfirm(true)
-				navigate(location.pathname, { replace: true })
-			}
-		}
-
-		window.addEventListener('popstate', handlePopState)
-		return () => window.removeEventListener('popstate', handlePopState)
-	}, [location.pathname])
-
+	// Loading State
 	if (!currentQuestion)
 		return (
 			<Loader2
+				color='white'
 				size={70}
 				className='animate-spin h-[calc(100vh-150px)] mx-auto'
 			/>
@@ -134,7 +138,7 @@ const AppQuiz = ({ quiz }: AppQuizProps) => {
 			{/* Header */}
 			<div className='flex items-center px-3.5 justify-between flex-wrap'>
 				{!TypeThemeParam ? (
-					<p className='text-2xl font-semibold'>
+					<p className='text-2xl font-semibold text-white'>
 						{id}-{t('bilet')}
 					</p>
 				) : null}
@@ -148,9 +152,9 @@ const AppQuiz = ({ quiz }: AppQuizProps) => {
 			</div>
 
 			{/* Question */}
-			<div className='bg-white p-3.5 rounded-lg'>
+			<div className='bg-white/30 backdrop-blur-md border p-3.5 rounded-lg'>
 				<div
-					className='w-full text-center'
+					className='w-full text-white text-center'
 					dangerouslySetInnerHTML={getTranslationHTML(
 						'question',
 						currentQuestion
@@ -159,22 +163,25 @@ const AppQuiz = ({ quiz }: AppQuizProps) => {
 			</div>
 
 			{/* Main Content */}
-			<div className='flex-1 flex flex-wrap gap-3.5 items-stretch'>
+			<div className='flex-1 flex flex-wrap gap-3.5 items-start'>
 				{/* Media */}
-				<div className='photo-container flex-1 bg-white rounded-lg flex items-center justify-center min-h-[250px]'>
+				<div className='flex-1 rounded-lg flex min-h-[250px] overflow-hidden'>
 					{currentQuestion.media?.trim() ? (
 						<img
 							src={currentQuestion.media}
 							alt='Question media'
-							className='max-h-[600px] max-w-full object-contain'
+							className='h-full max-w-full mx-auto object-contain'
 						/>
 					) : (
-						<img className='w-[400px] h-[400px]' src='/logo.png' />
+						<img
+							className='mt-14 h-full bg-white rounded-full w-[400px] mx-auto object-contain'
+							src='/logo.png'
+						/>
 					)}
 				</div>
 
 				{/* Answers */}
-				<div className='question-container w-[500px] bg-white p-3.5 rounded-lg flex flex-col'>
+				<div className='w-[500px]  px-3.5 rounded-lg flex flex-col'>
 					<RadioGroup>
 						{currentQuestion.answers.map((answer, i) => {
 							const isSelected =
@@ -188,15 +195,18 @@ const AppQuiz = ({ quiz }: AppQuizProps) => {
 							return (
 								<div
 									key={answer.id}
-									className={`flex items-center space-x-2 p-2 rounded cursor-pointer
-									${!isAnswered ? 'hover:bg-gray-100' : ''} 
-									${isUserWrongAnswer ? 'bg-red-500 border border-red-200' : ''} 
-									${isCorrectHighlight ? 'bg-green-400 border border-green-400' : ''} 
-									${isSelected ? 'ring-2 ring-blue-500 border-none' : ''}
+									className={`flex items-center justify-between space-x-2 text-white rounded cursor-pointer bg-white/30 backdrop-blur-md
+											${!isAnswered ? 'hover:bg-primary' : ''} 
 								`}
 									onClick={() => handleAnswerSelect(answer)}
 								>
-									<p className='font-semibold leading-4'>F{i + 1}</p>
+									<p
+										className={`font-semibold leading-6 p-4 w-12 
+									${isUserWrongAnswer ? 'bg-red-500 ' : ''} 
+									${isCorrectHighlight ? 'bg-green-400' : ''}`}
+									>
+										F{i + 1}
+									</p>
 									<Label className='flex-1'>
 										<div
 											dangerouslySetInnerHTML={getTranslationHTML(
@@ -213,9 +223,11 @@ const AppQuiz = ({ quiz }: AppQuizProps) => {
 					{/* Question Description */}
 					<Accordion
 						type='single'
+						value={openAccordion}
+						onValueChange={setOpenAccordion}
 						disabled={!userAnswers[currentQuestion.id]}
 						collapsible
-						className='w-full mt-auto'
+						className='w-full mt-auto text-white'
 					>
 						<AccordionItem value='item-1'>
 							<AccordionTrigger>
@@ -223,22 +235,24 @@ const AppQuiz = ({ quiz }: AppQuizProps) => {
 								{i18n.language === 'uz' && 'Тавсиф'}
 								{i18n.language === 'la' && 'Tavsif'}
 							</AccordionTrigger>
-							<AccordionContent>
-								<div
-									className='text-xs'
-									dangerouslySetInnerHTML={getTranslationHTML(
-										'question_description',
-										currentQuestion
-									)}
-								/>
-							</AccordionContent>
+							{userAnswers[currentQuestion.id] && (
+								<AccordionContent className='' key={currentQuestion.id}>
+									<div
+										className='text-xs ans-description max-h-[200px] overflow-y-auto'
+										dangerouslySetInnerHTML={getTranslationHTML(
+											'question_description',
+											currentQuestion
+										)}
+									/>
+								</AccordionContent>
+							)}
 						</AccordionItem>
 					</Accordion>
 				</div>
 			</div>
 
 			{/* Navigation and Timer */}
-			<div className='flex items-center justify-center gap-4 mt-auto'>
+			<div className='flex items-center justify-center gap-4 mt-auto mb-3'>
 				<Tabs quantity={quiz.length} onTabChange={setCurrentQuestionIndex} />
 			</div>
 
@@ -249,9 +263,7 @@ const AppQuiz = ({ quiz }: AppQuizProps) => {
 						<DialogTitle>{t('finish_test')}?</DialogTitle>
 					</DialogHeader>
 					<DialogFooter className='flex justify-center gap-2'>
-						<Button onClick={handleFinishTest} variant='destructive'>
-							{t('yes')}
-						</Button>
+						<Button onClick={handleFinishTest}>{t('yes')}</Button>
 						<Button variant='outline' onClick={() => setShowConfirm(false)}>
 							{t('no')}
 						</Button>
@@ -266,12 +278,7 @@ const AppQuiz = ({ quiz }: AppQuizProps) => {
 						<DialogTitle>{t('finish_test')}?</DialogTitle>
 					</DialogHeader>
 					<DialogFooter className='flex justify-center gap-2'>
-						<Button
-							variant='destructive'
-							onClick={() => handleExitConfirm(true)}
-						>
-							{t('yes')}
-						</Button>
+						<Button onClick={() => handleExitConfirm(true)}>{t('yes')}</Button>
 						<Button variant='outline' onClick={() => handleExitConfirm(false)}>
 							{t('no')}
 						</Button>

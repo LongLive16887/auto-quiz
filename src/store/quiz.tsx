@@ -1,5 +1,5 @@
 import api from '@/api/axios'
-import { Question } from '@/types'
+import { BlockData, Question } from '@/types'
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 
@@ -7,6 +7,7 @@ type QuizStore = {
 	quiz: Question[]
 	loadQuiz: (id: number) => void
 	loadFanQuiz: (id: number) => void
+	loadTestQuiz: (quantity: string) => void
 	activeLang: string
 	setActiveLang: (lang: string) => void
 	currentQuestionIndex: number
@@ -14,29 +15,31 @@ type QuizStore = {
 	userAnswers: Record<number, { answerId: number; isCorrect: boolean }>
 	correctCount: number
 	incorrectCount: number
+	maxQuizCount: number
 	submitAnswer: (
 		questionId: number,
 		answerId: number,
 		isCorrect: boolean
 	) => void
 	reset: (clearQuiz?: boolean) => void
-	maxQuizCount: number
-	setMaxQuizCount: () => void
+	statistics: BlockData[]
+	setStatistics: (theme?: boolean) => void
 }
 
 export const useQuizStore = create<QuizStore>()(
 	persist(
 		set => ({
 			quiz: [],
+			maxQuizCount: 0,
 			activeLang: 'la',
 			currentQuestionIndex: 0,
 			userAnswers: {},
 			correctCount: 0,
 			incorrectCount: 0,
-			maxQuizCount: 0,
+			statistics: [],
 			loadQuiz: id => {
 				api
-					.get(`/api/v1/question?groupId=${id}&page=1073741824&size=1073741824`)
+					.get(`/api/v1/question?groupId=${id}&page=0&size=1073741824`)
 					.then(res => {
 						set({ quiz: res.data.data.results })
 					})
@@ -45,19 +48,37 @@ export const useQuizStore = create<QuizStore>()(
 			loadFanQuiz: id => {
 				api
 					.get(
-						`/api/v1/question?lessonId=${id}&page=1073741824&size=1073741824`
+						`/api/v1/question?lessonId=${id}&page=0&size=1073741824`
 					)
 					.then(res => {
 						set({ quiz: res.data.data.results })
 					})
 					.catch()
 			},
-			setMaxQuizCount: () => {
-				api.get('/api/groups/maxId').then(res => {
-					set({ maxQuizCount: res.data.data.max_group_iD })
-				})
+			loadTestQuiz: quantity => {
+				api
+					.get(
+						`/api/v1/question?page=0&size=${quantity}`
+					)
+					.then(res => {
+						set({ quiz: res.data.data.results })
+					})
+					.catch()
 			},
-
+			setStatistics: theme => {
+				api
+					.get(`/api/v1/user/statistics?type=${theme ? 100 : 102}`)
+					.then(res => {
+						const { data } = res.data
+						set({
+							statistics: data,
+							maxQuizCount: data.length,
+						})
+					})
+					.catch(error => {
+						console.error('Error fetching statistics:', error)
+					})
+			},
 			setActiveLang: lang => set({ activeLang: lang }),
 			setCurrentQuestionIndex: index => set({ currentQuestionIndex: index }),
 			submitAnswer: (questionId, answerId, isCorrect) =>
@@ -88,6 +109,7 @@ export const useQuizStore = create<QuizStore>()(
 				correctCount: state.correctCount,
 				incorrectCount: state.incorrectCount,
 				maxQuizCount: state.maxQuizCount,
+				userAnswers: state.userAnswers
 			}),
 		}
 	)
