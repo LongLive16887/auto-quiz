@@ -5,13 +5,13 @@ import { TestBlock } from '../../components/TestBlock'
 import MainLayout from '../../layouts/MainLayout'
 
 const Dashboard = () => {
-	const { statistics, setStatistics } = useQuizStore()
+	const { generalStatistics, setGeneralStatistics } = useQuizStore()
 
 	useEffect(() => {
-		setStatistics()
+		setGeneralStatistics()
 	}, [])
 
-	if (!statistics.length) {
+	if (!generalStatistics.length) {
 		return (
 			<MainLayout>
 				<Loader2
@@ -26,7 +26,7 @@ const Dashboard = () => {
 	return (
 		<MainLayout>
 			<div className='flex justify-center flex-wrap gap-3.5'>
-				{statistics.map((item, index) => (
+				{generalStatistics.map((item, index) => (
 					<TestBlock data={item} key={index} />
 				))}
 			</div>

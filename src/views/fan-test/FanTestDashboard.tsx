@@ -5,13 +5,13 @@ import { useEffect } from 'react'
 import MainLayout from '../../layouts/MainLayout'
 
 const FanTestDashboard = () => {
-	const { statistics, setStatistics } = useQuizStore()
+	const { fanStatistics, setFanStatistics } = useQuizStore()
 
 	useEffect(() => {
-		setStatistics(true)
+		setFanStatistics() // Очищаем данные перед загрузкой новых
 	}, [])
 
-	if (!statistics.length) {
+	if (!fanStatistics.length) {
 		return (
 			<MainLayout>
 				<Loader2
@@ -26,7 +26,7 @@ const FanTestDashboard = () => {
 	return (
 		<MainLayout>
 			<div className='flex justify-center flex-wrap gap-3.5'>
-				{statistics.map(test => (
+				{fanStatistics.map(test => (
 					<FanTestBlock key={test.id} data={test} />
 				))}
 			</div>

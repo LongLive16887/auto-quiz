@@ -22,8 +22,10 @@ type QuizStore = {
 		isCorrect: boolean
 	) => void
 	reset: (clearQuiz?: boolean) => void
-	statistics: BlockData[]
-	setStatistics: (theme?: boolean) => void
+	generalStatistics: BlockData[]
+	fanStatistics: BlockData[]
+	setGeneralStatistics: () => void
+	setFanStatistics: () => void
 }
 
 export const useQuizStore = create<QuizStore>()(
@@ -36,7 +38,8 @@ export const useQuizStore = create<QuizStore>()(
 			userAnswers: {},
 			correctCount: 0,
 			incorrectCount: 0,
-			statistics: [],
+			generalStatistics: [],
+			fanStatistics: [],
 			loadQuiz: id => {
 				api
 					.get(`/api/v1/question?groupId=${id}&page=0&size=1073741824`)
@@ -66,19 +69,15 @@ export const useQuizStore = create<QuizStore>()(
 					})
 					.catch()
 			},
-			setStatistics: theme => {
-				api
-					.get(`/api/v1/user/statistics?type=${theme ? 100 : 102}`)
-					.then(res => {
-						const { data } = res.data
-						set(state => ({
-							statistics: data,
-							maxQuizCount: theme ? state.maxQuizCount : data.length, 
-						}))
-					})
-					.catch(error => {
-						console.error('Error fetching statistics:', error)
-					})
+			setGeneralStatistics: () => {
+				api.get('/api/v1/user/statistics?type=102').then(res => {
+					set({ generalStatistics: res.data.data })
+				})
+			},
+			setFanStatistics: () => {
+				api.get('/api/v1/user/statistics?type=100').then(res => {
+					set({ fanStatistics: res.data.data })
+				})
 			},
 			setActiveLang: lang => set({ activeLang: lang }),
 			setCurrentQuestionIndex: index => set({ currentQuestionIndex: index }),
