@@ -1,6 +1,6 @@
 import { useQuizStore } from '@/store/quiz'
 import { BlockData } from '@/types'
-import { Check, X } from 'lucide-react'
+import { Check, CircleAlert, X } from 'lucide-react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
@@ -48,8 +48,11 @@ export function FanTestBlock({ data }: { data: BlockData }) {
 						className='text-center'
 						dangerouslySetInnerHTML={{ __html: getLanguageName() }}
 					></p>
-					{data.correct_answer !== 0 && data.wrong_answer !== 0 ? (
+					{data.correct_answer !== 0 && data.wrong_answer !== 0 || data.skipped_answer !== 0 ? (
 						<div className='flex items-center gap-1 absolute top-1 right-1'>
+							<Badge variant='warn'>
+								<CircleAlert size={15} /> {data.skipped_answer}
+							</Badge>
 							<Badge variant='succes'>
 								<Check size={15} /> {data.wrong_answer}
 							</Badge>

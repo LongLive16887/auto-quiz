@@ -37,12 +37,12 @@ const SinovTestDashboard = () => {
 	return (
 		<MainLayout>
 			<div className='space-x-4'>
-				<div className='flex items-center gap-3.5'>
+				<div className='flex items-center justify-center gap-3.5'>
 					<div
 						onClick={() => handleButtonClick('20')}
 						className='max-w-[350px] flex w-full text-2xl justify-center items-center  py-10 bg-white/30 backdrop-blur-md text-white cursor-pointer rounded-lg border hover:shadow-sm transition'
 					>
-						20
+						20 
 					</div>
 					<div
 						onClick={() => handleButtonClick('50')}

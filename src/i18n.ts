@@ -4,26 +4,28 @@ import { initReactI18next } from 'react-i18next'
 import LanguageDetector from 'i18next-browser-languagedetector'
 
 i18n
-	.use(HttpBackend) 
-	.use(initReactI18next) 
-	.use(LanguageDetector) 
+	.use(HttpBackend)
+	.use(initReactI18next)
+	.use(LanguageDetector)
 	.init({
-		fallbackLng: 'la', 
-		lng: 'la',
+		fallbackLng: 'la', // Использовать 'la', если язык не найден
 		debug: true,
 		interpolation: {
-			escapeValue: false, 
+			escapeValue: false,
 		},
 		backend: {
-			loadPath: '/locales/{{lng}}/translation.json', 
+			loadPath: '/locales/{{lng}}/translation.json',
 		},
 		react: {
-			useSuspense: false, 
+			useSuspense: false,
 		},
 		detection: {
-			order: ['localStorage', 'navigator'], 
-			caches: ['localStorage'], 
+			order: ['localStorage', 'navigator'],
+			caches: ['localStorage'],
 		},
+		whitelist: ['la', 'ru', 'en'], // Поддерживаемые языки
+		checkWhitelist: true,
+		lng: localStorage.getItem('i18nextLng') || 'la', // Принудительно ставим 'la', если нет сохранённого языка
 	})
 
 export default i18n

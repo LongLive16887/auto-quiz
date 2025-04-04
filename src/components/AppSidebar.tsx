@@ -13,6 +13,7 @@ import {
 	SidebarMenuButton,
 	SidebarMenuItem,
 } from './ui/sidebar'
+import { Link } from 'react-router-dom'
 
 const AppSidebar = () => {
 	const { maxQuizCount } = useQuizStore()
@@ -62,10 +63,10 @@ const AppSidebar = () => {
 										}
 										asChild
 									>
-										<a href={item.url} className='font-semibold text-lg text-white'>
+										<Link to={item.url} className='font-semibold text-lg text-white'>
 											<item.icon size={30} />
 											<span>{item.title}</span>
-										</a>
+										</Link>
 									</SidebarMenuButton>
 								</SidebarMenuItem>
 							))}
