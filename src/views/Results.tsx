@@ -34,15 +34,9 @@ export const ResultsPage = () => {
 					<p className='text-red-600'>
 						{t('incorrect_answers')}: {data.wrong_answer}
 					</p>
-					{/* <p className='text-gray-600'>
-						{t('all_questions')}: {total}
-					</p> */}
 					<p className='text-gray-600'>
-						{t('all_questions')}: {data.skipped_answer}
+						{t('skipped_questions')}: {data.skipped_answer}
 					</p>
-					{/* <p className='text-blue-600 font-bold'>
-						{t('percent')}: {((correctCount / total) * 100 || 0).toFixed(0)}%
-					</p> */}
 				</div>
 				<Button onClick={handleClick}>{t('main_menu')}</Button>
 			</div>

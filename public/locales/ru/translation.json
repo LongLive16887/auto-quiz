@@ -10,7 +10,7 @@
 	"right_answers": "Правильных ответов",
   "percent": "Процент",
 	"incorrect_answers": "Неправильных ответов",
-	"all_questions": "Всего вопросов",
+	"skipped_questions": "Пропущенные вопросы",
 	"main_menu": "Главное меню",
 	"finish": "Закончить",
   "finish_test": "Хотите завершить тест",

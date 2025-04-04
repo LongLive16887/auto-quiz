@@ -54,7 +54,7 @@ export function FanTestBlock({ data }: { data: BlockData }) {
 								<CircleAlert size={15} /> {data.skipped_answer}
 							</Badge>
 							<Badge variant='succes'>
-								<Check size={15} /> {data.wrong_answer}
+								<Check size={15} /> {data.correct_answer}
 							</Badge>
 
 							<Badge variant='error'>

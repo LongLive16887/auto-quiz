@@ -61,6 +61,7 @@ export const useQuizStore = create<QuizStore>()(
 						`/api/v1/question?page=0&size=${quantity}`
 					)
 					.then(res => {
+						console.log(res)
 						set({ quiz: res.data.data.results })
 					})
 					.catch()
@@ -109,7 +110,6 @@ export const useQuizStore = create<QuizStore>()(
 				correctCount: state.correctCount,
 				incorrectCount: state.incorrectCount,
 				maxQuizCount: state.maxQuizCount,
-				userAnswers: state.userAnswers
 			}),
 		}
 	)

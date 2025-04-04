@@ -10,7 +10,7 @@
 	"right_answers": "Тўғри жавоблар",
   "percent": "Фоиз",
 	"incorrect_answers": "Нотўғри жавоблар",
-	"all_questions": "Жами саволлар",
+	"skipped_questions": "Танланмаган жавоблар",
 	"main_menu": "Асосий меню",
 	"finish": "Якунлаш",
 	"finish_test": "Тестни якунлашни истайсизми",

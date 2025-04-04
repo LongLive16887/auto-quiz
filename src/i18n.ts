@@ -25,6 +25,7 @@ i18n
 		},
 		supportedLngs: ['la', 'ru', 'en'], // Используем supportedLngs вместо whitelist
 		nonExplicitSupportedLngs: true, // Игнорировать суффиксы (например, 'ru-RU' → 'ru')
+		lng: localStorage.getItem('i18nextLng') || 'la',
 	})
 
 export default i18n

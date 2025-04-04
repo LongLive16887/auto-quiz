@@ -42,7 +42,7 @@ export function TestBlock({ data }: { data: BlockData }) {
 							</Badge>
 
 							<Badge variant='succes'>
-								<Check size={15} /> {data.wrong_answer}
+								<Check size={15} /> {data.correct_answer}
 							</Badge>
 
 							<Badge variant='error'>

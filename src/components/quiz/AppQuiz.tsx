@@ -37,7 +37,7 @@ const AppQuiz = ({ quiz }: AppQuizProps) => {
 	const { i18n, t } = useTranslation()
 	const location = useLocation()
 	const navigate = useNavigate()
-	const TypeThemeParam = new URLSearchParams(location.search).get('type')
+	const TypeParam = new URLSearchParams(location.search).get('type')
 
 	const {
 		currentQuestionIndex,
@@ -96,7 +96,13 @@ const AppQuiz = ({ quiz }: AppQuizProps) => {
 	}
 
 	const submitQuizData = async () => {
-		const type = TypeThemeParam ? 100 : 102
+		let type = 102
+
+		if (TypeParam === 'test') {
+			type = 105
+		} else if (TypeParam === 'theme') {
+			type = 100
+		}
 		const requestData = {
 			type,
 			external_id: id,
@@ -137,7 +143,7 @@ const AppQuiz = ({ quiz }: AppQuizProps) => {
 		<div className='flex flex-col h-[calc(100vh-110px)] gap-3.5'>
 			{/* Header */}
 			<div className='flex items-center px-3.5 justify-between flex-wrap'>
-				{!TypeThemeParam ? (
+				{!TypeParam ? (
 					<p className='text-2xl font-semibold text-white'>
 						{id}-{t('bilet')}
 					</p>

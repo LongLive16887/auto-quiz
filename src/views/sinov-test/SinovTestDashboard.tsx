@@ -22,7 +22,7 @@ const SinovTestDashboard = () => {
 	const handleStartTest = () => {
 		setOpen(false)
 		loadTestQuiz(selectedValue)
-		navigate(`/template/${selectedValue}`)
+		navigate(`/template/${selectedValue}?type=test`)
 	}
 
 	const handleButtonClick = (value: string) => {
