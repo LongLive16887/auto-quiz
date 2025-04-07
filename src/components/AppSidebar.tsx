@@ -20,7 +20,6 @@ const AppSidebar = () => {
 	const { maxQuizCount } = useQuizStore()
 	const { t } = useTranslation()
 	const { user, userRoles } = useUserStore()
-	console.log(userRoles)
 	const { wishlist } = useWishlistStore()
 	const items = [
 		{

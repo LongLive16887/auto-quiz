@@ -100,7 +100,6 @@ const StudentForm = ({ onStudentCreated }: StudentFormProps) => {
 					)}
 				/>
 				<FormField
-				
 					control={form.control}
 					name='confirm_password'
 					render={({ field }) => (
@@ -129,7 +128,6 @@ const StudentForm = ({ onStudentCreated }: StudentFormProps) => {
 												!field.value && 'text-muted-foreground'
 											)}
 										>
-
 											<CalendarIcon className='mr-2 h-4 w-4' />
 											{field.value
 												? format(new Date(field.value), 'PPP')
@@ -140,7 +138,7 @@ const StudentForm = ({ onStudentCreated }: StudentFormProps) => {
 										<Calendar
 											mode='single'
 											selected={field.value ? new Date(field.value) : undefined}
-											onSelect={selectedDate => {
+											onSelect={(selectedDate) => {
 												field.onChange(selectedDate?.toISOString() || '')
 											}}
 											initialFocus

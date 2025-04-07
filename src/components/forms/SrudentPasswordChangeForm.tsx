@@ -38,7 +38,6 @@ const StudentPasswordChangeForm = ({
 	})
 
 	const onSubmit = (data: z.infer<typeof studentPasswordSchema>) => {
-		console.log(767677)
 		setLoading(true)
 		changeStudentPassword(data).then(() => {
 			setLoading(false)
