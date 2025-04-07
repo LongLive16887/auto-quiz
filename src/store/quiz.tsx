@@ -72,6 +72,7 @@ export const useQuizStore = create<QuizStore>()(
 			setGeneralStatistics: () => {
 				api.get('/api/v1/user/statistics?type=102').then(res => {
 					set({ generalStatistics: res.data.data })
+					set({maxQuizCount: res.data.data.length})
 				})
 			},
 			setFanStatistics: () => {

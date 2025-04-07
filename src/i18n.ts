@@ -8,8 +8,8 @@ i18n
 	.use(initReactI18next)
 	.use(LanguageDetector)
 	.init({
-		fallbackLng: 'la', // Если язык не найден, используем 'la'
-		debug: true,
+		fallbackLng: 'la', 
+		debug: false,
 		interpolation: {
 			escapeValue: false,
 		},
@@ -23,8 +23,8 @@ i18n
 			order: ['localStorage', 'navigator'],
 			caches: ['localStorage'],
 		},
-		supportedLngs: ['la', 'ru', 'en'], // Используем supportedLngs вместо whitelist
-		nonExplicitSupportedLngs: true, // Игнорировать суффиксы (например, 'ru-RU' → 'ru')
+		supportedLngs: ['la', 'ru', 'en'], 
+		nonExplicitSupportedLngs: true, 
 		lng: localStorage.getItem('i18nextLng') || 'la',
 	})
 

@@ -9,6 +9,7 @@ type UserStore = {
 		username?: string
 		full_name?: string
 	}
+	userRoles: string[]
 	token: string
 	setUser: (val: any) => void
 	lougoutUser: () => void
@@ -23,6 +24,7 @@ export const useUserStore = create<UserStore>()(
 		set => ({
 			token: Cookies.get('token') || '',
 			user: {},
+			userRoles: [],
 			setToken: (val: string) => {
 				Cookies.set('token', val, { expires: 1, path: '/' })
 				set({ token: val })
@@ -36,6 +38,7 @@ export const useUserStore = create<UserStore>()(
 					const token = res.data.data.access_token
 					Cookies.set('token', token, { expires: 1, path: '/' })
 					set({ token, user: res.data.data.user })
+					set({userRoles: res.data.data.roles})
 				} catch (error) {
 					throw error
 				}
@@ -49,6 +52,7 @@ export const useUserStore = create<UserStore>()(
 			name: 'User',
 			partialize: state => ({
 				user: state.user,
+				userRoles: state.userRoles
 			}),
 		}
 	)

@@ -9,17 +9,15 @@ export const ResultsPage = () => {
 	const navigate = useNavigate()
 	const { reset } = useQuizStore()
 	const { t } = useTranslation()
-  const location = useLocation()
+	const location = useLocation()
 
-  // Получаем данные из состояния
-  const { data } = location.state || {}
+	// Получаем данные из состояния
+	const { data } = location.state || {}
 
-	useEffect(() => {
-
-	}, [])
+	useEffect(() => {}, [])
 
 	function handleClick() {
-		navigate('/')
+		navigate(-2)
 		reset()
 	}
 
@@ -34,7 +32,7 @@ export const ResultsPage = () => {
 					<p className='text-red-600'>
 						{t('incorrect_answers')}: {data.wrong_answer}
 					</p>
-					<p className='text-gray-600'>
+					<p className='text-white'>
 						{t('skipped_questions')}: {data.skipped_answer}
 					</p>
 				</div>

@@ -15,8 +15,9 @@ import {
 import { Label } from '@/components/ui/label'
 import { RadioGroup } from '@/components/ui/radio-group'
 import { useQuizStore } from '@/store/quiz'
+import { useWishlistStore } from '@/store/wishlist'
 import { Answer, Question } from '@/types'
-import { Loader2 } from 'lucide-react'
+import { Loader2, Star } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
@@ -49,6 +50,8 @@ const AppQuiz = ({ quiz }: AppQuizProps) => {
 		reset,
 	} = useQuizStore()
 
+	const { wishlist, toggleWishlist } = useWishlistStore()
+
 	// States
 	const [showConfirm, setShowConfirm] = useState(false)
 	const [showExitConfirm, setShowExitConfirm] = useState(false)
@@ -60,6 +63,7 @@ const AppQuiz = ({ quiz }: AppQuizProps) => {
 		() => Object.keys(userAnswers).length < quiz.length
 	)
 	const currentQuestion = quiz[currentQuestionIndex]
+	const isWishlisted = wishlist.some(q => q.id === currentQuestion?.id)
 
 	// Effects
 	useEffect(() => {
@@ -148,13 +152,26 @@ const AppQuiz = ({ quiz }: AppQuizProps) => {
 						{id}-{t('bilet')}
 					</p>
 				) : null}
-				<Button
-					variant='destructive'
-					className='ml-auto'
-					onClick={() => setShowConfirm(true)}
-				>
-					{t('finish')}
-				</Button>
+				<div className='flex items-center gap-3.5 ml-auto'>
+					<Button
+						size={'icon'}
+						onClick={() =>
+							currentQuestion && toggleWishlist(currentQuestion)
+						}
+					>
+						<Star
+							fill={isWishlisted ? 'yellow' : 'none'} // если не кликнута – не заполнена
+							color='yellow'
+							size={50}
+						/>
+					</Button>
+					<Button
+						variant='destructive'
+						onClick={() => setShowConfirm(true)}
+					>
+						{t('finish')}
+					</Button>
+				</div>
 			</div>
 
 			{/* Question */}
@@ -180,7 +197,7 @@ const AppQuiz = ({ quiz }: AppQuizProps) => {
 						/>
 					) : (
 						<img
-							className='mt-14 h-full bg-white rounded-full w-[400px] mx-auto object-contain'
+							className='mt-14 h-[300px] bg-white rounded-full w-[300px] mx-auto object-contain'
 							src='/logo.png'
 						/>
 					)}

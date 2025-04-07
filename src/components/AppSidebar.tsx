@@ -1,7 +1,9 @@
 import { useQuizStore } from '@/store/quiz'
 import { useUserStore } from '@/store/user'
-import { Lightbulb, User } from 'lucide-react'
+import { useWishlistStore } from '@/store/wishlist'
+import { Lightbulb, Star, User, UserCog } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
+import { Link } from 'react-router-dom'
 import {
 	Sidebar,
 	SidebarContent,
@@ -13,12 +15,13 @@ import {
 	SidebarMenuButton,
 	SidebarMenuItem,
 } from './ui/sidebar'
-import { Link } from 'react-router-dom'
 
 const AppSidebar = () => {
 	const { maxQuizCount } = useQuizStore()
 	const { t } = useTranslation()
-	const { user } = useUserStore()
+	const { user, userRoles } = useUserStore()
+	console.log(userRoles)
+	const { wishlist } = useWishlistStore()
 	const items = [
 		{
 			title: `${t('shablon_test')} (${maxQuizCount})`,
@@ -27,7 +30,19 @@ const AppSidebar = () => {
 		},
 		{ title: `${t('sinov_test')} (20/50)`, url: '/test', icon: Lightbulb },
 		{ title: t('theme_test'), url: '/fan-test', icon: Lightbulb },
+		{
+			title:
+				wishlist.length > 0
+					? `${t('Saqlangan')} (${wishlist.length})`
+					: t('Saqlangan'),
+			url: '/wishlist',
+			icon: Star,
+		},
 	]
+
+	if (userRoles.includes('WRITE')) {
+		items.push({ title: t("O'quvchilar"), url: '/students', icon: UserCog })
+	}
 
 	return (
 		<Sidebar variant='floating'>
@@ -63,7 +78,10 @@ const AppSidebar = () => {
 										}
 										asChild
 									>
-										<Link to={item.url} className='font-semibold text-lg text-white'>
+										<Link
+											to={item.url}
+											className='font-semibold text-lg text-white'
+										>
 											<item.icon size={30} />
 											<span>{item.title}</span>
 										</Link>

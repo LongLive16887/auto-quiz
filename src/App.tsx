@@ -6,8 +6,8 @@ import { ResultsPage } from './views/Results'
 import Dashboard from './views/shablon/Dashboard'
 import TemplateTest from './views/shablon/TemplateTest'
 import SinovTestDashboard from './views/sinov-test/SinovTestDashboard'
-
-
+import Students from './views/Students'
+import Wishlist from './views/Wishlist'
 
 const router = createBrowserRouter([
 	{
@@ -42,14 +42,20 @@ const router = createBrowserRouter([
 				path: '/results',
 				element: <ResultsPage />,
 			},
+			{
+				path: '/wishlist',
+				element: <Wishlist />,
+			},
+			{
+				path: '/students',
+				element: <Students />,
+			},
 		],
 	},
 ])
 
 function App() {
-	return (
-		<RouterProvider router={router} />
-	)
+	return <RouterProvider router={router} />
 }
 
 export default App
