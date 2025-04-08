@@ -23,5 +23,6 @@
 	"clean_stats": "Очистить статистику",
 	"add_student": "Добавить студента",
 	"username_taken": "Этот логин занят.",
-	"username_check_error": "Ошибка при проверке логина"
+	"username_check_error": "Ошибка при проверке логина",
+	"user_not_found": "Фойдаланувчи топилмади"
 }

@@ -1,3 +1,4 @@
+import api from '@/api/axios'
 import { Calendar } from '@/components/ui/calendar'
 import {
 	Popover,
@@ -8,9 +9,11 @@ import { cn } from '@/lib/utils'
 import { useStudentStore } from '@/store/student'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { format } from 'date-fns'
+import debounce from 'lodash/debounce' // Import debounce function from lodash
 import { Calendar as CalendarIcon, Loader2, LogIn } from 'lucide-react'
-import { useState, useCallback } from 'react'
+import { useCallback, useState } from 'react'
 import { useForm } from 'react-hook-form'
+import { useTranslation } from 'react-i18next'
 import { z } from 'zod'
 import { studentSchema } from '../../schemas'
 import { Button } from '../ui/button'
@@ -23,16 +26,13 @@ import {
 	FormMessage,
 } from '../ui/form'
 import { Input } from '../ui/input'
-import debounce from 'lodash/debounce' // Import debounce function from lodash
-import api from '@/api/axios'
-import { useTranslation } from 'react-i18next'
 
 type StudentFormProps = {
 	onStudentCreated: () => void
 }
 
 const StudentForm = ({ onStudentCreated }: StudentFormProps) => {
-		const { t } = useTranslation()
+	const { t } = useTranslation()
 	const [loading, setLoading] = useState(false)
 	const { createStudent } = useStudentStore()
 	const [usernameError, setUsernameError] = useState<string | null>(null)
@@ -69,7 +69,7 @@ const StudentForm = ({ onStudentCreated }: StudentFormProps) => {
 
 	// Use debounce to limit the number of API calls
 	const debouncedCheckUsername = useCallback(
-		debounce((username: string) => checkUsername(username), 500), 
+		debounce((username: string) => checkUsername(username), 500),
 		[]
 	)
 

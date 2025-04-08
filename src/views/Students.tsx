@@ -183,11 +183,13 @@ const Students = () => {
 						</Table>
 					</div>
 				) : (
-					<Loader2
-						color='white'
-						size={70}
-						className='animate-spin h-[calc(100vh-150px)] mx-auto'
-					/>
+					<div className='text-center  text-white text-lg h-[calc(100vh-150px)] flex items-center justify-center'>
+						{searchTerm.trim() ? (
+							t('user_not_found')
+						) : (
+							<Loader2 className='animate-spin' size={70} color='white' />
+						)}
+					</div>
 				)}
 				{totalPages > 1 && data.length ? (
 					<div className='flex mt-auto justify-end w-full'>

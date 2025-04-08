@@ -23,5 +23,6 @@
 	"clean_stats": "Statistikani tozalash",
 	"add_student": "O'quvchi qo'shish",
 	"username_taken": "Ushbu login band.",
-  "username_check_error": "Loginni tekshirishda xatolik yuz berdi."
+  "username_check_error": "Loginni tekshirishda xatolik yuz berdi.",
+	"user_not_found": "Foydalanuvchi topilmadi"
 }
