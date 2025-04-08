@@ -1,5 +1,6 @@
 import api from '@/api/axios'
 import StudentPasswordChangeForm from '@/components/forms/SrudentPasswordChangeForm'
+import StudentEditForm from '@/components/forms/StudentEditForm'
 import StudentForm from '@/components/forms/StudentForm'
 import { Button } from '@/components/ui/button'
 import {
@@ -26,12 +27,13 @@ import {
 	TableHeader,
 	TableRow,
 } from '@/components/ui/table'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import MainLayout from '@/layouts/MainLayout'
 import { Student } from '@/types'
 import { DialogTrigger } from '@radix-ui/react-dialog'
-import { t } from 'i18next'
 import { Loader2, Pen, Search } from 'lucide-react'
 import { useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 
 const Students = () => {
 	const [searchTerm, setSearchTerm] = useState('')
@@ -42,7 +44,7 @@ const Students = () => {
 	const [showConfirm, setShowConfirm] = useState(false)
 	const [showPasswordChange, setShowPasswordChange] = useState(false)
 	const [selectedStudent, setSelectedStudent] = useState<Student | null>(null)
-
+	const { t } = useTranslation()
 	const getStudents = (username?: string, page = 1) => {
 		const query = username ? `&username=${username}` : ''
 		api
@@ -63,6 +65,7 @@ const Students = () => {
 
 	const handlePasswordChange = () => {
 		setShowPasswordChange(false)
+		getStudents()
 	}
 
 	const handlePasswordChangeClick = (student: Student) => {
@@ -79,23 +82,16 @@ const Students = () => {
 		getStudents(searchTerm, 1)
 	}
 
-	if (!data.length) {
-		return (
-			<MainLayout>
-				<Loader2
-					color='white'
-					size={70}
-					className='animate-spin h-[calc(100vh-150px)] mx-auto'
-				/>
-			</MainLayout>
-		)
+	const handlePageChange = (page: number) => {
+		if (page >= 1 && page <= totalPages) {
+			setCurrentPage(page)
+		}
 	}
 
 	return (
 		<MainLayout>
-			<div>
+			<div className='flex flex-col h-full'>
 				<div className='flex items-baseline justify-between flex-wrap gap-2'>
-					{/* Search Input */}
 					<div className='flex items-center gap-1 w-full max-w-[300px]'>
 						<Input
 							clearable
@@ -118,14 +114,14 @@ const Students = () => {
 					<Dialog open={showConfirm} onOpenChange={setShowConfirm}>
 						<DialogTrigger asChild>
 							<div className='mb-3.5 flex justify-end'>
-								<Button>O'quvchi qo'shish</Button>
+								<Button>{t('add_student')}</Button>
 							</div>
 						</DialogTrigger>
 						<DialogContent>
 							<DialogHeader>
-								<DialogTitle>{t("O'quvchi qo'shish")}?</DialogTitle>
+								<DialogTitle>{t('add_student')}</DialogTitle>
 							</DialogHeader>
-							<StudentForm onStudentCreated={handleCreated} />
+							<StudentForm onStudentCreated={handlePasswordChange} />
 						</DialogContent>
 					</Dialog>
 				</div>
@@ -133,72 +129,145 @@ const Students = () => {
 				<Dialog open={showPasswordChange} onOpenChange={setShowPasswordChange}>
 					<DialogContent>
 						<DialogHeader>
-							<DialogTitle>{t("Parolni o'zgartirish")}?</DialogTitle>
+							<DialogTitle>{t('edit')}</DialogTitle>
 						</DialogHeader>
-						{/* Pass the selected student's username as a prop */}
-						{selectedStudent && (
-							<StudentPasswordChangeForm
-								username={selectedStudent.username}
-								onPasswordChange={handlePasswordChange}
-							/>
-						)}
+						<Tabs defaultValue='account'>
+							<TabsList className='mb-3.5'>
+								<TabsTrigger value='account'>Akaunt</TabsTrigger>
+								<TabsTrigger value='password'>Parol</TabsTrigger>
+							</TabsList>
+							<TabsContent value='account'>
+								{selectedStudent && (
+									<StudentEditForm
+										data={selectedStudent}
+										onPasswordChange={handlePasswordChange}
+									/>
+								)}
+							</TabsContent>
+							<TabsContent value='password'>
+								{' '}
+								{selectedStudent && (
+									<StudentPasswordChangeForm
+										username={selectedStudent.username}
+										onPasswordChange={handlePasswordChange}
+									/>
+								)}
+							</TabsContent>
+						</Tabs>
 					</DialogContent>
 				</Dialog>
-
-				<Table>
-					<TableHeader>
-						<TableRow className='text-white'>
-							<TableHead className='w-[100px]'>ID</TableHead>
-							<TableHead>Login</TableHead>
-							<TableHead>F.I.O</TableHead>
-							<TableHead>Tugash vaqti</TableHead>
-							<TableHead className='text-right'>Tahirlash</TableHead>
-						</TableRow>
-					</TableHeader>
-					<TableBody>
-						{data.map(student => (
-							<TableRow key={student.id}>
-								<TableCell className='font-medium'>{student.id}</TableCell>
-								<TableCell>{student.username}</TableCell>
-								<TableCell>{student.full_name}</TableCell>
-								<TableCell>{student.expiration_date}</TableCell>
-								<TableCell className='text-right'>
-									<Button onClick={() => handlePasswordChangeClick(student)}>
-										<Pen />
-									</Button>
-								</TableCell>
-							</TableRow>
-						))}
-					</TableBody>
-				</Table>
-				{totalPages > 1 && (
-					<div className='flex justify-end w-full'>
+				{data.length ? (
+					<div className='mb-3.5'>
+						<Table>
+							<TableHeader>
+								<TableRow className='text-white'>
+									<TableHead className='w-[100px]'>ID</TableHead>
+									<TableHead>Login</TableHead>
+									<TableHead>F.I.O</TableHead>
+									<TableHead>{t('expiration')}</TableHead>
+									<TableHead className='text-right'>{t('edit')}</TableHead>
+								</TableRow>
+							</TableHeader>
+							<TableBody>
+								{data.map(student => (
+									<TableRow key={student.id}>
+										<TableCell className='font-medium'>{student.id}</TableCell>
+										<TableCell>{student.username}</TableCell>
+										<TableCell>{student.full_name}</TableCell>
+										<TableCell>{student.expiration_date}</TableCell>
+										<TableCell className='text-right'>
+											<Button
+												onClick={() => handlePasswordChangeClick(student)}
+											>
+												<Pen />
+											</Button>
+										</TableCell>
+									</TableRow>
+								))}
+							</TableBody>
+						</Table>
+					</div>
+				) : (
+					<Loader2
+						color='white'
+						size={70}
+						className='animate-spin h-[calc(100vh-150px)] mx-auto'
+					/>
+				)}
+				{totalPages > 1 && data.length ? (
+					<div className='flex mt-auto justify-end w-full'>
 						<Pagination>
 							<PaginationContent>
 								<PaginationItem>
-									<PaginationPrevious href='#' />
+									<PaginationPrevious
+										href='#'
+										onClick={e => {
+											e.preventDefault()
+											handlePageChange(currentPage - 1)
+										}}
+										className={
+											currentPage === 1 ? 'pointer-events-none opacity-50' : ''
+										}
+									/>
 								</PaginationItem>
+
+								{Array.from(
+									{ length: Math.min(3, totalPages) },
+									(_, i) => i + 1
+								).map(page => (
+									<PaginationItem key={page}>
+										<PaginationLink
+											href='#'
+											onClick={e => {
+												e.preventDefault()
+												handlePageChange(page)
+											}}
+											isActive={page === currentPage}
+										>
+											{page}
+										</PaginationLink>
+									</PaginationItem>
+								))}
+
+								{totalPages > 3 && (
+									<PaginationItem>
+										<PaginationEllipsis />
+									</PaginationItem>
+								)}
+
+								{totalPages > 3 && (
+									<PaginationItem>
+										<PaginationLink
+											href='#'
+											onClick={e => {
+												e.preventDefault()
+												handlePageChange(totalPages)
+											}}
+											isActive={totalPages === currentPage}
+										>
+											{totalPages}
+										</PaginationLink>
+									</PaginationItem>
+								)}
+
 								<PaginationItem>
-									<PaginationLink href='#'>1</PaginationLink>
-								</PaginationItem>
-								<PaginationItem>
-									<PaginationLink href='#' isActive>
-										2
-									</PaginationLink>
-								</PaginationItem>
-								<PaginationItem>
-									<PaginationLink href='#'>3</PaginationLink>
-								</PaginationItem>
-								<PaginationItem>
-									<PaginationEllipsis />
-								</PaginationItem>
-								<PaginationItem>
-									<PaginationNext href='#' />
+									<PaginationNext
+										href='#'
+										onClick={e => {
+											e.preventDefault()
+											handlePageChange(currentPage + 1)
+										}}
+										className={
+											currentPage === totalPages
+												? 'pointer-events-none opacity-50'
+												: ''
+										}
+									/>
 								</PaginationItem>
 							</PaginationContent>
 						</Pagination>
 					</div>
-				)}
+				) : null}
 			</div>
 		</MainLayout>
 	)

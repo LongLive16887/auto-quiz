@@ -12,7 +12,7 @@ const MainLayout = ({ children }: MainLayoutProps) => {
 		<SidebarProvider>
 			<AppSidebar />
 			<div className='p-3.5 w-full flex flex-col justify-between'>
-				<div className='flex flex-col gap-3.5'>
+				<div className='flex flex-col gap-3.5 h-full'>
 					<AppNav />
 
 					{children}

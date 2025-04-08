@@ -23,7 +23,7 @@ export const ResultsPage = () => {
 
 	return (
 		<MainLayout>
-			<div className='w-full bg-white/30 backdrop-blur-md text-white border rounded-lg mx-auto p-4 text-center'>
+			<div className='w-full bg-white/10 backdrop-blur-lg text-white border rounded-lg mx-auto p-4 text-center'>
 				<h1 className='text-3xl font-bold mb-6'>{t('test_results')}</h1>
 				<div className='space-y-4 mb-8'>
 					<p className='text-green-600'>

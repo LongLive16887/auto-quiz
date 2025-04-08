@@ -31,8 +31,8 @@ export function TestBlock({ data }: { data: BlockData }) {
 	return (
 		<Dialog open={open} onOpenChange={setOpen}>
 			<DialogTrigger asChild>
-				<div className='flex flex-col relative items-center py-10 bg-white/30 backdrop-blur-md cursor-pointer gap-2 max-w-[150px] w-full rounded-lg border hover:shadow-sm transition'>
-					<p className='text-lg text-white'>
+				<div className='flex flex-col relative items-center py-10 bg-white/10 backdrop-blur-lg cursor-pointer gap-2 max-w-[150px] w-full rounded-lg border hover:shadow-sm transition'>
+					<p className='text-sm text-white'>
 						{data.id} - {t('bilet')}
 					</p>
 					{data.correct_answer !== 0 && data.wrong_answer !== 0 || data.skipped_answer !== 0 ? (

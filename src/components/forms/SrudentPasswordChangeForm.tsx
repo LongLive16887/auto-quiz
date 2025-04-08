@@ -26,7 +26,7 @@ const StudentPasswordChangeForm = ({
 	username,
 }: StudentFormProps) => {
 	const [loading, setLoading] = useState(false)
-	const {changeStudentPassword } = useStudentStore()
+	const { changeStudentPassword } = useStudentStore()
 
 	const form = useForm<z.infer<typeof studentPasswordSchema>>({
 		resolver: zodResolver(studentPasswordSchema),
@@ -39,7 +39,11 @@ const StudentPasswordChangeForm = ({
 
 	const onSubmit = (data: z.infer<typeof studentPasswordSchema>) => {
 		setLoading(true)
-		changeStudentPassword(data).then(() => {
+		const updatedData = {
+			...data,
+			confirm_password: data.password,
+		}
+		changeStudentPassword(updatedData).then(() => {
 			setLoading(false)
 			onPasswordChange()
 		})
@@ -58,9 +62,9 @@ const StudentPasswordChangeForm = ({
 					disabled
 					render={({ field }) => (
 						<FormItem>
-							<FormLabel>Parol</FormLabel>
+							<FormLabel>Login</FormLabel>
 							<FormControl>
-								<Input  {...field} />
+								<Input {...field} />
 							</FormControl>
 							<FormMessage />
 						</FormItem>
@@ -72,19 +76,6 @@ const StudentPasswordChangeForm = ({
 					render={({ field }) => (
 						<FormItem>
 							<FormLabel>Parol</FormLabel>
-							<FormControl>
-								<Input type='password' {...field} autoComplete='new-password' />
-							</FormControl>
-							<FormMessage />
-						</FormItem>
-					)}
-				/>
-				<FormField
-					control={form.control}
-					name='confirm_password'
-					render={({ field }) => (
-						<FormItem>
-							<FormLabel>Parol tasdiqlash</FormLabel>
 							<FormControl>
 								<Input type='password' {...field} autoComplete='new-password' />
 							</FormControl>

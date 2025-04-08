@@ -1,13 +1,9 @@
 import { z } from 'zod'
 
-export const studentSchema = z
+export const studentEditSchema = z
 	.object({
+		id: z.number(),
 		username: z.string().min(1, { message: "Iltimos, login kiriting!" }),
 		full_name: z.string().min(1, { message: "Iltimos, to'liq ismingizni kiriting!" }),
-		password: z
-			.string()
-			.min(1, { message: "Iltimos, parol kiriting!" })
-			.min(8, { message: "Parol kamida 8 ta belgidan iborat bo'lishi kerak!" }),
-		confirm_password: z.string(),
 		expiration_date: z.string().min(1, { message: "Iltimos, tugash vaqtini kiriting!" }),
 	})

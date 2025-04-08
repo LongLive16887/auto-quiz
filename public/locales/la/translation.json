@@ -15,5 +15,11 @@
 	"finish": "Yakunlash",
 	"finish_test": "Testni yakunlashni istaysizmi",
 	"yes": "Ha",
-	"no": "Yo'q"
+	"no": "Yo'q",
+	"saved":"Saqlanganlar",
+	"students": "O'quvchilar",
+	"expiration": "Tugash vaqti",
+	"edit": "Tahirlash",
+	"clean_stats": "Statistikani tozalash",
+	"add_student": "O'quvchi qo'shish"
 }

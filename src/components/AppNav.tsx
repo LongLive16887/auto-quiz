@@ -21,7 +21,7 @@ const AppNav = () => {
 	]
 
 	return (
-		<div className='flex items-center justify-between p-3.5 border bg-white/30 backdrop-blur-md rounded-lg'>
+		<div className='flex items-center justify-between p-3.5 border bg-white/10 backdrop-blur-lg rounded-lg'>
 			<div className='flex items-center gap-3'>
 				<SidebarTrigger />
 			</div>

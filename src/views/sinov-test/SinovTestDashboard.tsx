@@ -40,13 +40,13 @@ const SinovTestDashboard = () => {
 				<div className='flex items-center justify-center gap-3.5'>
 					<div
 						onClick={() => handleButtonClick('20')}
-						className='max-w-[350px] flex w-full text-2xl justify-center items-center  py-10 bg-white/30 backdrop-blur-md text-white cursor-pointer rounded-lg border hover:shadow-sm transition'
+						className='max-w-[350px] flex w-full text-2xl justify-center items-center  py-10 bg-white/10 backdrop-blur-lg text-white cursor-pointer rounded-lg border hover:shadow-sm transition'
 					>
 						20 
 					</div>
 					<div
 						onClick={() => handleButtonClick('50')}
-						className='max-w-[350px] w-full flex text-2xl py-10 justify-center items-center bg-white/30 backdrop-blur-md text-white cursor-pointer rounded-lg border hover:shadow-sm transition'
+						className='max-w-[350px] w-full flex text-2xl py-10 justify-center items-center bg-white/10 backdrop-blur-lg text-white cursor-pointer rounded-lg border hover:shadow-sm transition'
 					>
 						50
 					</div>

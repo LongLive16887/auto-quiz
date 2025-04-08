@@ -29,11 +29,7 @@ import {
 import { Button } from '../ui/button'
 import Tabs from './Tabs'
 
-type AppQuizProps = {
-	quiz: Question[]
-}
-
-const AppQuiz = ({ quiz }: AppQuizProps) => {
+const AppQuiz = () => {
 	const { id } = useParams()
 	const { i18n, t } = useTranslation()
 	const location = useLocation()
@@ -48,6 +44,7 @@ const AppQuiz = ({ quiz }: AppQuizProps) => {
 		correctCount,
 		incorrectCount,
 		reset,
+		quiz
 	} = useQuizStore()
 
 	const { wishlist, toggleWishlist } = useWishlistStore()
@@ -83,6 +80,22 @@ const AppQuiz = ({ quiz }: AppQuizProps) => {
 			blocker.reset()
 		}
 	}, [blocker.state])
+
+	useEffect(() => {
+		const handleBeforeUnload = (e: BeforeUnloadEvent) => {
+			if (Object.keys(userAnswers).length < quiz.length) {
+				e.preventDefault()
+				e.returnValue = '' 
+			}
+		}
+	
+		window.addEventListener('beforeunload', handleBeforeUnload)
+	
+		return () => {
+			window.removeEventListener('beforeunload', handleBeforeUnload)
+		}
+	}, [userAnswers, quiz.length])
+	
 
 	// Helper Functions
 	const getTranslationHTML = (
@@ -160,7 +173,7 @@ const AppQuiz = ({ quiz }: AppQuizProps) => {
 						}
 					>
 						<Star
-							fill={isWishlisted ? 'yellow' : 'none'} // если не кликнута – не заполнена
+							fill={isWishlisted ? 'yellow' : 'none'} 
 							color='yellow'
 							size={50}
 						/>
@@ -175,7 +188,7 @@ const AppQuiz = ({ quiz }: AppQuizProps) => {
 			</div>
 
 			{/* Question */}
-			<div className='bg-white/30 backdrop-blur-md border p-3.5 rounded-lg'>
+			<div className='bg-white/10  backdrop-blur-md border p-3.5 rounded-lg'>
 				<div
 					className='w-full text-white text-center'
 					dangerouslySetInnerHTML={getTranslationHTML(
@@ -218,7 +231,7 @@ const AppQuiz = ({ quiz }: AppQuizProps) => {
 							return (
 								<div
 									key={answer.id}
-									className={`flex items-center justify-between space-x-2 text-white rounded cursor-pointer bg-white/30 backdrop-blur-md
+									className={`flex items-center justify-between space-x-2 text-white rounded cursor-pointer bg-white/20 backdrop-blur-md
 											${!isAnswered ? 'hover:bg-primary' : ''} 
 								`}
 									onClick={() => handleAnswerSelect(answer)}

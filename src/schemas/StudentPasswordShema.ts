@@ -7,12 +7,5 @@ export const studentPasswordSchema = z
 			.string()
 			.min(1, { message: 'Iltimos, parol kiriting!' })
 			.min(8, { message: "Parol kamida 8 ta belgidan iborat bo'lishi kerak!" }),
-		confirm_password: z
-			.string()
-			.min(1, { message: 'Iltimos, parolni tasdiqlang!' })
-			.min(8, { message: "Parol kamida 8 ta belgidan iborat bo'lishi kerak!" }),
-	})
-	.refine(data => data.password === data.confirm_password, {
-		path: ['confirm_password'],
-		message: 'Parollar mos emas!',
+		confirm_password: z.string()
 	})

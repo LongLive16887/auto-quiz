@@ -1,19 +1,21 @@
-import { Calendar } from '@/components/ui/calendar'
+import { useStudentStore } from '@/store/student'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { format } from 'date-fns'
+import { CalendarIcon, Loader2, LogIn } from 'lucide-react'
+import { useState } from 'react'
+import { useForm } from 'react-hook-form'
+import { z } from 'zod'
+import { studentEditSchema } from '../../schemas'
+import { Button } from '../ui/button'
+
 import {
 	Popover,
 	PopoverContent,
 	PopoverTrigger,
 } from '@/components/ui/popover'
 import { cn } from '@/lib/utils'
-import { useStudentStore } from '@/store/student'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { format } from 'date-fns'
-import { Calendar as CalendarIcon, Loader2, LogIn } from 'lucide-react'
-import { useState } from 'react'
-import { useForm } from 'react-hook-form'
-import { z } from 'zod'
-import { studentSchema } from '../../schemas'
-import { Button } from '../ui/button'
+import { Student } from '@/types'
+import { Calendar } from '../ui/calendar'
 import {
 	Form,
 	FormControl,
@@ -25,38 +27,31 @@ import {
 import { Input } from '../ui/input'
 
 type StudentFormProps = {
-	onStudentCreated: () => void
+	onPasswordChange: () => void
+	data: Student
 }
 
-const StudentForm = ({ onStudentCreated }: StudentFormProps) => {
+const StudentEditForm = ({ onPasswordChange, data }: StudentFormProps) => {
 	const [loading, setLoading] = useState(false)
-	const { createStudent } = useStudentStore()
+	const { editStudent } = useStudentStore()
 
-	const form = useForm<z.infer<typeof studentSchema>>({
-		resolver: zodResolver(studentSchema),
+	const form = useForm<z.infer<typeof studentEditSchema>>({
+		resolver: zodResolver(studentEditSchema),
 		defaultValues: {
-			username: '',
-			full_name: '',
-			password: '',
-			confirm_password: '',
-			expiration_date: '',
+			id: data.id,
+			username: data.username,
+			full_name: data.full_name,
+			expiration_date: data.expiration_date,
 		},
 	})
 
-	const onSubmit = (data: z.infer<typeof studentSchema>) => {
+	const onSubmit = (formData: z.infer<typeof studentEditSchema>) => {
 		setLoading(true)
-		const formattedDate = format(new Date(data.expiration_date), 'yyyy-MM-dd')
-		const updatedData = {
-			...data,
-			confirm_password: data.password,
-			expiration_date: formattedDate,
-		}
-		createStudent(updatedData).then(() => {
+		editStudent(formData).then(() => {
 			setLoading(false)
-			onStudentCreated()
+			onPasswordChange()
 		})
 	}
-
 	return (
 		<Form {...form}>
 			<form
@@ -71,7 +66,7 @@ const StudentForm = ({ onStudentCreated }: StudentFormProps) => {
 						<FormItem>
 							<FormLabel>Login</FormLabel>
 							<FormControl>
-								<Input {...field} autoComplete='off' />
+								<Input {...field} />
 							</FormControl>
 							<FormMessage />
 						</FormItem>
@@ -82,22 +77,9 @@ const StudentForm = ({ onStudentCreated }: StudentFormProps) => {
 					name='full_name'
 					render={({ field }) => (
 						<FormItem>
-							<FormLabel>To'liq ism</FormLabel>
+							<FormLabel>to'liq ism</FormLabel>
 							<FormControl>
-								<Input {...field} autoComplete='off' />
-							</FormControl>
-							<FormMessage />
-						</FormItem>
-					)}
-				/>
-				<FormField
-					control={form.control}
-					name='password'
-					render={({ field }) => (
-						<FormItem>
-							<FormLabel>Parol</FormLabel>
-							<FormControl>
-								<Input type='password' {...field} autoComplete='new-password' />
+								<Input {...field} />
 							</FormControl>
 							<FormMessage />
 						</FormItem>
@@ -141,7 +123,6 @@ const StudentForm = ({ onStudentCreated }: StudentFormProps) => {
 						</FormItem>
 					)}
 				/>
-
 				<Button
 					type='submit'
 					className='self-end'
@@ -160,4 +141,4 @@ const StudentForm = ({ onStudentCreated }: StudentFormProps) => {
 	)
 }
 
-export default StudentForm
+export default StudentEditForm

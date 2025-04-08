@@ -1,17 +1,18 @@
 import api from '@/api/axios'
 import { FanTestBlock } from '@/components/FanTestBlock'
 import { Button } from '@/components/ui/button'
-import { useQuizStore } from '@/store/quiz'
+import { BlockData } from '@/types'
 import { Eraser, Loader2 } from 'lucide-react'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import MainLayout from '../../layouts/MainLayout'
+import { useTranslation } from 'react-i18next'
 
 const FanTestDashboard = () => {
-	const { fanStatistics, setFanStatistics } = useQuizStore()
-
+	const [fanStatistics, setFanStatistics] = useState<BlockData[]>([])
+	const { t } = useTranslation()
 	const handleCleanStats = () => {
 		api.delete('/api/v1/user/statistics/delete-by-type/100').then(() => {
-			setFanStatistics()
+			getFanStats()
 		})
 	}
 	const allStatsAreZero = fanStatistics.every(
@@ -21,8 +22,14 @@ const FanTestDashboard = () => {
 			stat.skipped_answer === 0
 	)
 
+	const getFanStats = () => {
+		api.get('/api/v1/user/statistics?type=100').then(res => {
+			setFanStatistics(res.data.data)
+		})
+	}
+
 	useEffect(() => {
-		setFanStatistics()
+		getFanStats()
 	}, [])
 
 	if (!fanStatistics.length) {
@@ -41,8 +48,8 @@ const FanTestDashboard = () => {
 		<MainLayout>
 			<div className='flex flex-col gap-3.5'>
 				{!allStatsAreZero && (
-					<Button className='self-end' onClick={handleCleanStats}>
-						Statistikani tozalash
+					<Button className='self-end' size={'sm'} onClick={handleCleanStats}>
+						{t('clean_stats')}
 						<Eraser />
 					</Button>
 				)}

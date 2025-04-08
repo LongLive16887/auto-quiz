@@ -4,6 +4,7 @@ import { persist } from 'zustand/middleware'
 
 type StudentStore = {
 	student: {
+		id?: number
 		username?: string
 		full_name?: string
 		password?: string
@@ -23,6 +24,13 @@ type StudentStore = {
 		password: string
 		confirm_password: string
 	}) => Promise<void>
+	editStudent: (data: {
+		id: number
+		username: string
+		full_name: string
+		expiration_date: string
+	}) => Promise<void>
+	
 }
 
 export const useStudentStore = create<StudentStore>()(
@@ -42,6 +50,13 @@ export const useStudentStore = create<StudentStore>()(
 			changeStudentPassword: async data => {
 				try {
 					await api.post('/api/v1/auth/change_password', data)
+				} catch (error) {
+					throw error
+				}
+			},
+			editStudent: async data => {
+				try {
+					await api.put('/api/v1/auth/update', data)
 				} catch (error) {
 					throw error
 				}

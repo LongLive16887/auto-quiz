@@ -23,7 +23,7 @@ i18n
 			order: ['localStorage', 'navigator'],
 			caches: ['localStorage'],
 		},
-		supportedLngs: ['la', 'ru', 'en'], 
+		supportedLngs: ['la', 'ru', 'uz'], 
 		nonExplicitSupportedLngs: true, 
 		lng: localStorage.getItem('i18nextLng') || 'la',
 	})

@@ -32,15 +32,15 @@ const AppSidebar = () => {
 		{
 			title:
 				wishlist.length > 0
-					? `${t('Saqlangan')} (${wishlist.length})`
-					: t('Saqlangan'),
+					? `${t('saved')} (${wishlist.length})`
+					: t('saved'),
 			url: '/wishlist',
 			icon: Star,
 		},
 	]
 
 	if (userRoles.includes('WRITE')) {
-		items.push({ title: t("O'quvchilar"), url: '/students', icon: UserCog })
+		items.push({ title: t("students"), url: '/students', icon: UserCog })
 	}
 
 	return (

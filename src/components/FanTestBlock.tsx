@@ -43,7 +43,7 @@ export function FanTestBlock({ data }: { data: BlockData }) {
 	return (
 		<Dialog open={open} onOpenChange={setOpen}>
 			<DialogTrigger asChild>
-				<div className='flex relative flex-col justify-center items-center p-2 bg-white/30 backdrop-blur-md text-white cursor-pointer gap-4 max-w-[370px] min-h-[300px] w-full border rounded-lg hover:shadow-sm transition'>
+				<div className='flex relative flex-col justify-center items-center p-2 bg-white/10 backdrop-blur-lg text-white cursor-pointer gap-4 max-w-[370px] min-h-[300px] w-full border rounded-lg hover:shadow-sm transition'>
 					<p
 						className='text-center'
 						dangerouslySetInnerHTML={{ __html: getLanguageName() }}
