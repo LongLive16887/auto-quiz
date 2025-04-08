@@ -34,6 +34,8 @@
     "i18next-http-backend": "^3.0.2",
     "i18next-localstorage-cache": "^1.1.1",
     "js-cookie": "^3.0.5",
+    "lodash": "^4.17.21",
+    "lodash.debounce": "^4.0.8",
     "lucide-react": "^0.484.0",
     "react": "^19.0.0",
     "react-countdown-circle-timer": "^3.2.1",
@@ -53,6 +55,7 @@
   "devDependencies": {
     "@eslint/js": "^9.21.0",
     "@types/js-cookie": "^3.0.6",
+    "@types/lodash.debounce": "^4.0.9",
     "@types/node": "^22.13.13",
     "@types/react": "^19.0.10",
     "@types/react-dom": "^19.0.4",

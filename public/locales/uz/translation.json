@@ -8,7 +8,7 @@
 	"back": "Орқага",
 	"test_results": "Тест натижалари",
 	"right_answers": "Тўғри жавоблар",
-  "percent": "Фоиз",
+	"percent": "Фоиз",
 	"incorrect_answers": "Нотўғри жавоблар",
 	"skipped_questions": "Танланмаган жавоблар",
 	"main_menu": "Асосий меню",
@@ -16,12 +16,12 @@
 	"finish_test": "Тестни якунлашни истайсизми",
 	"yes": "Ҳа",
 	"no": "Йўқ",
-	"saved":"Сақланганлар",
+	"saved": "Сақланганлар",
 	"students": "Ўқувчилар",
 	"expiration": "Тугаш вақти",
 	"edit": "Таҳрирлаш",
 	"clean_stats": "Статистикани тозалаш",
-	"add_student": "ўқувчи қўшиш"
-
-	
+	"add_student": "ўқувчи қўшиш",
+	"username_taken": "Ушбу логин банд.",
+	"username_check_error": "Логинни текширишда хатолик юз берди."
 }

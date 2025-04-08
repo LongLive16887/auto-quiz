@@ -9,7 +9,7 @@ import { useStudentStore } from '@/store/student'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { format } from 'date-fns'
 import { Calendar as CalendarIcon, Loader2, LogIn } from 'lucide-react'
-import { useState } from 'react'
+import { useState, useCallback } from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { studentSchema } from '../../schemas'
@@ -23,14 +23,19 @@ import {
 	FormMessage,
 } from '../ui/form'
 import { Input } from '../ui/input'
+import debounce from 'lodash/debounce' // Import debounce function from lodash
+import api from '@/api/axios'
+import { useTranslation } from 'react-i18next'
 
 type StudentFormProps = {
 	onStudentCreated: () => void
 }
 
 const StudentForm = ({ onStudentCreated }: StudentFormProps) => {
+		const { t } = useTranslation()
 	const [loading, setLoading] = useState(false)
 	const { createStudent } = useStudentStore()
+	const [usernameError, setUsernameError] = useState<string | null>(null)
 
 	const form = useForm<z.infer<typeof studentSchema>>({
 		resolver: zodResolver(studentSchema),
@@ -42,6 +47,31 @@ const StudentForm = ({ onStudentCreated }: StudentFormProps) => {
 			expiration_date: '',
 		},
 	})
+
+	const checkUsername = async (username: string) => {
+		if (username) {
+			try {
+				const response = await api.get('api/v1/auth/check-username', {
+					params: { username },
+				})
+				if (response.data.exists) {
+					setUsernameError(t('username_taken'))
+				} else {
+					setUsernameError(null)
+				}
+			} catch (error) {
+				setUsernameError(t('username_check_error'))
+			}
+		} else {
+			setUsernameError(null)
+		}
+	}
+
+	// Use debounce to limit the number of API calls
+	const debouncedCheckUsername = useCallback(
+		debounce((username: string) => checkUsername(username), 500), 
+		[]
+	)
 
 	const onSubmit = (data: z.infer<typeof studentSchema>) => {
 		setLoading(true)
@@ -57,6 +87,16 @@ const StudentForm = ({ onStudentCreated }: StudentFormProps) => {
 		})
 	}
 
+	// Handler for username input change
+	const handleUsernameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+		const username = e.target.value
+		form.setValue('username', username)
+		debouncedCheckUsername(username) // Call the debounced function
+	}
+
+	// Checking if there's any error
+	const isUsernameInvalid = usernameError || form.formState.errors.username
+
 	return (
 		<Form {...form}>
 			<form
@@ -71,9 +111,18 @@ const StudentForm = ({ onStudentCreated }: StudentFormProps) => {
 						<FormItem>
 							<FormLabel>Login</FormLabel>
 							<FormControl>
-								<Input {...field} autoComplete='off' />
+								<Input
+									{...field}
+									autoComplete='off'
+									onChange={handleUsernameChange}
+									className={isUsernameInvalid ? 'border-red-500' : ''}
+								/>
 							</FormControl>
-							<FormMessage />
+							{isUsernameInvalid && (
+								<FormMessage>
+									{usernameError || form.formState.errors.username?.message}
+								</FormMessage>
+							)}
 						</FormItem>
 					)}
 				/>
@@ -146,7 +195,7 @@ const StudentForm = ({ onStudentCreated }: StudentFormProps) => {
 					type='submit'
 					className='self-end'
 					size='default'
-					disabled={loading}
+					disabled={loading || Boolean(isUsernameInvalid)}
 				>
 					Saqlash
 					{loading ? (
