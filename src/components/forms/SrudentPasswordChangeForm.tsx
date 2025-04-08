@@ -41,6 +41,7 @@ const StudentPasswordChangeForm = ({
 		setLoading(true)
 		const updatedData = {
 			...data,
+			username: username,
 			confirm_password: data.password,
 		}
 		changeStudentPassword(updatedData).then(() => {
