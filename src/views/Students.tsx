@@ -59,6 +59,7 @@ const Students = () => {
 	}
 
 	const handlePasswordChange = () => {
+		setShowConfirm(false)
 		setShowPasswordChange(false)
 		getStudents()
 	}
