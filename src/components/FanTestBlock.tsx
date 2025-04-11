@@ -48,18 +48,33 @@ export function FanTestBlock({ data }: { data: BlockData }) {
 						className='text-center'
 						dangerouslySetInnerHTML={{ __html: getLanguageName() }}
 					></p>
-					{data.correct_answer !== 0 && data.wrong_answer !== 0 || data.skipped_answer !== 0 ? (
+					{data.correct_answer != 0 &&
+					data.wrong_answer === 0 &&
+					data.skipped_answer === 0 ? (
 						<div className='flex items-center gap-1 absolute top-1 right-1'>
-							<Badge variant='warn'>
-								<CircleAlert size={15} /> {data.skipped_answer}
-							</Badge>
 							<Badge variant='succes'>
 								<Check size={15} /> {data.correct_answer}
 							</Badge>
-
-							<Badge variant='error'>
-								<X size={15} /> {data.wrong_answer}
-							</Badge>
+						</div>
+					) : data.correct_answer !== 0 ||
+					  data.wrong_answer !== 0 ||
+					  data.skipped_answer !== 0 ? (
+						<div className='flex items-center gap-1 absolute top-1 right-1'>
+							{data.skipped_answer > 0 && (
+								<Badge variant='warn'>
+									<CircleAlert size={15} /> {data.skipped_answer}
+								</Badge>
+							)}
+							{data.correct_answer > 0 && (
+								<Badge variant='succes'>
+									<Check size={15} /> {data.correct_answer}
+								</Badge>
+							)}
+							{data.wrong_answer > 0 && (
+								<Badge variant='error'>
+									<X size={15} /> {data.wrong_answer}
+								</Badge>
+							)}
 						</div>
 					) : null}
 				</div>
