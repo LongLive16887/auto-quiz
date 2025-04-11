@@ -109,7 +109,15 @@ const AppQuiz = () => {
 
 	const handleAnswerSelect = (answer: Answer) => {
 		if (!currentQuestion || userAnswers[currentQuestion.id]) return
+	
 		submitAnswer(currentQuestion.id, answer.id, answer.is_correct)
+		setTimeout(() => {
+			if (currentQuestionIndex + 1 < quiz.length) {
+				setCurrentQuestionIndex(currentQuestionIndex + 1)
+			} else {
+				setShowConfirm(true)
+			}
+		}, 500)
 	}
 
 	const submitQuizData = async () => {
