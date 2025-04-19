@@ -55,7 +55,7 @@ const Wishlist = () => {
 							{/* Левая часть */}
 							<div className='w-full md:w-80 flex flex-col'>
 								<div
-									className='text-sm mb-2 line-clamp-3'
+									className='text-sm mb-2'
 									dangerouslySetInnerHTML={getTranslationHTML(
 										'question',
 										question

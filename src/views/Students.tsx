@@ -2,6 +2,7 @@ import api from '@/api/axios'
 import StudentPasswordChangeForm from '@/components/forms/SrudentPasswordChangeForm'
 import StudentEditForm from '@/components/forms/StudentEditForm'
 import StudentForm from '@/components/forms/StudentForm'
+import ResultsTabs from '@/components/ResultsTabs'
 import { Button } from '@/components/ui/button'
 import {
 	Dialog,
@@ -31,7 +32,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import MainLayout from '@/layouts/MainLayout'
 import { Student } from '@/types'
 import { DialogTrigger } from '@radix-ui/react-dialog'
-import { Loader2, Pen, Search } from 'lucide-react'
+import { Eye, Loader2, Pen, Search } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -43,6 +44,10 @@ const Students = () => {
 	const pageSize = 10
 	const [showConfirm, setShowConfirm] = useState(false)
 	const [showPasswordChange, setShowPasswordChange] = useState(false)
+	const [showResults, setShowResults] = useState(false)
+	const [selectedResultStudent, setSelectedResultStudent] = useState<
+		number | null
+	>(null)
 	const [selectedStudent, setSelectedStudent] = useState<Student | null>(null)
 	const { t } = useTranslation()
 	const getStudents = (username?: string, page = 1) => {
@@ -61,6 +66,12 @@ const Students = () => {
 	const handlePasswordChange = () => {
 		setShowConfirm(false)
 		setShowPasswordChange(false)
+		getStudents()
+	}
+
+	const handleShowResult = (student: Student) => {
+		setSelectedResultStudent(student.id)
+		setShowResults(true)
 		getStudents()
 	}
 
@@ -86,7 +97,27 @@ const Students = () => {
 
 	return (
 		<MainLayout>
-			<div className='flex flex-col h-full'>
+	<div className='flex flex-col h-full'>
+		{showResults && selectedResultStudent ? (
+			<>
+				<div className='flex justify-between items-center mb-4'>
+					<h2 className='text-xl font-semibold text-white'>
+						{t('results')} - ID: {selectedResultStudent}
+					</h2>
+					<Button
+						onClick={() => {
+							setShowResults(false)
+							setSelectedResultStudent(null)
+						}}
+					>
+						{/* {t('back_to_list')} */}
+						Orqaga
+					</Button>
+				</div>
+				<ResultsTabs studentId={selectedResultStudent} />
+			</>
+		) : (
+			<>
 				<div className='flex items-baseline justify-between flex-wrap gap-2'>
 					<div className='flex items-center gap-1 w-full max-w-[300px]'>
 						<Input
@@ -122,8 +153,11 @@ const Students = () => {
 					</Dialog>
 				</div>
 
-				<Dialog open={showPasswordChange} onOpenChange={setShowPasswordChange}>
-					<DialogContent>
+				<Dialog
+					open={showPasswordChange}
+					onOpenChange={setShowPasswordChange}
+				>
+					<DialogContent className='max-w-2xl'>
 						<DialogHeader>
 							<DialogTitle>{t('edit')}</DialogTitle>
 						</DialogHeader>
@@ -141,7 +175,6 @@ const Students = () => {
 								)}
 							</TabsContent>
 							<TabsContent value='password'>
-								{' '}
 								{selectedStudent && (
 									<StudentPasswordChangeForm
 										username={selectedStudent.username}
@@ -152,6 +185,7 @@ const Students = () => {
 						</Tabs>
 					</DialogContent>
 				</Dialog>
+
 				{data.length ? (
 					<div className='mb-3.5'>
 						<Table>
@@ -161,7 +195,10 @@ const Students = () => {
 									<TableHead>Login</TableHead>
 									<TableHead>F.I.O</TableHead>
 									<TableHead>{t('expiration')}</TableHead>
-									<TableHead className='text-right'>{t('edit')}</TableHead>
+									<TableHead>Natijalar</TableHead>
+									<TableHead className='text-right'>
+										{t('edit')}
+									</TableHead>
 								</TableRow>
 							</TableHeader>
 							<TableBody>
@@ -171,6 +208,11 @@ const Students = () => {
 										<TableCell>{student.username}</TableCell>
 										<TableCell>{student.full_name}</TableCell>
 										<TableCell>{student.expiration_date}</TableCell>
+										<TableCell>
+											<Button onClick={() => handleShowResult(student)}>
+												<Eye />
+											</Button>
+										</TableCell>
 										<TableCell className='text-right'>
 											<Button
 												onClick={() => handlePasswordChangeClick(student)}
@@ -184,7 +226,7 @@ const Students = () => {
 						</Table>
 					</div>
 				) : (
-					<div className='text-center  text-white text-lg h-[calc(100vh-150px)] flex items-center justify-center'>
+					<div className='text-center text-white text-lg h-[calc(100vh-150px)] flex items-center justify-center'>
 						{searchTerm.trim() ? (
 							t('user_not_found')
 						) : (
@@ -192,6 +234,7 @@ const Students = () => {
 						)}
 					</div>
 				)}
+
 				{totalPages > 1 && data.length ? (
 					<div className='flex mt-auto justify-end w-full'>
 						<Pagination>
@@ -228,24 +271,23 @@ const Students = () => {
 								))}
 
 								{totalPages > 3 && (
-									<PaginationItem>
-										<PaginationEllipsis />
-									</PaginationItem>
-								)}
-
-								{totalPages > 3 && (
-									<PaginationItem>
-										<PaginationLink
-											href='#'
-											onClick={e => {
-												e.preventDefault()
-												handlePageChange(totalPages)
-											}}
-											isActive={totalPages === currentPage}
-										>
-											{totalPages}
-										</PaginationLink>
-									</PaginationItem>
+									<>
+										<PaginationItem>
+											<PaginationEllipsis />
+										</PaginationItem>
+										<PaginationItem>
+											<PaginationLink
+												href='#'
+												onClick={e => {
+													e.preventDefault()
+													handlePageChange(totalPages)
+												}}
+												isActive={totalPages === currentPage}
+											>
+												{totalPages}
+											</PaginationLink>
+										</PaginationItem>
+									</>
 								)}
 
 								<PaginationItem>
@@ -266,8 +308,11 @@ const Students = () => {
 						</Pagination>
 					</div>
 				) : null}
-			</div>
-		</MainLayout>
+			</>
+		)}
+	</div>
+</MainLayout>
+
 	)
 }
 

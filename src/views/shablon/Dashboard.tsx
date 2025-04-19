@@ -28,7 +28,6 @@ const Dashboard = () => {
 		api.get('/api/v1/user/statistics?type=102').then(res => {
 			setStatistics(res.data.data)
 			setMaxQuizCount(res.data.data.length)
-			
 		})
 	}
 

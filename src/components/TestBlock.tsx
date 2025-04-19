@@ -31,7 +31,7 @@ export function TestBlock({ data }: { data: BlockData }) {
 	return (
 		<Dialog open={open} onOpenChange={setOpen}>
 			<DialogTrigger asChild>
-				<div className='flex flex-col relative items-center py-10 bg-white/10 backdrop-blur-lg cursor-pointer gap-2 max-w-[150px] w-full rounded-lg border hover:shadow-sm transition'>
+				<div className='flex flex-col relative items-center py-10 cursor-pointer gap-2 max-w-[150px] w-full rounded-lg border hover:shadow-sm transition'>
 					<p className='text-sm text-white'>
 						{data.id} - {t('bilet')}
 					</p>
