@@ -13,8 +13,6 @@ const ResultsTabs = ({ studentId }: { studentId: number }) => {
 	const [savedQuestions, setSavedQuestions] = useState<Question[]>([])
 	const [activeTab, setActiveTab] = useState('shablon')
 	const [loading, setLoading] = useState(false)
-	const [selectedImage, setSelectedImage] = useState<string | null>(null)
-
 
 	const getStats = (tab: string) => {
 		setLoading(true)
@@ -218,17 +216,14 @@ const ResultsTabs = ({ studentId }: { studentId: number }) => {
 														src={`https://backend.avtotest-begzod.uz/api/v1/file/download/${question.mobile_media}`}
 														alt='Question'
 														className='w-full h-40 object-cover rounded-md mb-2 cursor-pointer'
-														onClick={() => setSelectedImage(question.mobile_media!)}
 													/>
 												</DialogTrigger>
 												<DialogContent className='max-w-4xl p-0 bg-transparent border-none shadow-none'>
-													{selectedImage && (
-														<img
-															src={selectedImage}
-															alt='Full view'
-															className='w-full h-auto rounded-lg object-cover max-h-[80vh]'
-														/>
-													)}
+													<img
+														src={`https://backend.avtotest-begzod.uz/api/v1/file/download/${question.mobile_media}`}
+														alt='Full view'
+														className='w-full h-auto rounded-lg object-cover max-h-[80vh]'
+													/>
 												</DialogContent>
 											</Dialog>
 										) : (

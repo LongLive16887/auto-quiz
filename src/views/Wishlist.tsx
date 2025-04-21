@@ -4,14 +4,12 @@ import MainLayout from '@/layouts/MainLayout'
 import { useWishlistStore } from '@/store/wishlist'
 import { Question } from '@/types'
 import { Bookmark } from 'lucide-react'
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 
 const Wishlist = () => {
 	const { fetchWishlist, wishlist, toggleWishlist } = useWishlistStore()
 	const { i18n } = useTranslation()
-	const [selectedImage, setSelectedImage] = useState<string | null>(null)
-
 	useEffect(() => {
 		fetchWishlist()
 	}, [fetchWishlist])
@@ -72,17 +70,14 @@ const Wishlist = () => {
 												src={`https://backend.avtotest-begzod.uz/api/v1/file/download/${question.mobile_media}`}
 												alt='Question'
 												className='w-full h-40 object-cover rounded-md mb-2 cursor-pointer'
-												onClick={() => setSelectedImage(question.mobile_media!)}
 											/>
 										</DialogTrigger>
 										<DialogContent className='max-w-4xl p-0 bg-transparent border-none shadow-none'>
-											{selectedImage && (
-												<img
-													src={selectedImage}
-													alt='Full view'
-													className='w-full h-auto rounded-lg object-cover max-h-[80vh]'
-												/>
-											)}
+											<img
+												src={`https://backend.avtotest-begzod.uz/api/v1/file/download/${question.mobile_media}`}
+												alt='Full view'
+												className='w-full h-auto rounded-lg object-cover max-h-[80vh]'
+											/>
 										</DialogContent>
 									</Dialog>
 								) : (
