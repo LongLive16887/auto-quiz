@@ -10,10 +10,21 @@ import { LogOutIcon } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { Button } from './ui/button'
 import { SidebarTrigger } from './ui/sidebar'
+import {
+	Dialog,
+	DialogTrigger,
+	DialogContent,
+	DialogHeader,
+	DialogTitle,
+	DialogFooter,
+} from './ui/dialog'
+import { useState } from 'react'
 
 const AppNav = () => {
 	const { lougoutUser } = useUserStore()
-	const { i18n } = useTranslation()
+	const { i18n, t } = useTranslation()
+	const [open, setOpen] = useState(false)
+
 	const languages = [
 		{ code: 'ru', label: 'Русский' },
 		{ code: 'uz', label: "O'zbek" },
@@ -49,19 +60,46 @@ const AppNav = () => {
 					}}
 				>
 					<SelectTrigger className='w-[110px]'>
-						<SelectValue placeholder='Выбери язык' />
+						<SelectValue placeholder={t('select_language')} />
 					</SelectTrigger>
 					<SelectContent>
 						{languages.map(lang => (
 							<SelectItem key={lang.code} value={lang.code}>
-								<p className='text-sm'> {lang.label}</p>
+								<p className='text-sm'>{lang.label}</p>
 							</SelectItem>
 						))}
 					</SelectContent>
 				</Select>
-				<Button onClick={lougoutUser}>
-					<LogOutIcon />
-				</Button>
+
+				<Dialog open={open} onOpenChange={setOpen}>
+					<DialogTrigger asChild>
+						<Button className='gap-2'>
+							<LogOutIcon className='w-4 h-4' />
+						</Button>
+					</DialogTrigger>
+					<DialogContent>
+						<DialogHeader>
+							<DialogTitle>Tasdiqlash</DialogTitle>
+						</DialogHeader>
+						<p>Akauntdan chiqmoqchimisiz?</p>
+						<DialogFooter className='gap-2'>
+							<Button
+								variant='outline'
+								onClick={() => setOpen(false)}
+							>
+								Yoq
+							</Button>
+							<Button
+								onClick={() => {
+									lougoutUser()
+									setOpen(false)
+								}}
+							>
+								Ha
+							</Button>
+						</DialogFooter>
+					</DialogContent>
+				</Dialog>
 			</div>
 		</div>
 	)

@@ -1,7 +1,14 @@
 import { useQuizStore } from '@/store/quiz'
 import { useUserStore } from '@/store/user'
 import { useWishlistStore } from '@/store/wishlist'
-import { Lightbulb, Star, User, UserCog } from 'lucide-react'
+import {
+	Bookmark,
+	BookOpen,
+	Dumbbell,
+	Lightbulb,
+	User,
+	UserCog,
+} from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
 import {
@@ -27,20 +34,18 @@ const AppSidebar = () => {
 			url: '/',
 			icon: Lightbulb,
 		},
-		{ title: `${t('sinov_test')} (20/50)`, url: '/test', icon: Lightbulb },
-		{ title: t('theme_test'), url: '/fan-test', icon: Lightbulb },
+		{ title: `${t('sinov_test')} (20/50)`, url: '/test', icon: Dumbbell },
+		{ title: t('theme_test'), url: '/fan-test', icon: BookOpen },
 		{
 			title:
-				wishlist.length > 0
-					? `${t('saved')} (${wishlist.length})`
-					: t('saved'),
+				wishlist.length > 0 ? `${t('saved')} (${wishlist.length})` : t('saved'),
 			url: '/wishlist',
-			icon: Star,
+			icon: Bookmark,
 		},
 	]
 
 	if (userRoles.includes('WRITE')) {
-		items.push({ title: t("students"), url: '/students', icon: UserCog })
+		items.push({ title: t('students'), url: '/students', icon: UserCog })
 	}
 
 	return (

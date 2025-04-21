@@ -1,14 +1,16 @@
 import { Button } from '@/components/ui/button'
+import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog'
 import MainLayout from '@/layouts/MainLayout'
 import { useWishlistStore } from '@/store/wishlist'
 import { Question } from '@/types'
-import { Star } from 'lucide-react'
-import { useEffect } from 'react'
+import { Bookmark } from 'lucide-react'
+import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 const Wishlist = () => {
 	const { fetchWishlist, wishlist, toggleWishlist } = useWishlistStore()
 	const { i18n } = useTranslation()
+	const [selectedImage, setSelectedImage] = useState<string | null>(null)
 
 	useEffect(() => {
 		fetchWishlist()
@@ -26,10 +28,11 @@ const Wishlist = () => {
 	if (!wishlist.length) {
 		return (
 			<MainLayout>
-        <div>
-        <p className='text-white h-[calc(100vh-150px)] mx-auto'>Saqlangan yoq</p>
-        </div>
-	
+				<div>
+					<p className='text-white h-[calc(100vh-150px)] mx-auto'>
+						Saqlangan yoq
+					</p>
+				</div>
 			</MainLayout>
 		)
 	}
@@ -49,7 +52,7 @@ const Wishlist = () => {
 								className='absolute top-2 right-2 text-yellow-400 hover:text-yellow-500 z-10'
 								onClick={() => toggleWishlist(question)}
 							>
-								<Star fill='currentColor' className='w-5 h-5' />
+								<Bookmark fill='currentColor' className='w-5 h-5' />
 							</Button>
 
 							{/* Левая часть */}
@@ -62,12 +65,26 @@ const Wishlist = () => {
 									)}
 								/>
 
-								{question.media ? (
-									<img
-										src={question.media}
-										alt='Question'
-										className='w-full h-40 object-cover rounded-md mb-2'
-									/>
+								{question.mobile_media ? (
+									<Dialog>
+										<DialogTrigger asChild>
+											<img
+												src={`https://backend.avtotest-begzod.uz/api/v1/file/download/${question.mobile_media}`}
+												alt='Question'
+												className='w-full h-40 object-cover rounded-md mb-2 cursor-pointer'
+												onClick={() => setSelectedImage(question.mobile_media!)}
+											/>
+										</DialogTrigger>
+										<DialogContent className='max-w-4xl p-0 bg-transparent border-none shadow-none'>
+											{selectedImage && (
+												<img
+													src={selectedImage}
+													alt='Full view'
+													className='w-full h-auto rounded-lg object-cover max-h-[80vh]'
+												/>
+											)}
+										</DialogContent>
+									</Dialog>
 								) : (
 									<img
 										className='h-40 bg-white w-fit mx-auto rounded-full object-contain mb-2'

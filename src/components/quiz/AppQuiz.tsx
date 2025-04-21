@@ -17,7 +17,7 @@ import { RadioGroup } from '@/components/ui/radio-group'
 import { useQuizStore } from '@/store/quiz'
 import { useWishlistStore } from '@/store/wishlist'
 import { Answer, Question } from '@/types'
-import { Loader2, Star } from 'lucide-react'
+import { Bookmark, Loader2 } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
@@ -44,7 +44,7 @@ const AppQuiz = () => {
 		correctCount,
 		incorrectCount,
 		reset,
-		quiz
+		quiz,
 	} = useQuizStore()
 
 	const { wishlist, toggleWishlist } = useWishlistStore()
@@ -85,17 +85,16 @@ const AppQuiz = () => {
 		const handleBeforeUnload = (e: BeforeUnloadEvent) => {
 			if (Object.keys(userAnswers).length < quiz.length) {
 				e.preventDefault()
-				e.returnValue = '' 
+				e.returnValue = ''
 			}
 		}
-	
+
 		window.addEventListener('beforeunload', handleBeforeUnload)
-	
+
 		return () => {
 			window.removeEventListener('beforeunload', handleBeforeUnload)
 		}
 	}, [userAnswers, quiz.length])
-	
 
 	// Helper Functions
 	const getTranslationHTML = (
@@ -109,7 +108,7 @@ const AppQuiz = () => {
 
 	const handleAnswerSelect = (answer: Answer) => {
 		if (!currentQuestion || userAnswers[currentQuestion.id]) return
-	
+
 		submitAnswer(currentQuestion.id, answer.id, answer.is_correct)
 		setTimeout(() => {
 			if (currentQuestionIndex + 1 < quiz.length) {
@@ -117,7 +116,7 @@ const AppQuiz = () => {
 			} else {
 				setShowConfirm(true)
 			}
-		}, 500)
+		}, 1500)
 	}
 
 	const submitQuizData = async () => {
@@ -176,20 +175,15 @@ const AppQuiz = () => {
 				<div className='flex items-center gap-3.5 ml-auto'>
 					<Button
 						size={'icon'}
-						onClick={() =>
-							currentQuestion && toggleWishlist(currentQuestion)
-						}
+						onClick={() => currentQuestion && toggleWishlist(currentQuestion)}
 					>
-						<Star
-							fill={isWishlisted ? 'yellow' : 'none'} 
+						<Bookmark
+							fill={isWishlisted ? 'yellow' : 'none'}
 							color='yellow'
 							size={50}
 						/>
 					</Button>
-					<Button
-						variant='destructive'
-						onClick={() => setShowConfirm(true)}
-					>
+					<Button variant='destructive' onClick={() => setShowConfirm(true)}>
 						{t('finish')}
 					</Button>
 				</div>
@@ -210,15 +204,15 @@ const AppQuiz = () => {
 			<div className='flex-1 flex flex-wrap gap-3.5 items-start'>
 				{/* Media */}
 				<div className='flex-1 rounded-lg flex min-h-[250px] overflow-hidden'>
-					{currentQuestion.media?.trim() ? (
+					{currentQuestion.mobile_media?.trim() ? (
 						<img
-							src={currentQuestion.media}
+							src={`https://backend.avtotest-begzod.uz/api/v1/file/download/${currentQuestion.mobile_media}`}
 							alt='Question media'
-							className='h-full max-w-full mx-auto object-contain'
+							className='max-h-[550px]! max-w-full mx-auto object-contain'
 						/>
 					) : (
 						<img
-							className='mt-14 h-[300px] bg-white rounded-full w-[300px] mx-auto object-contain'
+							className='h-[550px] rounded-full w-[300px] mx-auto object-contain'
 							src='/logo.png'
 						/>
 					)}
@@ -245,13 +239,13 @@ const AppQuiz = () => {
 									onClick={() => handleAnswerSelect(answer)}
 								>
 									<p
-										className={`font-semibold leading-6 p-4 w-12 
+										className={`font-semibold leading-6 text-center p-6 w-16 
 									${isUserWrongAnswer ? 'bg-red-500 ' : ''} 
 									${isCorrectHighlight ? 'bg-green-400' : ''}`}
 									>
 										F{i + 1}
 									</p>
-									<Label className='flex-1'>
+									<Label className='flex-1 px-5'>
 										<div
 											dangerouslySetInnerHTML={getTranslationHTML(
 												'answer',
