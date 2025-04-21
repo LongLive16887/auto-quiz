@@ -219,7 +219,7 @@ const AppQuiz = () => {
 				</div>
 
 				{/* Answers */}
-				<div className='w-[500px]  px-3.5 rounded-lg flex flex-col'>
+				<div className='w-[500px] px-3.5 rounded-lg flex flex-col'>
 					<RadioGroup>
 						{currentQuestion.answers.map((answer, i) => {
 							const isSelected =
@@ -233,19 +233,19 @@ const AppQuiz = () => {
 							return (
 								<div
 									key={answer.id}
-									className={`flex items-center justify-between space-x-2 text-white rounded cursor-pointer bg-white/20 backdrop-blur-md
-											${!isAnswered ? 'hover:bg-primary' : ''} 
-								`}
+									className={`flex items-stretch space-x-4 text-white rounded cursor-pointer bg-white/20 backdrop-blur-md
+					${!isAnswered ? 'hover:bg-primary' : ''} 
+				`}
 									onClick={() => handleAnswerSelect(answer)}
 								>
 									<p
-										className={`font-semibold leading-6 text-center p-6 w-16 
-									${isUserWrongAnswer ? 'bg-red-500 ' : ''} 
-									${isCorrectHighlight ? 'bg-green-400' : ''}`}
+										className={`font-semibold leading-6 text-center p-4 w-20 flex-shrink-0 h-full flex items-center justify-center
+						${isUserWrongAnswer ? 'bg-red-500' : ''} 
+						${isCorrectHighlight ? 'bg-green-400' : ''}`}
 									>
 										F{i + 1}
 									</p>
-									<Label className='flex-1 px-5'>
+									<Label className='flex-1 px-2 py-4 break-words'>
 										<div
 											dangerouslySetInnerHTML={getTranslationHTML(
 												'answer',
