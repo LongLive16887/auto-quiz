@@ -108,6 +108,7 @@ const ResultsTabs = ({ studentId }: { studentId: number }) => {
 										<div className='flex items-center gap-1 absolute top-1 right-1'>
 											{item.skipped_answer > 0 && (
 												<Badge variant='warn'>
+													
 													<CircleAlert size={15} />
 													<span className='text-xs'>{item.skipped_answer}</span>
 												</Badge>
