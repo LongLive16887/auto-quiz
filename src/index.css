@@ -140,3 +140,8 @@ strong {
 		@apply bg-background text-foreground;
 	}
 }
+
+.tabs-items__header::-webkit-scrollbar{
+	width: 0;
+	display: none;
+}

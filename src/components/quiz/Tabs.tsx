@@ -14,7 +14,8 @@ const Tabs = ({ quantity, onTabChange }: {
   }
 
   return (
-    <div className="flex flex-wrap w-full gap-1 justify-center items-center">
+    <div className="flex flex-wrap w-full gap-1 justify-center items-center max-md:flex-nowrap overflow-x-hidden">
+      <div className="flex flex-nowrap overflow-x-auto gap-1 tabs-items__header">
       {[...Array(quantity)].map((_, index) => (
         <Button
           key={index}
@@ -28,6 +29,7 @@ const Tabs = ({ quantity, onTabChange }: {
           {index + 1}
         </Button>
       ))}
+      </div>
     </div>
   )
 }

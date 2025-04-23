@@ -189,6 +189,11 @@ const AppQuiz = () => {
 				</div>
 			</div>
 
+				{/* Navigation and Timer */}
+			<div className='hidden items-center justify-center gap-4 mt-auto mb-3 max-md:flex'>
+				<Tabs quantity={quiz.length} onTabChange={setCurrentQuestionIndex} />
+			</div>
+
 			{/* Question */}
 			<div className='bg-white/10  backdrop-blur-md border p-3.5 rounded-lg'>
 				<div
@@ -201,25 +206,25 @@ const AppQuiz = () => {
 			</div>
 
 			{/* Main Content */}
-			<div className='flex-1 flex flex-wrap gap-3.5 items-start'>
+			<div className='flex-1 flex flex-wrap gap-3.5 items-start max-md:flex-nowrap max-md:flex-col'>
 				{/* Media */}
-				<div className='flex-1 rounded-lg flex min-h-[250px] overflow-hidden'>
+				<div className='flex-1 rounded-lg flex min-h-[250px] overflow-hidden max-h-[550px] max-md:max-h-[200px] max-md:min-h-[200px] max-md:justify-center max-md:w-full'>
 					{currentQuestion.mobile_media?.trim() ? (
 						<img
 							src={`https://backend.avtotest-begzod.uz/api/v1/file/download/${currentQuestion.mobile_media}`}
 							alt='Question media'
-							className='max-h-[550px]! max-w-full mx-auto object-contain'
+							className='max-w-full mx-auto object-contain'
 						/>
 					) : (
 						<img
-							className='h-[550px] rounded-full w-[300px] mx-auto object-contain'
+							className='rounded-full w-full mx-auto object-contain max-md:max-h-[200px]'
 							src='/logo.png'
 						/>
 					)}
 				</div>
 
 				{/* Answers */}
-				<div className='w-[500px] px-3.5 rounded-lg flex flex-col'>
+				<div className='w-[500px] px-3.5 rounded-lg flex flex-col max-md:w-full'>
 					<RadioGroup>
 						{currentQuestion.answers.map((answer, i) => {
 							const isSelected =
@@ -290,7 +295,7 @@ const AppQuiz = () => {
 			</div>
 
 			{/* Navigation and Timer */}
-			<div className='flex items-center justify-center gap-4 mt-auto mb-3'>
+			<div className='flex items-center justify-center gap-4 mt-auto mb-3 max-md:hidden'>
 				<Tabs quantity={quiz.length} onTabChange={setCurrentQuestionIndex} />
 			</div>
 
