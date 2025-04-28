@@ -32,6 +32,7 @@ type StudentFormProps = {
 }
 
 const StudentForm = ({ onStudentCreated }: StudentFormProps) => {
+	const [open, setOpen] = useState<boolean>(false)
 	const { t } = useTranslation()
 	const [loading, setLoading] = useState(false)
 	const { createStudent } = useStudentStore()
@@ -159,7 +160,7 @@ const StudentForm = ({ onStudentCreated }: StudentFormProps) => {
 						<FormItem>
 							<FormLabel>Muddati</FormLabel>
 							<FormControl>
-								<Popover>
+								<Popover open={open} onOpenChange={setOpen}>
 									<PopoverTrigger asChild>
 										<Button
 											variant={'outline'}
@@ -180,6 +181,7 @@ const StudentForm = ({ onStudentCreated }: StudentFormProps) => {
 											selected={field.value ? new Date(field.value) : undefined}
 											onSelect={selectedDate => {
 												field.onChange(selectedDate?.toISOString() || '')
+												setOpen(false)
 											}}
 											initialFocus
 										/>

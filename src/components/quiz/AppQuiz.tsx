@@ -166,6 +166,9 @@ const AppQuiz = () => {
 	return (
 		<div className='flex flex-col h-[calc(100vh-110px)] gap-3.5'>
 			{/* Header */}
+		{/* <video src="https://backend.avtotest-begzod.uz/api/v1/file/download/video/7a440435-df72-49ed-a5f1-ae72552a0bd0" width="720px" height="480px" controls preload="auto"></video> */}
+
+
 			<div className='flex items-center px-3.5 justify-between flex-wrap'>
 				{!TypeParam ? (
 					<p className='text-2xl font-semibold text-white'>
