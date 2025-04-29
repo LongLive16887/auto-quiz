@@ -18,10 +18,7 @@ const Tabs = ({ quantity, onTabChange }: {
     <div className="flex flex-wrap w-full gap-1 justify-center items-center max-md:flex-nowrap overflow-x-hidden">
       <div
         className={cn(
-          "flex flex-wrap justify-center overflow-x-auto gap-1",
-          "max-md:tabs-items__header",
-          "max-md:flex-nowrap"
-
+          "flex max-md:flex-nowrap flex-wrap justify-center max-md:justify-start overflow-x-auto gap-1 tabs-items__header"
         )}
       >
         {[...Array(quantity)].map((_, index) => (
