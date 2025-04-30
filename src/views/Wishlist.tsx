@@ -81,11 +81,13 @@ const Wishlist = () => {
 										</DialogContent>
 									</Dialog>
 								) : (
-									<img
-										className='h-40 bg-white w-fit mx-auto rounded-full object-contain mb-2'
+									<div className='h-40 bg-white w-40 mx-auto rounded-full object-contain mb-2'>
+										<img
+										className='h-full bg-white w-full mx-auto rounded-full object-contain mb-2'
 										src='/logo.png'
 										alt='Logo'
 									/>
+									</div>
 								)}
 
 								<div className='space-y-1 pt-2 overflow-y-auto pr-2 scroll-smooth'>

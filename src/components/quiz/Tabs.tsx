@@ -28,7 +28,7 @@ const Tabs = ({ quantity, onTabChange }: {
             variant={getButtonVariant(index)}
             onClick={() => onTabChange(index)}
             className={cn(
-              currentQuestionIndex === index ? 'ring-2 ring-blue-500' : ''
+              currentQuestionIndex === index ? 'ring-2 ring-blue-500 bg-blue-500 text-white border-blue-500' : ''
             )}
           >
             {index + 1}
