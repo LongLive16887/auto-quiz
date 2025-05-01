@@ -17,7 +17,7 @@ import { RadioGroup } from "@/components/ui/radio-group";
 import { useQuizStore } from "@/store/quiz";
 import { useWishlistStore } from "@/store/wishlist";
 import { Answer, Question } from "@/types";
-import { Bookmark, Loader2 } from "lucide-react";
+import { Bookmark, Loader2, FileVideo } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useSwipeable } from "react-swipeable";
@@ -36,6 +36,7 @@ const AppQuiz = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const TypeParam = new URLSearchParams(location.search).get("type");
+  const VideoId = new URLSearchParams(location.search).get("video_id");
 
   const {
     currentQuestionIndex,
@@ -55,6 +56,7 @@ const AppQuiz = () => {
   const [selectedImg, setSelectedImg] = useState<string | null>("");
   const [showConfirm, setShowConfirm] = useState(false);
   const [showExitConfirm, setShowExitConfirm] = useState(false);
+  const [showVideo,setShowVideo] = useState(false)
   const [openAccordion, setOpenAccordion] = useState<string | undefined>(
     undefined
   );
@@ -156,9 +158,11 @@ const AppQuiz = () => {
     }
   };
   function next() {
-    console.log("hi");
-    if (quiz.length != currentQuestionIndex) {
+    if (quiz.length != currentQuestionIndex + 1) {
       setCurrentQuestionIndex(currentQuestionIndex + 1);
+    }
+    if (quiz.length == currentQuestionIndex + 1) {
+      setShowConfirm(true);
     }
   }
   function prev() {
@@ -197,6 +201,13 @@ const AppQuiz = () => {
           </p>
         ) : null}
         <div className="flex items-center gap-3.5 ml-auto">
+		  <Button
+		  className="w-fit px-4"
+            size={"icon"}
+            onClick={() => setShowVideo(true)}>
+            <FileVideo className="text-white" />
+			video ko'rish
+          </Button>
           <Button
             size={"icon"}
             onClick={() => currentQuestion && toggleWishlist(currentQuestion)}>
@@ -338,6 +349,18 @@ const AppQuiz = () => {
           </DialogFooter>
         </DialogContent>
       </Dialog>
+
+
+	  <Dialog open={showVideo} onOpenChange={setShowVideo}>
+        <DialogContent>
+		  <div className="overflow-hidden rounded-lg py-4">
+			<video controls src={`https://backend.avtotest-begzod.uz/api/v1/file/download/video/${VideoId}`}>
+
+			</video>
+		  </div>
+        </DialogContent>
+      </Dialog>
+
 
       {/* Выход из теста */}
       <Dialog open={showExitConfirm} onOpenChange={setShowExitConfirm}>

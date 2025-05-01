@@ -6,4 +6,5 @@ export type BlockData = {
 	name_ru: number
 	skipped_answer: number
 	wrong_answer: number
+	video_id?:string|null
 }
