@@ -56,7 +56,7 @@ const AppQuiz = () => {
   const [selectedImg, setSelectedImg] = useState<string | null>("");
   const [showConfirm, setShowConfirm] = useState(false);
   const [showExitConfirm, setShowExitConfirm] = useState(false);
-  const [showVideo,setShowVideo] = useState(false)
+  const [showVideo, setShowVideo] = useState(false);
   const [openAccordion, setOpenAccordion] = useState<string | undefined>(
     undefined
   );
@@ -201,13 +201,15 @@ const AppQuiz = () => {
           </p>
         ) : null}
         <div className="flex items-center gap-3.5 ml-auto">
-		  <Button
-		  className="w-fit px-4"
-            size={"icon"}
-            onClick={() => setShowVideo(true)}>
-            <FileVideo className="text-white" />
-			video ko'rish
-          </Button>
+          {!!VideoId && (
+            <Button
+              className="w-fit px-4"
+              size={"icon"}
+              onClick={() => setShowVideo(true)}>
+              <FileVideo className="text-white" />
+              video ko'rish
+            </Button>
+          )}
           <Button
             size={"icon"}
             onClick={() => currentQuestion && toggleWishlist(currentQuestion)}>
@@ -350,17 +352,16 @@ const AppQuiz = () => {
         </DialogContent>
       </Dialog>
 
-
-	  <Dialog open={showVideo} onOpenChange={setShowVideo}>
+      <Dialog open={showVideo} onOpenChange={setShowVideo}>
         <DialogContent>
-		  <div className="overflow-hidden rounded-lg py-4">
-			<video controls src={`https://backend.avtotest-begzod.uz/api/v1/file/download/video/${VideoId}`}>
-
-			</video>
-		  </div>
+          <div className="overflow-hidden rounded-lg py-4">
+            <video
+              className="max-h-[80dvh] object-cover h-full w-full"
+              controls
+              src={`https://backend.avtotest-begzod.uz/api/v1/file/download/video/${VideoId}`}></video>
+          </div>
         </DialogContent>
       </Dialog>
-
 
       {/* Выход из теста */}
       <Dialog open={showExitConfirm} onOpenChange={setShowExitConfirm}>
