@@ -328,13 +328,13 @@ const AppQuiz = () => {
             </AccordionItem>
           </Accordion>
           <div className="max-md:w-[90dvw] w-full overflow-hidden">
-          <div className="flex items-center gap-2 justify-between mt-2 overflow-x-auto max-md:flex-nowrap flex-wrap">
+          <div className="flex items-center gap-2 justify-between mt-2 overflow-x-auto max-md:flex-nowrap flex-wrap max-md:my-5">
           {!!videos && (
             videos.map((video: any) => {
                 return (
                   <Button
                     key={video.id}
-                    className="w-fit px-4 flex items-center gap-2  max-md:max-w-[220px] flex-1 max-w-1/2"
+                    className="w-fit px-4 flex items-center gap-2  max-md:max-w-full flex-1 max-w-1/2"
                     size={"icon"}
                     onClick={() => openVideoModal(video.video_id)}>
                     <FileVideo className="text-white overflow-hidden" />
