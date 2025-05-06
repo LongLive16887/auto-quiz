@@ -327,8 +327,8 @@ const AppQuiz = () => {
               )}
             </AccordionItem>
           </Accordion>
-          <div className="max-md:w-[90dvw] w-full overflow-hidden">
-          <div className="flex items-center gap-2 justify-between mt-2 overflow-x-auto max-md:flex-nowrap flex-wrap max-md:my-5">
+          <div className="max-md:w-[100%] w-full overflow-hidden">
+          <div className="flex items-center gap-2 justify-between mt-2 flex-wrap max-md:my-5">
           {!!videos && (
             videos.map((video: any) => {
                 return (
