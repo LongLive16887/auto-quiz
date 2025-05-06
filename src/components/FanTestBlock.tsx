@@ -1,5 +1,5 @@
 import { useQuizStore } from "@/store/quiz";
-import { BlockData } from "@/types";
+import { BlockData, Video } from "@/types";
 import { Check, CircleAlert, X } from "lucide-react";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -35,9 +35,13 @@ export function FanTestBlock({ data }: { data: BlockData }) {
   };
 
   const handleStartTest = () => {
-    let url = !data.video_id
+    let url = !data.videos || data.videos.length === 0
       ? `/template/${data.id}?type=theme`
-      : `/template/${data.id}?type=theme&video_id=${data.video_id}`;
+      : `/template/${data.id}?type=theme&video_id=${(data.videos as Video[]).map(d => d.video_id).join(",")}`;
+    localStorage.setItem("fan_test_video", JSON.stringify(data.videos));  
+    if(!data.videos ||data.videos.length === 0){
+      localStorage.removeItem("fan_test_video");
+    }
     setOpen(false);
     loadFanQuiz(data.id);
     navigate(url);

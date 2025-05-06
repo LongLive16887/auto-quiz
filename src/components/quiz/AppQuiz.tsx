@@ -36,7 +36,8 @@ const AppQuiz = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const TypeParam = new URLSearchParams(location.search).get("type");
-  const VideoId = new URLSearchParams(location.search).get("video_id");
+  // const VideoId = new URLSearchParams(location.search).get("video_id");
+  const videos = JSON.parse(localStorage.getItem("fan_test_video") || "[]");
 
   const {
     currentQuestionIndex,
@@ -57,6 +58,7 @@ const AppQuiz = () => {
   const [showConfirm, setShowConfirm] = useState(false);
   const [showExitConfirm, setShowExitConfirm] = useState(false);
   const [showVideo, setShowVideo] = useState(false);
+  const [currentVideo, setCurrentVideo] = useState<string|null>("");
   const [openAccordion, setOpenAccordion] = useState<string | undefined>(
     undefined
   );
@@ -67,6 +69,11 @@ const AppQuiz = () => {
   const currentQuestion = quiz[currentQuestionIndex];
   const isWishlisted = wishlist.some((q) => q.id === currentQuestion?.id);
 
+
+  function openVideoModal(videoId: string | null) {
+    setCurrentVideo(videoId);
+    setShowVideo(true);
+  }
   // Effects
   useEffect(() => {
     if (quiz.length > 0) {
@@ -201,15 +208,6 @@ const AppQuiz = () => {
           </p>
         ) : null}
         <div className="flex items-center gap-3.5 ml-auto">
-          {!!VideoId && (
-            <Button
-              className="w-fit px-4"
-              size={"icon"}
-              onClick={() => setShowVideo(true)}>
-              <FileVideo className="text-white" />
-              video ko'rish
-            </Button>
-          )}
           <Button
             size={"icon"}
             onClick={() => currentQuestion && toggleWishlist(currentQuestion)}>
@@ -329,6 +327,31 @@ const AppQuiz = () => {
               )}
             </AccordionItem>
           </Accordion>
+          <div className="max-md:w-[90dvw] w-full overflow-hidden">
+          <div className="flex items-center gap-2 justify-between mt-2 overflow-x-auto max-md:flex-nowrap flex-wrap">
+          {!!videos && (
+            videos.map((video: any) => {
+                return (
+                  <Button
+                    key={video.id}
+                    className="w-fit px-4 flex items-center gap-2  max-md:max-w-[220px] flex-1 max-w-1/2"
+                    size={"icon"}
+                    onClick={() => openVideoModal(video.video_id)}>
+                    <FileVideo className="text-white overflow-hidden" />
+                    <p className="line-clamp-1 whitespace-normal overflow-hidden">{video.title_la} cacsadasdasdsa asdasdasd adasda dasdasdas</p>
+                  </Button>
+                );
+            })
+            // <Button
+            //   className="w-fit px-4"
+            //   size={"icon"}
+            //   onClick={() => setShowVideo(true)}>
+            //   <FileVideo className="text-white" />
+            //   video ko'rish
+            // </Button>
+          )}
+          </div>
+          </div>
         </div>
       </div>
 
@@ -358,7 +381,7 @@ const AppQuiz = () => {
             <video
               className="max-h-[80dvh] object-cover h-full w-full"
               controls
-              src={`https://backend.avtotest-begzod.uz/api/v1/file/download/video/${VideoId}`}></video>
+              src={`https://backend.avtotest-begzod.uz/api/v1/file/download/video/${currentVideo}`}></video>
           </div>
         </DialogContent>
       </Dialog>
