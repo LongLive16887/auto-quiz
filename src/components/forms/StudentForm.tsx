@@ -165,7 +165,7 @@ const StudentForm = ({ onStudentCreated }: StudentFormProps) => {
 										<Button
 											variant={'outline'}
 											className={cn(
-												'w-[280px] justify-start text-left font-normal',
+												'justify-start text-left font-normal py-6',
 												!field.value && 'text-muted-foreground'
 											)}
 										>

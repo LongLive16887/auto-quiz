@@ -217,7 +217,7 @@ const AppQuiz = () => {
               size={50}
             />
           </Button>
-          <Button variant="destructive" onClick={() => setShowConfirm(true)}>
+          <Button variant="destructive" onClick={() => {setShowConfirm(true);localStorage.removeItem("fan_test_video")}}>
             {t("finish")}
           </Button>
         </div>
@@ -338,7 +338,7 @@ const AppQuiz = () => {
                     size={"icon"}
                     onClick={() => openVideoModal(video.video_id)}>
                     <FileVideo className="text-white overflow-hidden" />
-                    <p className="line-clamp-1 whitespace-normal overflow-hidden">{video.title_la} cacsadasdasdsa asdasdasd adasda dasdasdas</p>
+                    <p className="line-clamp-1 whitespace-normal overflow-hidden">{video.title_la}</p>
                   </Button>
                 );
             })
@@ -379,7 +379,7 @@ const AppQuiz = () => {
         <DialogContent>
           <div className="overflow-hidden rounded-lg py-4">
             <video
-              className="max-h-[80dvh] object-cover h-full w-full"
+              className="max-h-[80dvh] object-contain h-full w-full"
               controls
               src={`https://backend.avtotest-begzod.uz/api/v1/file/download/video/${currentVideo}`}></video>
           </div>
