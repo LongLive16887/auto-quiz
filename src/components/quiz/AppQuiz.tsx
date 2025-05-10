@@ -155,6 +155,7 @@ const AppQuiz = () => {
   const handleFinishTest = () => {
     reset(true);
     submitQuizData();
+    localStorage.removeItem("fan_test_video");
   };
 
   const handleExitConfirm = (confirmed: boolean) => {
@@ -203,9 +204,14 @@ const AppQuiz = () => {
 
       <div className="flex items-center px-3.5 justify-between flex-wrap">
         {!TypeParam ? (
-          <p className="text-2xl font-semibold text-white">
-            {id}-{t("bilet")}
-          </p>
+          <div className="flex items-center gap-3">
+            <p className="text-2xl font-semibold text-white">
+              {id}-{t("bilet")}
+            </p>
+            <p className="hidden md:block text-2xl font-semibold text-white">
+             Id: {currentQuestion.id}
+            </p>
+          </div>
         ) : null}
         <div className="flex items-center gap-3.5 ml-auto">
           <Button
@@ -217,7 +223,7 @@ const AppQuiz = () => {
               size={50}
             />
           </Button>
-          <Button variant="destructive" onClick={() => {setShowConfirm(true);localStorage.removeItem("fan_test_video")}}>
+          <Button variant="destructive" onClick={() => {setShowConfirm(true)}}>
             {t("finish")}
           </Button>
         </div>
