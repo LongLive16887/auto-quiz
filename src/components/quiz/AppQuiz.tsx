@@ -59,6 +59,7 @@ const AppQuiz = () => {
   const [showExitConfirm, setShowExitConfirm] = useState(false);
   const [showVideo, setShowVideo] = useState(false);
   const [currentVideo, setCurrentVideo] = useState<string|null>("");
+  const [shuffleQuiz, setShuffleQuiz] = useState<Answer[]>([]);
   const [openAccordion, setOpenAccordion] = useState<string | undefined>(
     undefined
   );
@@ -74,7 +75,16 @@ const AppQuiz = () => {
     setCurrentVideo(videoId);
     setShowVideo(true);
   }
+  const shuffle = () => {
+    const shuffled = [...currentQuestion.answers]; 
+    for (let i = shuffled.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+    }
+    setShuffleQuiz(shuffled); 
+  };
   // Effects
+  
   useEffect(() => {
     if (quiz.length > 0) {
       setCurrentQuestionIndex(0);
@@ -84,6 +94,7 @@ const AppQuiz = () => {
 
   useEffect(() => {
     setOpenAccordion(undefined);
+    shuffle();
   }, [currentQuestionIndex]);
 
   useEffect(() => {
@@ -271,7 +282,7 @@ const AppQuiz = () => {
         {/* Answers */}
         <div className="w-[500px] px-3.5 rounded-lg flex flex-col max-md:w-full">
           <RadioGroup>
-            {currentQuestion.answers.map((answer, i) => {
+            {shuffleQuiz.map((answer, i) => {
               const isSelected =
                 userAnswers[currentQuestion.id]?.answerId === answer.id;
               const isAnswered = !!userAnswers[currentQuestion.id];

@@ -55,7 +55,7 @@ const StudentForm = ({ onStudentCreated }: StudentFormProps) => {
 				const response = await api.get('api/v1/auth/check-username', {
 					params: { username },
 				})
-				if (response.data.exists) {
+				if (!response.data.success) {
 					setUsernameError(t('username_taken'))
 				} else {
 					setUsernameError(null)
