@@ -139,13 +139,13 @@ const AppQuiz = () => {
     if (!currentQuestion || userAnswers[currentQuestion.id]) return;
 
     submitAnswer(currentQuestion.id, answer.id, answer.is_correct);
-    setTimeout(() => {
-      if (currentQuestionIndex + 1 < quiz.length) {
-        setCurrentQuestionIndex(currentQuestionIndex + 1);
-      } else {
-        setShowConfirm(true);
-      }
-    }, 1500);
+    // setTimeout(() => {
+    //   if (currentQuestionIndex + 1 < quiz.length) {
+    //     setCurrentQuestionIndex(currentQuestionIndex + 1);
+    //   } else {
+    //     setShowConfirm(true);
+    //   }
+    // }, 1500);
   };
 
   const submitQuizData = async () => {
