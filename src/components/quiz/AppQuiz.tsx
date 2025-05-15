@@ -58,7 +58,7 @@ const AppQuiz = () => {
   const [showConfirm, setShowConfirm] = useState(false);
   const [showExitConfirm, setShowExitConfirm] = useState(false);
   const [showVideo, setShowVideo] = useState(false);
-  const [currentVideo, setCurrentVideo] = useState<string|null>("");
+  const [currentVideo, setCurrentVideo] = useState<string | null>("");
   const [shuffleQuiz, setShuffleQuiz] = useState<Answer[]>([]);
   const [openAccordion, setOpenAccordion] = useState<string | undefined>(
     undefined
@@ -70,31 +70,37 @@ const AppQuiz = () => {
   const currentQuestion = quiz[currentQuestionIndex];
   const isWishlisted = wishlist.some((q) => q.id === currentQuestion?.id);
 
-
   function openVideoModal(videoId: string | null) {
     setCurrentVideo(videoId);
     setShowVideo(true);
   }
   const shuffle = () => {
-    const shuffled = [...currentQuestion.answers]; 
-    for (let i = shuffled.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+    if (
+      currentQuestion &&
+      currentQuestion.answers &&
+      currentQuestion.answers.length > 0
+    ) {
+      const shuffled = [...currentQuestion.answers];
+      for (let i = shuffled.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+      }
+      setShuffleQuiz(shuffled);
     }
-    setShuffleQuiz(shuffled); 
   };
   // Effects
-  
+
   useEffect(() => {
     if (quiz.length > 0) {
       setCurrentQuestionIndex(0);
       reset();
     }
   }, [quiz]);
-
+  useEffect(() => {
+    shuffle();
+  }, [currentQuestion]);
   useEffect(() => {
     setOpenAccordion(undefined);
-    shuffle();
   }, [currentQuestionIndex]);
 
   useEffect(() => {
@@ -220,7 +226,7 @@ const AppQuiz = () => {
               {id}-{t("bilet")}
             </p>
             <p className="hidden md:block text-2xl font-semibold text-white">
-             Id: {currentQuestion.id}
+              Id: {currentQuestion.id}
             </p>
           </div>
         ) : null}
@@ -234,7 +240,11 @@ const AppQuiz = () => {
               size={50}
             />
           </Button>
-          <Button variant="destructive" onClick={() => {setShowConfirm(true)}}>
+          <Button
+            variant="destructive"
+            onClick={() => {
+              setShowConfirm(true);
+            }}>
             {t("finish")}
           </Button>
         </div>
@@ -345,29 +355,31 @@ const AppQuiz = () => {
             </AccordionItem>
           </Accordion>
           <div className="max-md:w-[100%] w-full overflow-hidden">
-          <div className="flex items-center gap-2 justify-between mt-2 flex-wrap max-md:my-5">
-          {!!videos && (
-            videos.map((video: any) => {
-                return (
-                  <Button
-                    key={video.id}
-                    className="w-fit px-4 flex items-center gap-2  max-md:max-w-full flex-1 max-w-1/2"
-                    size={"icon"}
-                    onClick={() => openVideoModal(video.video_id)}>
-                    <FileVideo className="text-white overflow-hidden" />
-                    <p className="line-clamp-1 whitespace-normal overflow-hidden">{video.title_la}</p>
-                  </Button>
-                );
-            })
-            // <Button
-            //   className="w-fit px-4"
-            //   size={"icon"}
-            //   onClick={() => setShowVideo(true)}>
-            //   <FileVideo className="text-white" />
-            //   video ko'rish
-            // </Button>
-          )}
-          </div>
+            <div className="flex items-center gap-2 justify-between mt-2 flex-wrap max-md:my-5">
+              {!!videos &&
+                videos.map((video: any) => {
+                  return (
+                    <Button
+                      key={video.id}
+                      className="w-fit px-4 flex items-center gap-2  max-md:max-w-full flex-1 max-w-1/2"
+                      size={"icon"}
+                      onClick={() => openVideoModal(video.video_id)}>
+                      <FileVideo className="text-white overflow-hidden" />
+                      <p className="line-clamp-1 whitespace-normal overflow-hidden">
+                        {video.title_la}
+                      </p>
+                    </Button>
+                  );
+                })
+                // <Button
+                //   className="w-fit px-4"
+                //   size={"icon"}
+                //   onClick={() => setShowVideo(true)}>
+                //   <FileVideo className="text-white" />
+                //   video ko'rish
+                // </Button>
+              }
+            </div>
           </div>
         </div>
       </div>
