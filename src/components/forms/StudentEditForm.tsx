@@ -47,7 +47,11 @@ const StudentEditForm = ({ onPasswordChange, data }: StudentFormProps) => {
 
   const onSubmit = (formData: z.infer<typeof studentEditSchema>) => {
     setLoading(true);
-    editStudent(formData).then(() => {
+	let data = {
+		...formData,
+		expiration_date: format(new Date(formData.expiration_date), 'yyyy-MM-dd')
+	}
+    editStudent(data).then(() => {
       setLoading(false);
       onPasswordChange();
     });
@@ -120,26 +124,27 @@ const StudentEditForm = ({ onPasswordChange, data }: StudentFormProps) => {
                 <Popover>
                   <PopoverTrigger asChild>
                     <Button
-                      variant="outline"
-                      onMouseDown={(e) => e.preventDefault()}
-                      className={cn(
-                        "justify-start text-left font-normal py-6",
-                        !field.value && "text-muted-foreground"
-                      )}>
-                      <CalendarIcon className="mr-2 h-4 w-4" />
-                      {field.value
-                        ? format(new Date(field.value), "PPP")
-                        : "Sanani tanlang"}
-                    </Button>
+											variant={'outline'}
+											className={cn(
+												'justify-start text-left font-normal py-6',
+												!field.value && 'text-muted-foreground'
+											)}
+										>
+											<CalendarIcon className='mr-2 h-4 w-4' />
+											{field.value
+												? format(new Date(field.value), 'PPP')
+												: 'Sanani tanlang'}
+										</Button>
                   </PopoverTrigger>
                   <PopoverContent className="w-auto p-0 z-[9999]">
-                    <Calendar
-                      mode="single"
-                      selected={field.value ? new Date(field.value) : undefined}
-                      onSelect={(selectedDate) => {
-                        field.onChange(selectedDate?.toISOString() || "");
-                      }}
-                    />
+                   <Calendar
+											mode='single'
+											selected={field.value ? new Date(field.value) : undefined}
+											onSelect={selectedDate => {
+												field.onChange(selectedDate?.toISOString() || '')
+											}}
+											
+										/>
                   </PopoverContent>
                 </Popover>
               </FormControl>

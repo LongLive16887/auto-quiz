@@ -183,7 +183,7 @@ const StudentForm = ({ onStudentCreated }: StudentFormProps) => {
 												field.onChange(selectedDate?.toISOString() || '')
 												setOpen(false)
 											}}
-											initialFocus
+											
 										/>
 									</PopoverContent>
 								</Popover>
