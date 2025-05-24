@@ -12,6 +12,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import { RadioGroup } from "@/components/ui/radio-group";
 import { useQuizStore } from "@/store/quiz";
@@ -29,6 +30,14 @@ import {
 } from "react-router-dom";
 import { Button } from "../ui/button";
 import Tabs from "./Tabs";
+
+function timeFormat(sec: number): string {
+  const minutes = Math.floor(sec / 60);
+  const seconds = sec % 60;
+  return `${minutes < 10 ? "0" : ""}${minutes}:${
+    seconds < 10 ? "0" : ""
+  }${seconds}`;
+}
 
 const AppQuiz = () => {
   const { id } = useParams();
@@ -48,6 +57,8 @@ const AppQuiz = () => {
     incorrectCount,
     reset,
     quiz,
+    showNext,
+    setShowNext,
   } = useQuizStore();
 
   const { wishlist, toggleWishlist } = useWishlistStore();
@@ -58,6 +69,7 @@ const AppQuiz = () => {
   const [showConfirm, setShowConfirm] = useState(false);
   const [showExitConfirm, setShowExitConfirm] = useState(false);
   const [showVideo, setShowVideo] = useState(false);
+  const [timer, setTimer] = useState(120);
   const [currentVideo, setCurrentVideo] = useState<string | null>("");
   const [shuffleQuiz, setShuffleQuiz] = useState<Answer[]>([]);
   const [openAccordion, setOpenAccordion] = useState<string | undefined>(
@@ -88,6 +100,15 @@ const AppQuiz = () => {
       setShuffleQuiz(shuffled);
     }
   };
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setTimer((prev) => prev - 1);
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, [timer]);
+
   // Effects
 
   useEffect(() => {
@@ -109,6 +130,24 @@ const AppQuiz = () => {
       blocker.reset();
     }
   }, [blocker.state]);
+
+  useEffect(() => {
+    if (timer === 0) {
+      handleFinishTest();
+    }
+  }, [timer]);
+
+  useEffect(() => {
+    if (quiz.length <= 20) {
+      setTimer(1500);
+    } else if (quiz.length <= 50) {
+      setTimer(2700);
+    } else if (quiz.length <= 100) {
+      setTimer(6000);
+    } else {
+      setTimer(6000);
+    }
+  }, [quiz]);
 
   useEffect(() => {
     const handleBeforeUnload = (e: BeforeUnloadEvent) => {
@@ -139,13 +178,15 @@ const AppQuiz = () => {
     if (!currentQuestion || userAnswers[currentQuestion.id]) return;
 
     submitAnswer(currentQuestion.id, answer.id, answer.is_correct);
-    // setTimeout(() => {
-    //   if (currentQuestionIndex + 1 < quiz.length) {
-    //     setCurrentQuestionIndex(currentQuestionIndex + 1);
-    //   } else {
-    //     setShowConfirm(true);
-    //   }
-    // }, 1500);
+    if (showNext) {
+      setTimeout(() => {
+        if (currentQuestionIndex + 1 < quiz.length) {
+          setCurrentQuestionIndex(currentQuestionIndex + 1);
+        } else {
+          setShowConfirm(true);
+        }
+      }, 1500);
+    }
   };
 
   const submitQuizData = async () => {
@@ -219,7 +260,7 @@ const AppQuiz = () => {
       {/* Header */}
       {/* <video src="https://backend.avtotest-begzod.uz/api/v1/file/download/video/7a440435-df72-49ed-a5f1-ae72552a0bd0" width="720px" height="480px" controls preload="auto"></video> */}
 
-      <div className="flex items-center px-3.5 justify-between flex-wrap">
+      <div className="flex items-center max-md:flex-col max-md:items-start px-3.5 justify-between flex-wrap">
         {!TypeParam ? (
           <div className="flex items-center gap-3">
             <p className="text-2xl font-semibold text-white">
@@ -230,7 +271,16 @@ const AppQuiz = () => {
             </p>
           </div>
         ) : null}
-        <div className="flex items-center gap-3.5 ml-auto">
+        <div className="flex items-center gap-3.5 ml-auto max-md:mt-1 max-md:w-full">
+          <div className="bg-white w-full md:min-w-[100px] text-center text-gray-800 px-2 py-1 rounded-md mr-1.5">
+            {timeFormat(timer)}
+          </div>
+          <div className="flex items-center gap-1.5">
+            <p className="text-white whitespace-nowrap hidden md:block">
+              Avto o'tkazgich
+            </p>
+            <Switch checked={showNext} onCheckedChange={setShowNext} />
+          </div>
           <Button
             size={"icon"}
             onClick={() => currentQuestion && toggleWishlist(currentQuestion)}>
@@ -326,7 +376,14 @@ const AppQuiz = () => {
               );
             })}
           </RadioGroup>
-
+          {currentQuestion.audio_id && (
+            <div className="my-5">
+              <audio
+                src={`https://backend.avtotest-begzod.uz/api/v1/file/download/audio/${currentQuestion.audio_id}`}
+                controls
+              />
+            </div>
+          )}
           {/* Question Description */}
           <Accordion
             type="single"
@@ -356,21 +413,22 @@ const AppQuiz = () => {
           </Accordion>
           <div className="max-md:w-[100%] w-full overflow-hidden">
             <div className="flex items-center gap-2 justify-between mt-2 flex-wrap max-md:my-5">
-              {!!videos &&
-                videos.map((video: any) => {
-                  return (
-                    <Button
-                      key={video.id}
-                      className="w-fit px-4 flex items-center gap-2  max-md:max-w-full flex-1 max-w-1/2"
-                      size={"icon"}
-                      onClick={() => openVideoModal(video.video_id)}>
-                      <FileVideo className="text-white overflow-hidden" />
-                      <p className="line-clamp-1 whitespace-normal overflow-hidden">
-                        {video.title_la}
-                      </p>
-                    </Button>
-                  );
-                })
+              {
+                !!videos &&
+                  videos.map((video: any) => {
+                    return (
+                      <Button
+                        key={video.id}
+                        className="w-fit px-4 flex items-center gap-2  max-md:max-w-full flex-1 max-w-1/2"
+                        size={"icon"}
+                        onClick={() => openVideoModal(video.video_id)}>
+                        <FileVideo className="text-white overflow-hidden" />
+                        <p className="line-clamp-1 whitespace-normal overflow-hidden">
+                          {video.title_la}
+                        </p>
+                      </Button>
+                    );
+                  })
                 // <Button
                 //   className="w-fit px-4"
                 //   size={"icon"}

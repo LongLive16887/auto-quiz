@@ -23,4 +23,5 @@ export type Question = {
 	web_media: string | null
 	mobile_media: string | null
 	answers: Answer[]
+	audio_id?:string|null
 }

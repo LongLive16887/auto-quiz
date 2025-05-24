@@ -21,6 +21,8 @@ type QuizStore = {
 		isCorrect: boolean
 	) => void
 	reset: (clearQuiz?: boolean) => void
+	showNext: boolean
+	setShowNext: (show: boolean) => void
 }
 
 export const useQuizStore = create<QuizStore>()(
@@ -32,6 +34,7 @@ export const useQuizStore = create<QuizStore>()(
 			userAnswers: {},
 			correctCount: 0,
 			incorrectCount: 0,
+			showNext: false,
 			loadQuiz: id => {
 				api
 					.get(`/api/v1/question?groupId=${id}&page=0&size=1073741824`)
@@ -56,6 +59,7 @@ export const useQuizStore = create<QuizStore>()(
 					})
 					.catch()
 			},
+			setShowNext: show => set({ showNext: show }),
 			setMaxQuizCount: quantity => set({maxQuizCount: quantity}),
 			setCurrentQuestionIndex: index => set({ currentQuestionIndex: index }),
 			submitAnswer: (questionId, answerId, isCorrect) =>
@@ -85,6 +89,7 @@ export const useQuizStore = create<QuizStore>()(
 				correctCount: state.correctCount,
 				incorrectCount: state.incorrectCount,
 				maxQuizCount: state.maxQuizCount,
+				showNext: state.showNext
 			}),
 		}
 	)
