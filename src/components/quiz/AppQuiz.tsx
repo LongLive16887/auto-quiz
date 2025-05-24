@@ -241,6 +241,11 @@ const AppQuiz = () => {
     onSwipedRight: () => prev(),
     trackTouch: true,
   });
+  const handlersAnswer = useSwipeable({
+    onSwipedLeft: () => next(),
+    onSwipedRight: () => prev(),
+    trackTouch: true,
+  });
   function openImageModal(imgUrl: string | null) {
     setSelectedImg(imgUrl);
     setopenShowImageModal(true);
@@ -317,13 +322,14 @@ const AppQuiz = () => {
       </div>
 
       {/* Main Content */}
-      <div
-        className="flex-1 flex flex-wrap gap-3.5 items-start max-md:flex-nowrap max-md:flex-col"
-        {...handlers}>
+      <div className="flex-1 flex flex-wrap gap-3.5 items-start max-md:flex-nowrap max-md:flex-col">
         {/* Media */}
-        <div className="flex-1 rounded-lg flex min-h-[250px] overflow-hidden max-h-[550px] max-md:max-h-[200px] max-md:min-h-[200px] max-md:justify-center max-md:w-full">
+        <div
+          {...handlers}
+          className="flex-1 rounded-lg flex min-h-[250px] overflow-hidden max-h-[550px] max-md:max-h-[200px] max-md:min-h-[200px] max-md:justify-center max-md:w-full">
           {currentQuestion.mobile_media?.trim() ? (
             <img
+              onContextMenu={(e) => e.preventDefault()}
               onClick={() => {
                 openImageModal(currentQuestion.mobile_media);
               }}
@@ -341,7 +347,7 @@ const AppQuiz = () => {
 
         {/* Answers */}
         <div className="w-[500px] px-3.5 rounded-lg flex flex-col max-md:w-full">
-          <RadioGroup>
+          <RadioGroup {...handlersAnswer}>
             {shuffleQuiz.map((answer, i) => {
               const isSelected =
                 userAnswers[currentQuestion.id]?.answerId === answer.id;
@@ -379,6 +385,7 @@ const AppQuiz = () => {
           {currentQuestion.audio_id && (
             <div className="my-5">
               <audio
+                controlsList="nodownload"
                 src={`https://backend.avtotest-begzod.uz/api/v1/file/download/audio/${currentQuestion.audio_id}`}
                 controls
               />
@@ -466,6 +473,7 @@ const AppQuiz = () => {
         <DialogContent>
           <div className="overflow-hidden rounded-lg py-4">
             <video
+              controlsList="nodownload"
               className="max-h-[80dvh] object-contain h-full w-full"
               controls
               src={`https://backend.avtotest-begzod.uz/api/v1/file/download/video/${currentVideo}`}></video>
@@ -491,6 +499,7 @@ const AppQuiz = () => {
         <DialogContent className="max-w-4xl bg-transparent border-none shadow-none p-4">
           <div className="flex items-center space-x-2 h-full">
             <img
+              onContextMenu={(e) => e.preventDefault()}
               src={`https://backend.avtotest-begzod.uz/api/v1/file/download/${selectedImg}`}
               alt="Question media"
               className="max-w-full object-cover"
