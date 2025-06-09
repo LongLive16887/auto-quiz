@@ -6,6 +6,7 @@ import { persist } from 'zustand/middleware'
 type QuizStore = {
 	quiz: Question[]
 	loadQuiz: (id: number) => void
+	loadTrickQuiz: (id: number) => void
 	loadFanQuiz: (id: number) => void
 	loadTestQuiz: (quantity: string) => void
 	currentQuestionIndex: number
@@ -46,6 +47,14 @@ export const useQuizStore = create<QuizStore>()(
 			loadFanQuiz: id => {
 				api
 					.get(`/api/v1/question?lessonId=${id}&page=0&size=1073741824`)
+					.then(res => {
+						set({ quiz: res.data.data.results })
+					})
+					.catch()
+			},
+			loadTrickQuiz: id => {
+				api
+					.get(`/api/v1/question?type=HARD&page=${id}&size=50`)
 					.then(res => {
 						set({ quiz: res.data.data.results })
 					})

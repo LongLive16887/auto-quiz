@@ -8,6 +8,7 @@ import TemplateTest from './views/shablon/TemplateTest'
 import SinovTestDashboard from './views/sinov-test/SinovTestDashboard'
 import Students from './views/Students'
 import Wishlist from './views/Wishlist'
+import TrickTestDashboard from './views/trick-test/TrickTestDashboard'
 
 const router = createBrowserRouter([
 	{
@@ -37,6 +38,10 @@ const router = createBrowserRouter([
 			{
 				path: '/fan-test',
 				element: <FanTestDashboard />,
+			},
+			{
+				path: '/trick-test',
+				element: <TrickTestDashboard />,
 			},
 			{
 				path: '/results',

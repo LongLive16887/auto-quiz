@@ -17,7 +17,7 @@ import { Label } from "@/components/ui/label";
 import { RadioGroup } from "@/components/ui/radio-group";
 import { useQuizStore } from "@/store/quiz";
 import { useWishlistStore } from "@/store/wishlist";
-import { Answer, Question } from "@/types";
+import { Answer, Question, TrickBlockData } from "@/types";
 import { Bookmark, Loader2, FileVideo } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -34,9 +34,8 @@ import Tabs from "./Tabs";
 function timeFormat(sec: number): string {
   const minutes = Math.floor(sec / 60);
   const seconds = sec % 60;
-  return `${minutes < 10 ? "0" : ""}${minutes}:${
-    seconds < 10 ? "0" : ""
-  }${seconds}`;
+  return `${minutes < 10 ? "0" : ""}${minutes}:${seconds < 10 ? "0" : ""
+    }${seconds}`;
 }
 
 const AppQuiz = () => {
@@ -190,6 +189,35 @@ const AppQuiz = () => {
   };
 
   const submitQuizData = async () => {
+    if (TypeParam === "trick") {
+      const STORAGE_KEY = 'trick-test-stats';
+
+      const updatedData: TrickBlockData = {
+        id: Number(id),
+        correct_answer: correctCount,
+        wrong_answer: incorrectCount,
+        skipped_answer: quiz.length - Object.keys(userAnswers).length,
+      };
+
+      const rawStats = localStorage.getItem(STORAGE_KEY);
+      const stats = rawStats ? JSON.parse(rawStats) : [];
+
+      let newStats = [...stats];
+      const index = newStats.findIndex(item => item.id === updatedData.id);
+      if (index !== -1) {
+        newStats[index] = updatedData;
+      } else {
+        newStats.push(updatedData);
+      }
+
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(newStats));
+
+      setTimeout(() => {
+        navigate("/results", { state: { data: updatedData } });
+      }, 0);
+      return;
+    }
+
     let type = 102;
 
     if (TypeParam === "test") {
@@ -197,6 +225,7 @@ const AppQuiz = () => {
     } else if (TypeParam === "theme") {
       type = 100;
     }
+
     const requestData = {
       type,
       external_id: id,
@@ -208,6 +237,7 @@ const AppQuiz = () => {
     await api.post("/api/v1/user/statistics", requestData).then((res) => {
       navigate("/results", { state: { data: res.data.data } });
     });
+
   };
 
   const handleFinishTest = () => {
@@ -223,6 +253,7 @@ const AppQuiz = () => {
       submitQuizData();
     }
   };
+
   function next() {
     if (quiz.length != currentQuestionIndex + 1) {
       setCurrentQuestionIndex(currentQuestionIndex + 1);
@@ -382,7 +413,7 @@ const AppQuiz = () => {
               );
             })}
           </RadioGroup>
-          {currentQuestion.audio_id && (
+          {userAnswers[currentQuestion.id] && currentQuestion.audio_id && (
             <div className="my-5">
               <audio
                 controlsList="nodownload"
@@ -422,20 +453,20 @@ const AppQuiz = () => {
             <div className="flex items-center gap-2 justify-between mt-2 flex-wrap max-md:my-5">
               {
                 !!videos &&
-                  videos.map((video: any) => {
-                    return (
-                      <Button
-                        key={video.id}
-                        className="w-fit px-4 flex items-center gap-2  max-md:max-w-full flex-1 max-w-1/2"
-                        size={"icon"}
-                        onClick={() => openVideoModal(video.video_id)}>
-                        <FileVideo className="text-white overflow-hidden" />
-                        <p className="line-clamp-1 whitespace-normal overflow-hidden">
-                          {video.title_la}
-                        </p>
-                      </Button>
-                    );
-                  })
+                videos.map((video: any) => {
+                  return (
+                    <Button
+                      key={video.id}
+                      className="w-fit px-4 flex items-center gap-2  max-md:max-w-full flex-1 max-w-1/2"
+                      size={"icon"}
+                      onClick={() => openVideoModal(video.video_id)}>
+                      <FileVideo className="text-white overflow-hidden" />
+                      <p className="line-clamp-1 whitespace-normal overflow-hidden">
+                        {video.title_la}
+                      </p>
+                    </Button>
+                  );
+                })
                 // <Button
                 //   className="w-fit px-4"
                 //   size={"icon"}
