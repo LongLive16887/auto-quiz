@@ -62,7 +62,7 @@ function DialogContent({
       >
         {children}
         <DialogPrimitive.Close className="data-[state=open]:bg-white data-[state=open]:white absolute top-4 right-4 rounded-xs opacity-70 transition-opacity hover:opacity-100  focus:outline-hidden disabled:pointer-events-none [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4">
-          <XIcon color='white' />
+          <XIcon color='black' />
           <span className="sr-only">Close</span>
         </DialogPrimitive.Close>
       </DialogPrimitive.Content>

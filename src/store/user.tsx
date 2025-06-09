@@ -2,7 +2,7 @@ import api from '@/api/axios'
 import Cookies from 'js-cookie'
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
-
+import { UAParser } from 'ua-parser-js';
 
 type UserStore = {
 	user: {
@@ -33,8 +33,14 @@ export const useUserStore = create<UserStore>()(
 				set({ user: val })
 			},
 			authUser: async loginData => {
+				const parser = new UAParser();
+				const result = parser.getResult();
 				try {
-					const res = await api.post('/api/v1/auth/login', loginData)
+					const res = await api.post('/api/v1/auth/login', loginData,{
+						headers: {
+							'device-id': screen.width+screen.height+"-"+result.os.name,
+						},
+					})
 					const token = res.data.data.access_token
 					Cookies.set('token', token, { expires: 1, path: '/' })
 					set({ token, user: res.data.data.user })

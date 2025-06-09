@@ -251,7 +251,6 @@ const ResultsTabs = ({ studentId }: { studentId: number }) => {
 											))}
 										</div>
 									</div>
-
 									{/* Правая часть: описание */}
 									<div className='flex-1 text-sm text-gray-200 p-2 border-t md:border-t-0 md:border-l border-white/20'>
 										<p className='text-sm font-semibold mb-2'>

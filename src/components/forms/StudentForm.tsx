@@ -55,7 +55,7 @@ const StudentForm = ({ onStudentCreated }: StudentFormProps) => {
 				const response = await api.get('api/v1/auth/check-username', {
 					params: { username },
 				})
-				if (response.data.exists) {
+				if (!response.data.success) {
 					setUsernameError(t('username_taken'))
 				} else {
 					setUsernameError(null)
@@ -165,7 +165,7 @@ const StudentForm = ({ onStudentCreated }: StudentFormProps) => {
 										<Button
 											variant={'outline'}
 											className={cn(
-												'w-[280px] justify-start text-left font-normal',
+												'justify-start text-left font-normal py-6',
 												!field.value && 'text-muted-foreground'
 											)}
 										>
@@ -183,7 +183,7 @@ const StudentForm = ({ onStudentCreated }: StudentFormProps) => {
 												field.onChange(selectedDate?.toISOString() || '')
 												setOpen(false)
 											}}
-											initialFocus
+											
 										/>
 									</PopoverContent>
 								</Popover>
