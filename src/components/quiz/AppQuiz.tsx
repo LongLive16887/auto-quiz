@@ -201,6 +201,11 @@ const AppQuiz = () => {
       const handleSelect = (e: Event) => e.preventDefault();
       document.addEventListener("selectstart", handleSelect);
 
+      const handleDragStart = (e: DragEvent) => {
+        e.preventDefault();
+      };
+      document.addEventListener("dragstart", handleDragStart);
+
       const handleKeyDown = (e: KeyboardEvent) => {
         if (
           e.key === "F12" ||
@@ -216,6 +221,7 @@ const AppQuiz = () => {
         document.removeEventListener("copy", handleCopy);
         document.removeEventListener("selectstart", handleSelect);
         document.removeEventListener("keydown", handleKeyDown);
+        document.removeEventListener("dragstart", handleDragStart)
       };
     }
   }, [userRoles]);

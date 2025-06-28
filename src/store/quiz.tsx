@@ -55,7 +55,7 @@ export const useQuizStore = create<QuizStore>()(
 			},
 			loadTrickQuiz: id => {
 				api
-					.get(`/api/v1/question?type=HARD&page=${id}&size=50`)
+					.get(`/api/v1/question?type=HARD&page=${id}&size=50&is_random=false`)
 					.then(res => {
 						set({ quiz: res.data.data.results })
 					})
@@ -63,7 +63,7 @@ export const useQuizStore = create<QuizStore>()(
 			},
 			loadDigitalQuiz: id => {
 				api
-					.get(`/api/v1/question?mobileType=HARD&page=${id}&size=50`)
+					.get(`/api/v1/question?mobileType=HARD&page=${id}&size=50&is_random=false`)
 					.then(res => {
 						set({ quiz: res.data.data.results })
 					})
