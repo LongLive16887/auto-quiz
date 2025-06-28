@@ -30,7 +30,6 @@ import {
 } from "react-router-dom";
 import { Button } from "../ui/button";
 import Tabs from "./Tabs";
-import { AudioOnDemand } from "./AudioOnDemand";
 import { useUserStore } from "@/store/user";
 
 function timeFormat(sec: number): string {
@@ -171,7 +170,7 @@ const AppQuiz = () => {
 
       if (e.code.startsWith("F")) {
         e.preventDefault();
-        const fnNumber = Number(e.code.slice(1)); // F1 -> 1, F2 -> 2 и т.д.
+        const fnNumber = Number(e.code.slice(1));
         const index = fnNumber - 1;
 
         if (
@@ -188,6 +187,45 @@ const AppQuiz = () => {
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [shuffleQuiz, currentQuestion, userAnswers]);
+
+  useEffect(() => {
+
+    if (!userRoles.includes("WRITE")) {
+
+      const handleContextMenu = (e: MouseEvent) => e.preventDefault();
+      document.addEventListener("contextmenu", handleContextMenu);
+
+      const handleCopy = (e: ClipboardEvent) => e.preventDefault();
+      document.addEventListener("copy", handleCopy);
+
+      const handleSelect = (e: Event) => e.preventDefault();
+      document.addEventListener("selectstart", handleSelect);
+
+      const handleDragStart = (e: DragEvent) => {
+        e.preventDefault();
+      };
+      document.addEventListener("dragstart", handleDragStart);
+
+      const handleKeyDown = (e: KeyboardEvent) => {
+        if (
+          e.key === "F12" ||
+          (e.ctrlKey && e.shiftKey && ["I", "J", "C", "K", "U"].includes(e.key.toUpperCase()))
+        ) {
+          e.preventDefault();
+        }
+      };
+      document.addEventListener("keydown", handleKeyDown);
+
+      return () => {
+        document.removeEventListener("contextmenu", handleContextMenu);
+        document.removeEventListener("copy", handleCopy);
+        document.removeEventListener("selectstart", handleSelect);
+        document.removeEventListener("keydown", handleKeyDown);
+        document.removeEventListener("dragstart", handleDragStart)
+      };
+    }
+  }, [userRoles]);
+
 
 
   // Helper Functions
@@ -419,7 +457,6 @@ const AppQuiz = () => {
           className="flex-1 rounded-lg flex min-h-[250px] overflow-hidden max-h-[500px] max-md:max-h-[200px] max-md:min-h-[200px] max-md:justify-center max-md:w-full">
           {currentQuestion.mobile_media?.trim() ? (
             <img
-              onContextMenu={(e) => e.preventDefault()}
               onClick={() => {
                 openImageModal(currentQuestion.mobile_media);
               }}
@@ -474,10 +511,12 @@ const AppQuiz = () => {
           </RadioGroup>
           {userAnswers[currentQuestion.id] && currentQuestion.audio_id && (
             <div className="my-5">
-              {userAnswers[currentQuestion.id] && currentQuestion.audio_id && (
-                <AudioOnDemand audioId={currentQuestion.audio_id} />
-              )}
-
+              <audio
+                controls
+                controlsList="nodownload"
+                preload="none"
+                src={`https://backend.avtotest-begzod.uz/api/v1/file/download/audio/${currentQuestion.audio_id}`}
+              />
             </div>
           )}
           {/* Question Description */}
