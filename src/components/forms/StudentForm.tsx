@@ -45,6 +45,7 @@ const StudentForm = ({ onStudentCreated }: StudentFormProps) => {
 			full_name: '',
 			password: '',
 			confirm_password: '',
+			device_id_length: 1,
 			expiration_date: '',
 		},
 	})
@@ -153,6 +154,28 @@ const StudentForm = ({ onStudentCreated }: StudentFormProps) => {
 						</FormItem>
 					)}
 				/>
+
+				<FormField
+					control={form.control}
+					name='device_id_length'
+					render={({ field }) => (
+						<FormItem>
+							<FormLabel>Kirish limiti (1–20)</FormLabel>
+							<FormControl>
+								<Input
+									type='number'
+									{...field}
+									onChange={e => field.onChange(Number(e.target.value))}
+									min={1}
+									max={20}
+								/>
+							</FormControl>
+							<FormMessage />
+						</FormItem>
+					)}
+				/>
+
+
 				<FormField
 					control={form.control}
 					name='expiration_date'
@@ -183,7 +206,7 @@ const StudentForm = ({ onStudentCreated }: StudentFormProps) => {
 												field.onChange(selectedDate?.toISOString() || '')
 												setOpen(false)
 											}}
-											
+
 										/>
 									</PopoverContent>
 								</Popover>

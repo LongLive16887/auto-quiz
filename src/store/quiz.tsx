@@ -8,6 +8,7 @@ type QuizStore = {
 	loadQuiz: (id: number) => void
 	loadTrickQuiz: (id: number) => void
 	loadFanQuiz: (id: number) => void
+	loadDigitalQuiz: (id: number) => void
 	loadTestQuiz: (quantity: string) => void
 	currentQuestionIndex: number
 	setCurrentQuestionIndex: (index: number) => void
@@ -60,6 +61,14 @@ export const useQuizStore = create<QuizStore>()(
 					})
 					.catch()
 			},
+			loadDigitalQuiz: id => {
+				api
+					.get(`/api/v1/question?mobileType=HARD&page=${id}&size=50`)
+					.then(res => {
+						set({ quiz: res.data.data.results })
+					})
+					.catch()
+			},
 			loadTestQuiz: quantity => {
 				api
 					.get(`/api/v1/question?page=0&size=${quantity}`)
@@ -69,7 +78,7 @@ export const useQuizStore = create<QuizStore>()(
 					.catch()
 			},
 			setShowNext: show => set({ showNext: show }),
-			setMaxQuizCount: quantity => set({maxQuizCount: quantity}),
+			setMaxQuizCount: quantity => set({ maxQuizCount: quantity }),
 			setCurrentQuestionIndex: index => set({ currentQuestionIndex: index }),
 			submitAnswer: (questionId, answerId, isCorrect) =>
 				set(state => ({
