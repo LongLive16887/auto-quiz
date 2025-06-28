@@ -30,6 +30,8 @@ import {
 } from "react-router-dom";
 import { Button } from "../ui/button";
 import Tabs from "./Tabs";
+import { AudioOnDemand } from "./AudioOnDemand";
+import { useUserStore } from "@/store/user";
 
 function timeFormat(sec: number): string {
   const minutes = Math.floor(sec / 60);
@@ -61,6 +63,7 @@ const AppQuiz = () => {
   } = useQuizStore();
 
   const { wishlist, toggleWishlist } = useWishlistStore();
+  const { userRoles } = useUserStore()
 
   // States
   const [openShowImageModal, setopenShowImageModal] = useState<boolean>(false);
@@ -163,6 +166,30 @@ const AppQuiz = () => {
     };
   }, [userAnswers, quiz.length]);
 
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+
+      if (e.code.startsWith("F")) {
+        e.preventDefault();
+        const fnNumber = Number(e.code.slice(1)); // F1 -> 1, F2 -> 2 и т.д.
+        const index = fnNumber - 1;
+
+        if (
+          index >= 0 &&
+          index < shuffleQuiz.length &&
+          currentQuestion &&
+          !userAnswers[currentQuestion.id]
+        ) {
+          handleAnswerSelect(shuffleQuiz[index]);
+        }
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [shuffleQuiz, currentQuestion, userAnswers]);
+
+
   // Helper Functions
   const getTranslationHTML = (
     prefix: "question" | "question_description" | "answer",
@@ -191,6 +218,35 @@ const AppQuiz = () => {
   const submitQuizData = async () => {
     if (TypeParam === "trick") {
       const STORAGE_KEY = 'trick-test-stats';
+
+      const updatedData: TrickBlockData = {
+        id: Number(id),
+        correct_answer: correctCount,
+        wrong_answer: incorrectCount,
+        skipped_answer: quiz.length - Object.keys(userAnswers).length,
+      };
+
+      const rawStats = localStorage.getItem(STORAGE_KEY);
+      const stats = rawStats ? JSON.parse(rawStats) : [];
+
+      let newStats = [...stats];
+      const index = newStats.findIndex(item => item.id === updatedData.id);
+      if (index !== -1) {
+        newStats[index] = updatedData;
+      } else {
+        newStats.push(updatedData);
+      }
+
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(newStats));
+
+      setTimeout(() => {
+        navigate("/results", { state: { data: updatedData } });
+      }, 0);
+      return;
+    }
+
+    if (TypeParam === "digital") {
+      const STORAGE_KEY = 'digital-test-stats';
 
       const updatedData: TrickBlockData = {
         id: Number(id),
@@ -291,6 +347,7 @@ const AppQuiz = () => {
       />
     );
 
+
   return (
     <div className="flex flex-col h-[calc(100vh-110px)] gap-3.5">
       {/* Header */}
@@ -302,9 +359,11 @@ const AppQuiz = () => {
             <p className="text-2xl font-semibold text-white">
               {id}-{t("bilet")}
             </p>
-            <p className="hidden md:block text-2xl font-semibold text-white">
-              Id: {currentQuestion.id}
-            </p>
+            {userRoles.includes('WRITE') && (
+              <p className="hidden md:block text-2xl font-semibold text-white">
+                Id: {currentQuestion.id}
+              </p>
+            )}
           </div>
         ) : null}
         <div className="flex items-center gap-3.5 ml-auto max-md:mt-1 max-md:w-full">
@@ -357,7 +416,7 @@ const AppQuiz = () => {
         {/* Media */}
         <div
           {...handlers}
-          className="flex-1 rounded-lg flex min-h-[250px] overflow-hidden max-h-[550px] max-md:max-h-[200px] max-md:min-h-[200px] max-md:justify-center max-md:w-full">
+          className="flex-1 rounded-lg flex min-h-[250px] overflow-hidden max-h-[500px] max-md:max-h-[200px] max-md:min-h-[200px] max-md:justify-center max-md:w-full">
           {currentQuestion.mobile_media?.trim() ? (
             <img
               onContextMenu={(e) => e.preventDefault()}
@@ -370,7 +429,7 @@ const AppQuiz = () => {
             />
           ) : (
             <img
-              className="rounded-full w-full mx-auto object-contain max-md:max-h-[200px]"
+              className="rounded-full w-full mx-auto object-contain max-md:max-h-[200px] max-h-[350px]"
               src="/logo.png"
             />
           )}
@@ -415,11 +474,10 @@ const AppQuiz = () => {
           </RadioGroup>
           {userAnswers[currentQuestion.id] && currentQuestion.audio_id && (
             <div className="my-5">
-              <audio
-                controlsList="nodownload"
-                src={`https://backend.avtotest-begzod.uz/api/v1/file/download/audio/${currentQuestion.audio_id}`}
-                controls
-              />
+              {userAnswers[currentQuestion.id] && currentQuestion.audio_id && (
+                <AudioOnDemand audioId={currentQuestion.audio_id} />
+              )}
+
             </div>
           )}
           {/* Question Description */}

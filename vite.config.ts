@@ -12,6 +12,6 @@ export default defineConfig({
     },
   },
   server: {
-    port: 4200, // bu yerda kerakli portni yozing
+    port: 4200,
   },
 })

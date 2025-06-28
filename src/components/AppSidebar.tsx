@@ -8,7 +8,8 @@ import {
 	Lightbulb,
 	User,
 	UserCog,
-	MessageCircleQuestionIcon
+	MessageCircleQuestionIcon,
+	FileDigit
 } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
@@ -38,6 +39,7 @@ const AppSidebar = () => {
 		{ title: `${t('sinov_test')} (20/50)`, url: '/test', icon: Dumbbell },
 		{ title: t('theme_test'), url: '/fan-test', icon: BookOpen },
 		{ title: t('trick_test'), url: '/trick-test', icon: MessageCircleQuestionIcon },
+		{ title: t('digital_test'), url: '/digital-test', icon: FileDigit },
 		{
 			title:
 				wishlist.length > 0 ? `${t('saved')} (${wishlist.length})` : t('saved'),
