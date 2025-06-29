@@ -109,7 +109,7 @@ const Students = () => {
 			api.delete(`api/v1/auth?id=${studentToDelete.id}`).then(() => {
 				setShowDeleteConfirm(false)
 				setStudentToDelete(null)
-				getStudents()
+				getStudents(searchTerm, currentPage)
 			})
 		}
 	}
@@ -127,6 +127,45 @@ const Students = () => {
 		if (page >= 1 && page <= totalPages) {
 			setCurrentPage(page)
 		}
+	}
+
+	const renderPagination = () => {
+		const pages = []
+		const range = 2
+		const start = Math.max(1, currentPage - range)
+		const end = Math.min(totalPages, currentPage + range)
+
+		if (start > 1) {
+			pages.push(
+				<PaginationItem key={1}>
+					<PaginationLink href="#" onClick={e => { e.preventDefault(); handlePageChange(1) }}>1</PaginationLink>
+				</PaginationItem>
+			)
+			if (start > 2) pages.push(<PaginationItem key="start-ellipsis"><PaginationEllipsis /></PaginationItem>)
+		}
+
+		for (let i = start; i <= end; i++) {
+			pages.push(
+				<PaginationItem key={i}>
+					<PaginationLink
+						href="#"
+						onClick={e => { e.preventDefault(); handlePageChange(i) }}
+						isActive={i === currentPage}
+					>{i}</PaginationLink>
+				</PaginationItem>
+			)
+		}
+
+		if (end < totalPages) {
+			if (end < totalPages - 1) pages.push(<PaginationItem key="end-ellipsis"><PaginationEllipsis /></PaginationItem>)
+			pages.push(
+				<PaginationItem key={totalPages}>
+					<PaginationLink href="#" onClick={e => { e.preventDefault(); handlePageChange(totalPages) }}>{totalPages}</PaginationLink>
+				</PaginationItem>
+			)
+		}
+
+		return pages
 	}
 
 	return (
@@ -310,81 +349,31 @@ const Students = () => {
 							</div>
 						)}
 
-						{totalPages > 1 && data.length ? (
+						{totalPages > 1 && data.length > 0 && (
 							<div className='flex mt-auto justify-end w-full'>
 								<Pagination>
 									<PaginationContent>
 										<PaginationItem>
 											<PaginationPrevious
-												href='#'
-												onClick={e => {
-													e.preventDefault()
-													handlePageChange(currentPage - 1)
-												}}
-												className={
-													currentPage === 1
-														? 'pointer-events-none opacity-50'
-														: ''
-												}
+												href="#"
+												onClick={e => { e.preventDefault(); handlePageChange(currentPage - 1) }}
+												className={currentPage === 1 ? 'pointer-events-none opacity-50' : ''}
 											/>
 										</PaginationItem>
 
-										{Array.from(
-											{ length: Math.min(3, totalPages) },
-											(_, i) => i + 1
-										).map(page => (
-											<PaginationItem key={page}>
-												<PaginationLink
-													href='#'
-													onClick={e => {
-														e.preventDefault()
-														handlePageChange(page)
-													}}
-													isActive={page === currentPage}
-												>
-													{page}
-												</PaginationLink>
-											</PaginationItem>
-										))}
-
-										{totalPages > 3 && (
-											<>
-												<PaginationItem>
-													<PaginationEllipsis />
-												</PaginationItem>
-												<PaginationItem>
-													<PaginationLink
-														href='#'
-														onClick={e => {
-															e.preventDefault()
-															handlePageChange(totalPages)
-														}}
-														isActive={totalPages === currentPage}
-													>
-														{totalPages}
-													</PaginationLink>
-												</PaginationItem>
-											</>
-										)}
+										{renderPagination()}
 
 										<PaginationItem>
 											<PaginationNext
-												href='#'
-												onClick={e => {
-													e.preventDefault()
-													handlePageChange(currentPage + 1)
-												}}
-												className={
-													currentPage === totalPages
-														? 'pointer-events-none opacity-50'
-														: ''
-												}
+												href="#"
+												onClick={e => { e.preventDefault(); handlePageChange(currentPage + 1) }}
+												className={currentPage === totalPages ? 'pointer-events-none opacity-50' : ''}
 											/>
 										</PaginationItem>
 									</PaginationContent>
 								</Pagination>
 							</div>
-						) : null}
+						)}
 					</>
 				)}
 			</div>
