@@ -8,6 +8,7 @@ export const studentSchema = z
 			.min(1, { message: "Iltimos, parol kiriting!" })
 			.min(8, { message: "Parol kamida 8 ta belgidan iborat bo'lishi kerak!" }),
 		confirm_password: z.string(),
+		phone_number: z.string(),
 		expiration_date: z.string().min(1, { message: "Iltimos, tugash vaqtini kiriting!" }),
 		device_id_length: z
 			.number({
