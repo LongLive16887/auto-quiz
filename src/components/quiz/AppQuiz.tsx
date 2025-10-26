@@ -274,6 +274,35 @@ const AppQuiz = () => {
       return;
     }
 
+    if (TypeParam === "wishlist"){
+      const STORAGE_KEY = 'wishlist-test-stats';
+
+      const updatedData: TrickBlockData = {
+        id: Number(id),
+        correct_answer: correctCount,
+        wrong_answer: incorrectCount,
+        skipped_answer: quiz.length - Object.keys(userAnswers).length,
+      };
+
+      const rawStats = localStorage.getItem(STORAGE_KEY);
+      const stats = rawStats ? JSON.parse(rawStats) : [];
+
+      let newStats = [...stats];
+      const index = newStats.findIndex(item => item.id === updatedData.id);
+      if (index !== -1) {
+        newStats[index] = updatedData;
+      } else {
+        newStats.push(updatedData);
+      }
+
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(newStats));
+
+      setTimeout(() => {
+        navigate("/results", { state: { data: updatedData } });
+      }, 0);
+      return;
+    }
+
     let type = 102;
 
     if (TypeParam === "test") {

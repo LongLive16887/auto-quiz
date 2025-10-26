@@ -44,6 +44,7 @@ const StudentForm = ({ onStudentCreated }: StudentFormProps) => {
 			username: '',
 			full_name: '',
 			password: '',
+			phone_number: '',
 			confirm_password: '',
 			device_id_length: 1,
 			expiration_date: '',
@@ -103,7 +104,7 @@ const StudentForm = ({ onStudentCreated }: StudentFormProps) => {
 		<Form {...form}>
 			<form
 				onSubmit={form.handleSubmit(onSubmit)}
-				className='space-y-6 w-full flex flex-col'
+				className='space-y-6 w-full flex flex-col h-full'
 				autoComplete='off'
 			>
 				<FormField
@@ -143,6 +144,19 @@ const StudentForm = ({ onStudentCreated }: StudentFormProps) => {
 				/>
 				<FormField
 					control={form.control}
+					name='phone_number'
+					render={({ field }) => (
+						<FormItem>
+							<FormLabel>Telefon raqami</FormLabel>
+							<FormControl>
+								<Input {...field} autoComplete='off' />
+							</FormControl>
+							<FormMessage />
+						</FormItem>
+					)}
+				/>
+				<FormField
+					control={form.control}
 					name='password'
 					render={({ field }) => (
 						<FormItem>
@@ -154,7 +168,6 @@ const StudentForm = ({ onStudentCreated }: StudentFormProps) => {
 						</FormItem>
 					)}
 				/>
-
 				<FormField
 					control={form.control}
 					name='device_id_length'

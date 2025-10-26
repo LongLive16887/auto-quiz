@@ -10,6 +10,7 @@ type QuizStore = {
 	loadFanQuiz: (id: number) => void
 	loadDigitalQuiz: (id: number) => void
 	loadTestQuiz: (quantity: string) => void
+	setQuiz: (questions: Question[]) => void
 	currentQuestionIndex: number
 	setCurrentQuestionIndex: (index: number) => void
 	userAnswers: Record<number, { answerId: number; isCorrect: boolean }>
@@ -37,6 +38,7 @@ export const useQuizStore = create<QuizStore>()(
 			correctCount: 0,
 			incorrectCount: 0,
 			showNext: false,
+			setQuiz: (questions: Question[]) => set({ quiz: questions }),
 			loadQuiz: id => {
 				api
 					.get(`/api/v1/question?groupId=${id}&page=0&size=1073741824`)

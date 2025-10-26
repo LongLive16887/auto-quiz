@@ -6,7 +6,7 @@ import {
 	SelectValue,
 } from '@/components/ui/select'
 import { useUserStore } from '@/store/user'
-import { LogOutIcon } from 'lucide-react'
+import { LogOutIcon, ReceiptText, Split } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { Button } from './ui/button'
 import { SidebarTrigger } from './ui/sidebar'
@@ -19,11 +19,16 @@ import {
 	DialogFooter,
 } from './ui/dialog'
 import { useState } from 'react'
+import { PdfModal } from './PdfModal'
+import { OctagonMinus } from 'lucide-react'
 
 const AppNav = () => {
 	const { lougoutUser } = useUserStore()
 	const { i18n, t } = useTranslation()
 	const [open, setOpen] = useState(false)
+	const [openFirstPdf, setOpenFirstPdf] = useState(false)
+	const [openSecondPdf, setSecondFirstPdf] = useState(false)
+	const [openThirdPdf, setThirdFirstPdf] = useState(false)
 
 	const languages = [
 		{ code: 'ru', label: 'Русский' },
@@ -37,6 +42,7 @@ const AppNav = () => {
 				<SidebarTrigger />
 			</div>
 			<div className='flex items-center gap-3.5'>
+				{/* 
 				<div className='flex gap-2 items-center'>
 					<a
 						className='cursor-pointer'
@@ -52,7 +58,10 @@ const AppNav = () => {
 					>
 						<img className='w-8 h-8' src='/telegram.svg' alt='' />
 					</a>
-				</div>
+				</div> */}
+				<PdfModal open={openFirstPdf} onClose={setOpenFirstPdf} pdfUrl='/pdf/way_signs.pdf' icon={OctagonMinus} />
+				<PdfModal open={openSecondPdf} onClose={setSecondFirstPdf} pdfUrl='/pdf/way_lines.pdf' icon={Split} />
+				<PdfModal open={openThirdPdf} onClose={setThirdFirstPdf} pdfUrl='/pdf/way_terms.pdf' icon={ReceiptText} />
 				<Select
 					value={i18n.language}
 					onValueChange={value => {
@@ -70,7 +79,6 @@ const AppNav = () => {
 						))}
 					</SelectContent>
 				</Select>
-
 				<Dialog open={open} onOpenChange={setOpen}>
 					<DialogTrigger asChild>
 						<Button className='gap-2'>
