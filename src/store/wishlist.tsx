@@ -4,6 +4,7 @@ import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 
 interface WishlistState {
+	reset: () => void
 	wishlist: Question[]
 	fetchWishlist: () => Promise<void>
 	addToWishlist: (question: Question) => Promise<void>
@@ -52,6 +53,7 @@ export const useWishlistStore = create<WishlistState>()(
 					await addToWishlist(question)
 				}
 			},
+			reset: () => set({ wishlist: [] })
 		}),
 		{
 			name: 'Wishlist',
