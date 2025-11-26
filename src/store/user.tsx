@@ -3,6 +3,7 @@ import Cookies from 'js-cookie'
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 import { UAParser } from 'ua-parser-js';
+import { useWishlistStore } from './wishlist';
 
 type UserStore = {
 	user: {
@@ -50,6 +51,7 @@ export const useUserStore = create<UserStore>()(
 				}
 			},
 			lougoutUser: () => {
+				useWishlistStore.getState().reset()
 				Cookies.set('token', '', { expires: 1, path: '/' })
 				set({ token: '', user: {} })
 			},
