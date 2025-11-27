@@ -3,5 +3,6 @@ export type Student = {
 	username: string
 	full_name: string
 	device_id_length: number;
-	expiration_date: string
+	expiration_date: string;
+	phone_number: string
 }

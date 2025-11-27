@@ -6,6 +6,7 @@ export const studentEditSchema = z
 		username: z.string().min(1, { message: "Iltimos, login kiriting!" }),
 		full_name: z.string().min(1, { message: "Iltimos, to'liq ismingizni kiriting!" }),
 		expiration_date: z.string().min(1, { message: "Iltimos, tugash vaqtini kiriting!" }),
+		phone_number: z.string(),
 		device_id_length: z
 		.number({
 			required_error: "Iltimos, device ID uzunligini kiriting!",

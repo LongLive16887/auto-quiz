@@ -43,6 +43,7 @@ const StudentEditForm = ({ onPasswordChange, data }: StudentFormProps) => {
       full_name: data.full_name,
       device_id_length: data.device_id_length,
       expiration_date: data.expiration_date,
+      phone_number: data.phone_number
     },
   });
 
@@ -82,6 +83,19 @@ const StudentEditForm = ({ onPasswordChange, data }: StudentFormProps) => {
           render={({ field }) => (
             <FormItem>
               <FormLabel>to'liq ism</FormLabel>
+              <FormControl>
+                <Input {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="phone_number"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Telefon raqami</FormLabel>
               <FormControl>
                 <Input {...field} />
               </FormControl>
