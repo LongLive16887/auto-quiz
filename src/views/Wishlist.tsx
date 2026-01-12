@@ -1,9 +1,9 @@
 import { Button } from '@/components/ui/button'
-import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog'
+import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
 import MainLayout from '@/layouts/MainLayout'
 import { useWishlistStore } from '@/store/wishlist'
 import { Question } from '@/types'
-import { Bookmark } from 'lucide-react'
+import { Bookmark, Trash } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Switch } from '@/components/ui/switch'
@@ -11,7 +11,7 @@ import { useNavigate } from 'react-router-dom'
 import { useQuizStore } from '@/store/quiz'
 import { WishlistTestBlock } from '@/components/WishlistTestBlock'
 
-export function createBlocks(length: number): {id: number}[] {
+export function createBlocks(length: number): { id: number }[] {
 	return Array.from({ length }).map((_, index) => ({
 		id: index,
 	}))
@@ -26,8 +26,10 @@ const Wishlist = () => {
 	const [testMode, setTestMode] = useState(false)
 	const navigate = useNavigate()
 	const { setQuiz } = useQuizStore();
+	const { removeAllFromWishlist } = useWishlistStore();
+	const [open, setOpen] = useState(false)
 
-	const [blocks, setBlocks] = useState<{id: number}[]>([])
+	const [blocks, setBlocks] = useState<{ id: number }[]>([])
 
 	useEffect(() => {
 		fetchWishlist()
@@ -84,12 +86,21 @@ const Wishlist = () => {
 		)
 	}
 
+	const handleStartTest = () => {
+		removeAllFromWishlist()
+	}
+
 	return (
 		<MainLayout>
 			<div className='p-4'>
-				<div className='flex items-center justify-end gap-2 text-white mb-4'>
-					<span>{t('test_mode')}</span>
-					<Switch checked={testMode} onCheckedChange={handleSetTestMode} />
+				<div className='flex items-center justify-between text-white mb-4'>
+					<Button onClick={() => setOpen(true)} className='hover:bg-red-500 cursor-pointer'>
+						<Trash />
+					</Button>
+					<div className='flex items-center gap-2'>
+						<span>{t('test_mode')}</span>
+						<Switch checked={testMode} onCheckedChange={handleSetTestMode} />
+					</div>
 				</div>
 				{testMode ? (
 					<div className="flex justify-center flex-wrap gap-3.5">
@@ -147,9 +158,8 @@ const Wishlist = () => {
 										{question.answers.map((answer, index) => (
 											<div
 												key={index}
-												className={`px-3 py-2 rounded-md text-xs ${
-													answer.is_correct ? 'bg-green-600 text-white' : 'bg-white/20 text-white'
-												}`}
+												className={`px-3 py-2 rounded-md text-xs ${answer.is_correct ? 'bg-green-600 text-white' : 'bg-white/20 text-white'
+													}`}
 												dangerouslySetInnerHTML={{
 													__html: (answer as any)[`answer_${i18n.language}`] || '',
 												}}
@@ -172,6 +182,21 @@ const Wishlist = () => {
 						))}
 					</div>
 				)}
+				<Dialog open={open} onOpenChange={setOpen}>
+					<DialogContent className='sm:max-w-[425px]'>
+						<DialogHeader>
+							<DialogTitle>{t('delete')}</DialogTitle>
+						</DialogHeader>
+						<DialogFooter>
+							<div className='flex items-center gap-2'>
+								<Button variant='secondary' onClick={() => setOpen(false)}>
+									{t('back')}
+								</Button>
+								<Button onClick={handleStartTest} className='hover:bg-red-500'>{t('all_delete')}</Button>
+							</div>
+						</DialogFooter>
+					</DialogContent>
+				</Dialog>
 			</div>
 		</MainLayout>
 	)

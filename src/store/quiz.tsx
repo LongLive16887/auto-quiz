@@ -1,13 +1,13 @@
 import api from '@/api/axios'
-import { Question } from '@/types'
+import { Question, Video } from '@/types'
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 
 type QuizStore = {
 	quiz: Question[]
-	loadQuiz: (id: number) => void
+	loadQuiz: (id: number, isRandom: boolean) => void
 	loadTrickQuiz: (id: number) => void
-	loadFanQuiz: (id: number) => void
+	loadFanQuiz: (id: number, isRandom: boolean) => void
 	loadDigitalQuiz: (id: number) => void
 	loadTestQuiz: (quantity: string) => void
 	setQuiz: (questions: Question[]) => void
@@ -17,6 +17,7 @@ type QuizStore = {
 	correctCount: number
 	incorrectCount: number
 	maxQuizCount: number
+	videos: Video[]
 	setMaxQuizCount: (quantity: number) => void
 	submitAnswer: (
 		questionId: number,
@@ -36,20 +37,21 @@ export const useQuizStore = create<QuizStore>()(
 			currentQuestionIndex: 0,
 			userAnswers: {},
 			correctCount: 0,
+			videos: [],
 			incorrectCount: 0,
 			showNext: false,
 			setQuiz: (questions: Question[]) => set({ quiz: questions }),
-			loadQuiz: id => {
+			loadQuiz: (id, isRandom) => {
 				api
-					.get(`/api/v1/question?groupId=${id}&page=0&size=1073741824`)
+					.get(`/api/v1/question?groupId=${id}&page=0&size=1073741824&is_random=${isRandom}`)
 					.then(res => {
-						set({ quiz: res.data.data.results })
+						set({ quiz: res.data.data.results, videos: res.data.data.videos })
 					})
 					.catch()
 			},
-			loadFanQuiz: id => {
+			loadFanQuiz: (id, isRandom) => {
 				api
-					.get(`/api/v1/question?lessonId=${id}&page=0&size=1073741824`)
+					.get(`/api/v1/question?lessonId=${id}&page=0&size=1073741824&is_random=${isRandom}`)
 					.then(res => {
 						set({ quiz: res.data.data.results })
 					})

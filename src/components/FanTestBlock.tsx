@@ -14,9 +14,11 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "./ui/dialog";
+import { Switch } from "./ui/switch";
 
 export function FanTestBlock({ data }: { data: BlockData }) {
   const [open, setOpen] = useState(false);
+  const [isRandom, setIsRandom] = useState(true);
   const navigate = useNavigate();
   const { loadFanQuiz } = useQuizStore();
   const { t, i18n } = useTranslation();
@@ -38,12 +40,12 @@ export function FanTestBlock({ data }: { data: BlockData }) {
     let url = !data.videos || data.videos.length === 0
       ? `/template/${data.id}?type=theme`
       : `/template/${data.id}?type=theme&video_id=${(data.videos as Video[]).map(d => d.video_id).join(",")}`;
-    localStorage.setItem("fan_test_video", JSON.stringify(data.videos));  
-    if(!data.videos ||data.videos.length === 0){
+    localStorage.setItem("fan_test_video", JSON.stringify(data.videos));
+    if (!data.videos || data.videos.length === 0) {
       localStorage.removeItem("fan_test_video");
     }
     setOpen(false);
-    loadFanQuiz(data.id);
+    loadFanQuiz(data.id, isRandom);
     navigate(url);
   };
 
@@ -55,8 +57,8 @@ export function FanTestBlock({ data }: { data: BlockData }) {
             className="text-center"
             dangerouslySetInnerHTML={{ __html: getLanguageName() }}></p>
           {data.correct_answer != 0 &&
-          data.wrong_answer === 0 &&
-          data.skipped_answer === 0 ? (
+            data.wrong_answer === 0 &&
+            data.skipped_answer === 0 ? (
             <div className="flex items-center gap-1 absolute top-1 right-1">
               <Badge variant="succes">
                 <Check size={15} /> {data.correct_answer}
@@ -89,6 +91,10 @@ export function FanTestBlock({ data }: { data: BlockData }) {
         <DialogHeader>
           <DialogTitle>{t("start")}</DialogTitle>
         </DialogHeader>
+        <div className="flex flex-row items-center justify-start gap-2">
+          <p>{t("is_random")}</p>
+          <Switch checked={isRandom} onCheckedChange={setIsRandom} />
+        </div>
         <DialogFooter>
           <div className="flex items-center gap-2">
             <Button variant="secondary" onClick={() => setOpen(false)}>
