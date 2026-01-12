@@ -13,18 +13,12 @@ export type BlockData = {
 
 export type TrickBlockData = {
 	id: number;
-    correct_answer: number;
-    wrong_answer: number;
-    skipped_answer: number;
+	correct_answer: number;
+	wrong_answer: number;
+	skipped_answer: number;
 }
 
 
 export type Video = {
-		"id": number,
-		"video_id": string,
-		"title_uz": null,
-		"title_ru": null,
-		"title_la": string,
-		"num": null
-	
+	video_id: string,
 }

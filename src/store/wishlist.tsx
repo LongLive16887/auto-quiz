@@ -9,6 +9,7 @@ interface WishlistState {
 	fetchWishlist: () => Promise<void>
 	addToWishlist: (question: Question) => Promise<void>
 	removeFromWishlist: (questionId: number) => Promise<void>
+	removeAllFromWishlist: () => Promise<void>
 	toggleWishlist: (question: Question) => Promise<void>
 }
 
@@ -42,6 +43,16 @@ export const useWishlistStore = create<WishlistState>()(
 					}))
 				} catch (error) {
 					console.error('Ошибка удаления из wishlist:', error)
+				}
+			},
+			removeAllFromWishlist: async () => {
+				try {
+					await api.delete(`/api/v1/wishlist/all`)
+					set({
+						wishlist: [],
+					})
+				} catch (error) {
+					console.error('Ошибка все избранные из wishlist:', error)
 				}
 			},
 			toggleWishlist: async (question: Question) => {

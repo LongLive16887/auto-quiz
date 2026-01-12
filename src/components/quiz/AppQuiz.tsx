@@ -46,7 +46,7 @@ const AppQuiz = () => {
   const navigate = useNavigate();
   const TypeParam = new URLSearchParams(location.search).get("type");
   // const VideoId = new URLSearchParams(location.search).get("video_id");
-  const videos = JSON.parse(localStorage.getItem("fan_test_video") || "[]");
+  /* const videos = JSON.parse(localStorage.getItem("fan_test_video") || "[]"); */
 
   const {
     currentQuestionIndex,
@@ -58,6 +58,7 @@ const AppQuiz = () => {
     reset,
     quiz,
     showNext,
+    videos,
     setShowNext,
   } = useQuizStore();
 
@@ -531,12 +532,12 @@ const AppQuiz = () => {
                   return (
                     <Button
                       key={video.id}
-                      className="w-fit px-4 flex items-center gap-2  max-md:max-w-full flex-1 max-w-1/2"
+                      className="w-fit px-4 flex items-center gap-2  max-md:max-w-full flex-1 max-w-1/2 cursor-pointer"
                       size={"icon"}
                       onClick={() => openVideoModal(video.video_id)}>
                       <FileVideo className="text-white overflow-hidden" />
                       <p className="line-clamp-1 whitespace-normal overflow-hidden">
-                        {video.title_la}
+                        {video.num}-video
                       </p>
                     </Button>
                   );

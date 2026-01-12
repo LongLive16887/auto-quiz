@@ -15,16 +15,18 @@ import {
 	DialogTitle,
 	DialogTrigger,
 } from './ui/dialog'
+import { Switch } from './ui/switch'
 
 export function TestBlock({ data }: { data: BlockData }) {
 	const [open, setOpen] = useState(false)
+	const [isRandom, setIsRandom] = useState(true);
 	const { t } = useTranslation()
 	const navigate = useNavigate()
 	const { loadQuiz } = useQuizStore()
 
 	const handleStartTest = () => {
 		setOpen(false)
-		loadQuiz(data.id)
+		loadQuiz(data.id, isRandom)
 		navigate(`/template/${data.id}`)
 	}
 
@@ -36,16 +38,16 @@ export function TestBlock({ data }: { data: BlockData }) {
 						{data.id} - {t('bilet')}
 					</p>
 					{data.correct_answer != 0 &&
-					data.wrong_answer === 0 &&
-					data.skipped_answer === 0 ? (
+						data.wrong_answer === 0 &&
+						data.skipped_answer === 0 ? (
 						<div className='flex items-center gap-1 absolute top-1 right-1'>
 							<Badge variant='succes'>
 								<Check size={15} /> {data.correct_answer}
 							</Badge>
 						</div>
 					) : data.correct_answer !== 0 ||
-					  data.wrong_answer !== 0 ||
-					  data.skipped_answer !== 0 ? (
+						data.wrong_answer !== 0 ||
+						data.skipped_answer !== 0 ? (
 						<div className='flex items-center gap-1 absolute top-1 right-1'>
 							{data.skipped_answer > 0 && (
 								<Badge variant='warn'>
@@ -70,6 +72,10 @@ export function TestBlock({ data }: { data: BlockData }) {
 				<DialogHeader>
 					<DialogTitle>{t('start')}</DialogTitle>
 				</DialogHeader>
+				<div className="flex flex-row items-center justify-start gap-2">
+					<p>{t("is_random")}</p>
+					<Switch checked={isRandom} onCheckedChange={setIsRandom} />
+				</div>
 				<DialogFooter>
 					<div className='flex items-center gap-2'>
 						<Button variant='secondary' onClick={() => setOpen(false)}>

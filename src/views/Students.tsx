@@ -32,7 +32,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import MainLayout from '@/layouts/MainLayout'
 import { Student } from '@/types'
 import { DialogTrigger } from '@radix-ui/react-dialog'
-import { CornerUpLeft, Eye, Loader2, Pen, Search, TrashIcon, ClipboardCopy, Check } from 'lucide-react';
+import { CornerUpLeft, Eye, Loader2, Pen, Search, TrashIcon } from 'lucide-react';
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -47,8 +47,6 @@ const Students = () => {
 	const [showResults, setShowResults] = useState(false)
 	const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
 	const [studentToDelete, setStudentToDelete] = useState<Student | null>(null)
-	const [copiedId, setCopiedId] = useState<number | null>(null);
-
 
 	const [selectedResultStudent, setSelectedResultStudent] = useState<
 		number | null
@@ -70,15 +68,6 @@ const Students = () => {
 				console.error('Error fetching data:', err)
 			})
 	}
-
-	const handleCopy = async (id: number) => {
-		const url = `https://avtotest-begzod.uz/share-app/mobile?referrer_id=${id}`;
-		await navigator.clipboard.writeText(url);
-		setCopiedId(id);
-		setTimeout(() => {
-			setCopiedId(null);
-		}, 2000);
-	};
 
 
 	const handlePasswordChange = () => {
@@ -293,21 +282,8 @@ const Students = () => {
 										{data.map(student => (
 											<TableRow key={student.id}>
 												<TableCell className='font-medium flex items-center gap-2'>
-													<span className="inline-block min-w-[40px]">{student.id}</span>
-													<Button
-														variant="ghost"
-														size="icon"
-														onClick={() => handleCopy(student.id)}
-														className="p-1 h-auto w-auto"
-													>
-														{copiedId === student.id ? (
-															<Check className="text-green-500 w-4 h-4" />
-														) : (
-															<ClipboardCopy className="w-4 h-4" />
-														)}
-													</Button>
+													<span className="inline-block min-w-[40px]">{student.num}</span>
 												</TableCell>
-
 												<TableCell>{student.username}</TableCell>
 												<TableCell>{student.full_name}</TableCell>
 												<TableCell>{student.expiration_date}</TableCell>
