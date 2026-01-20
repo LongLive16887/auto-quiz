@@ -53,7 +53,7 @@ export const useQuizStore = create<QuizStore>()(
 				api
 					.get(`/api/v1/question?lessonId=${id}&page=0&size=1073741824&is_random=${isRandom}`)
 					.then(res => {
-						set({ quiz: res.data.data.results })
+						set({ quiz: res.data.data.results, videos: res.data.data.videos })
 					})
 					.catch()
 			},
