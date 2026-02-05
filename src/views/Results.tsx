@@ -1,9 +1,10 @@
 import { Button } from '@/components/ui/button'
 import MainLayout from '@/layouts/MainLayout'
 import { useQuizStore } from '@/store/quiz'
-import { useEffect } from 'react'
+import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useLocation, useNavigate } from 'react-router-dom'
+import Confetti from 'react-confetti'
 
 export const ResultsPage = () => {
 	const navigate = useNavigate()
@@ -11,10 +12,19 @@ export const ResultsPage = () => {
 	const { t } = useTranslation()
 	const location = useLocation()
 
-	// Получаем данные из состояния
-	const { data } = location.state || {}
+	const { data, type } = location.state || {}
+	const isTest = type === 'test'
 
-	useEffect(() => {}, [])
+	const total = data?.correct_answer +
+		data?.wrong_answer +
+		data?.skipped_answer
+
+	const isWinner = useMemo(() => {
+		if (!isTest) return false
+		if (total === 20 && data.correct_answer >= 18) return true
+		if (total === 50 && data.correct_answer >= 47) return true
+		return false
+	}, [type, total, data])
 
 	function handleClick() {
 		navigate(-2)
@@ -23,8 +33,17 @@ export const ResultsPage = () => {
 
 	return (
 		<MainLayout>
-			<div className='w-full bg-white/10 backdrop-blur-lg text-white border rounded-lg mx-auto p-4 text-center'>
-				<h1 className='text-3xl font-bold mb-6'>{t('test_results')}</h1>
+			{isTest && isWinner && (
+				<Confetti
+					recycle={false}
+					numberOfPieces={2000}
+					gravity={0.25}
+				/>
+			)}
+			<div className='relative z-10 w-full bg-white/10 backdrop-blur-lg text-white border rounded-lg mx-auto p-4 text-center'>
+				<h1 className='text-3xl font-bold mb-6'>
+					{t('test_results')}
+				</h1>
 				<div className='space-y-4 mb-8'>
 					<p className='text-green-600'>
 						{t('right_answers')}: {data.correct_answer}
@@ -36,8 +55,16 @@ export const ResultsPage = () => {
 						{t('skipped_questions')}: {data.skipped_answer}
 					</p>
 				</div>
-				<Button onClick={handleClick}>{t('main_menu')}</Button>
+				<Button onClick={handleClick}>
+					{t('main_menu')}
+				</Button>
 			</div>
+			{isTest && !isWinner && <img
+				src={'https://gifzz.com/storage/gifs/0Ik8DQA0rGm8XGNwGgs6XuLQdiJwpgVU01budwWE.gif'}
+				alt="celebration"
+				className="mx-auto max-w-full"
+			/>
+			}
 		</MainLayout>
 	)
 }

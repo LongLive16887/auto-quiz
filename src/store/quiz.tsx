@@ -10,6 +10,7 @@ type QuizStore = {
 	loadFanQuiz: (id: number, isRandom: boolean) => void
 	loadDigitalQuiz: (id: number) => void
 	loadTestQuiz: (quantity: string) => void
+	loadMarathonQuiz: (limit: number, page: number) => void
 	setQuiz: (questions: Question[]) => void
 	currentQuestionIndex: number
 	setCurrentQuestionIndex: (index: number) => void
@@ -76,6 +77,14 @@ export const useQuizStore = create<QuizStore>()(
 			loadTestQuiz: quantity => {
 				api
 					.get(`/api/v1/question?page=0&size=${quantity}`)
+					.then(res => {
+						set({ quiz: res.data.data.results })
+					})
+					.catch()
+			},
+			loadMarathonQuiz: (limit, page) => {
+				api
+					.get(`/api/v1/question??is_random=false&page=${page}&size=${limit}`)
 					.then(res => {
 						set({ quiz: res.data.data.results })
 					})

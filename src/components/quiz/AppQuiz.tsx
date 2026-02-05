@@ -275,7 +275,7 @@ const AppQuiz = () => {
       return;
     }
 
-    if (TypeParam === "wishlist"){
+    if (TypeParam === "wishlist" || TypeParam === "marathon") {
 
       const updatedData: TrickBlockData = {
         id: Number(id),
@@ -307,7 +307,7 @@ const AppQuiz = () => {
     };
 
     await api.post("/api/v1/user/statistics", requestData).then((res) => {
-      navigate("/results", { state: { data: res.data.data } });
+      navigate("/results", { state: { data: res.data.data, type: TypeParam } });
     });
 
   };

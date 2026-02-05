@@ -12,6 +12,8 @@ import TrickTestDashboard from './views/trick-test/TrickTestDashboard'
 import DigitalTestDashboard from './views/digital-test/DigitalTestDashboard'
 import { useUserStore } from './store/user'
 import { useEffect } from 'react'
+import MarathonDashboard from './views/marathon/MarathonDashboard'
+import MarathonParts from './views/marathon/MarathonParts'
 
 const router = createBrowserRouter([
 	{
@@ -37,6 +39,14 @@ const router = createBrowserRouter([
 			{
 				path: '/test',
 				element: <SinovTestDashboard />,
+			},
+			{
+				path: '/marathon-test',
+				element: <MarathonDashboard />,
+			},
+			{
+				path: '/marathon-test/:limit',
+				element: <MarathonParts />,
 			},
 			{
 				path: '/fan-test',
