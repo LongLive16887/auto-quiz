@@ -59,12 +59,6 @@ export const ResultsPage = () => {
 					{t('main_menu')}
 				</Button>
 			</div>
-			{isTest && !isWinner && <img
-				src={'https://gifzz.com/storage/gifs/0Ik8DQA0rGm8XGNwGgs6XuLQdiJwpgVU01budwWE.gif'}
-				alt="celebration"
-				className="mx-auto max-w-full"
-			/>
-			}
 		</MainLayout>
 	)
 }
