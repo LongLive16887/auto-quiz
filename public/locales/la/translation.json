@@ -31,5 +31,6 @@
 	"block": "Qism",
 	"is_random": "Savollarni aralash chiqishi",
 	"delete": "O'chirish",
-	"all_delete": "Hammasini o'chirish"
+	"all_delete": "Hammasini o'chirish",
+	"marathon_test": "Marafon Testlar"
 }

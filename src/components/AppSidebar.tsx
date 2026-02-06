@@ -9,7 +9,8 @@ import {
 	User,
 	UserCog,
 	MessageCircleQuestionIcon,
-	FileDigit
+	FileDigit,
+	Waypoints
 } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
@@ -40,6 +41,7 @@ const AppSidebar = () => {
 		{ title: t('theme_test'), url: '/fan-test', icon: BookOpen },
 		{ title: t('trick_test'), url: '/trick-test', icon: MessageCircleQuestionIcon },
 		{ title: t('digital_test'), url: '/digital-test', icon: FileDigit },
+		{ title: t('marathon_test'), url: '/marathon-test', icon: Waypoints },
 		{
 			title:
 				wishlist.length > 0 ? `${t('saved')} (${wishlist.length})` : t('saved'),
