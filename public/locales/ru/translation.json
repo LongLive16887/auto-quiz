@@ -2,8 +2,8 @@
 	"shablon_test": "Тесты Шаблонов",
 	"sinov_test": "Проверочный тест",
 	"theme_test": "Тематические тесты",
-	"trick_test": "Обманчивые тесты",	
-	"digital_test" : "Числовые тесты",
+	"trick_test": "Обманчивые тесты",
+	"digital_test": "Числовые тесты",
 	"test_mode": "Режим теста",
 	"bilet": "Билет",
 	"start": "Начать",
@@ -32,5 +32,9 @@
 	"is_random": "Показать вопросы в перемешку",
 	"delete": "Удалить",
 	"all_delete": "Удалить всё",
-	"marathon_test": "Марафонные тесты"
+	"marathon_test": "Марафонные тесты",
+	"exam_failed_title": "К сожалению",
+	"exam_failed_desc": "Экзамен не сдан",
+	"exam_passed_title": "Поздравляем",
+	"exam_passed_desc": "Экзамен успешно сдан"
 }

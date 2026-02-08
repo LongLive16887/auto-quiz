@@ -205,6 +205,28 @@ const AppQuiz = () => {
     if (!currentQuestion || userAnswers[currentQuestion.id]) return;
 
     submitAnswer(currentQuestion.id, answer.id, answer.is_correct);
+    const willBeIncorrect = !answer.is_correct;
+
+    if (TypeParam === "test" && willBeIncorrect) {
+      const totalQuestions = quiz.length;
+      const currentWrong = incorrectCount + 1; 
+
+      let maxErrors = Infinity;
+
+      if (totalQuestions === 20) {
+        maxErrors = 3;
+      } else if (totalQuestions === 50) {
+        maxErrors = 4;
+      }
+
+      if (currentWrong >= maxErrors) {
+        setTimeout(() => {
+          handleFinishTest();
+        }, 500);
+        return;
+      }
+    }
+
     if (showNext) {
       setTimeout(() => {
         if (currentQuestionIndex + 1 < quiz.length) {
