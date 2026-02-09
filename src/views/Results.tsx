@@ -41,23 +41,27 @@ export const ResultsPage = () => {
 				/>
 			)}
 			<div className='relative z-10 w-full bg-white/10 backdrop-blur-lg text-white border rounded-lg mx-auto p-4 text-center'>
-				{isTest && !isWinner ? (
+				{isTest && (
 					<div className="space-y-4 mb-8">
-						<h1 className='text-3xl font-bold mb-6 text-red-600 uppercase'>
-							{t('exam_failed_title')}&#128532;
-						</h1>
-						<h2 className='text-3xl font-bold mb-6 text-white'>
-							{t('exam_failed_desc')}
-						</h2>
-					</div>
-				) : (
-					<div className="space-y-4 mb-8">
-						<h1 className='text-3xl font-bold mb-6 text-green-600 uppercase'>
-							{t('exam_passed_title')}&#129395;
-						</h1>
-						<h2 className='text-3xl font-bold mb-6 text-white'>
-							{t('exam_passed_desc')}
-						</h2>
+						{isWinner ? (
+							<>
+								<h1 className='text-3xl font-bold mb-6 text-green-600 uppercase'>
+									{t('exam_passed_title')}&#129395;
+								</h1>
+								<h2 className='text-3xl font-bold mb-6 text-white'>
+									{t('exam_passed_desc')}
+								</h2>
+							</>
+						) : (
+							<>
+								<h1 className='text-3xl font-bold mb-6 text-red-600 uppercase'>
+									{t('exam_failed_title')}&#128532;
+								</h1>
+								<h2 className='text-3xl font-bold mb-6 text-white'>
+									{t('exam_failed_desc')}
+								</h2>
+							</>
+						)}
 					</div>
 				)}
 				{!isTest && (
