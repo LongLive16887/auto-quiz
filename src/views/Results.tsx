@@ -41,20 +41,47 @@ export const ResultsPage = () => {
 				/>
 			)}
 			<div className='relative z-10 w-full bg-white/10 backdrop-blur-lg text-white border rounded-lg mx-auto p-4 text-center'>
-				<h1 className='text-3xl font-bold mb-6'>
-					{t('test_results')}
-				</h1>
-				<div className='space-y-4 mb-8'>
-					<p className='text-green-600'>
-						{t('right_answers')}: {data.correct_answer}
-					</p>
-					<p className='text-red-600'>
-						{t('incorrect_answers')}: {data.wrong_answer}
-					</p>
-					<p className='text-white'>
-						{t('skipped_questions')}: {data.skipped_answer}
-					</p>
-				</div>
+				{isTest && (
+					<div className="space-y-4 mb-8">
+						{isWinner ? (
+							<>
+								<h1 className='text-3xl font-bold mb-6 text-green-600 uppercase'>
+									{t('exam_passed_title')}&#129395;
+								</h1>
+								<h2 className='text-3xl font-bold mb-6 text-white'>
+									{t('exam_passed_desc')}
+								</h2>
+							</>
+						) : (
+							<>
+								<h1 className='text-3xl font-bold mb-6 text-red-600 uppercase'>
+									{t('exam_failed_title')}&#128532;
+								</h1>
+								<h2 className='text-3xl font-bold mb-6 text-white'>
+									{t('exam_failed_desc')}
+								</h2>
+							</>
+						)}
+					</div>
+				)}
+				{!isTest && (
+					<>
+						<h1 className='text-3xl font-bold mb-6'>
+							{t('test_results')}
+						</h1>
+						<div className='space-y-4 mb-8'>
+							<p className='text-green-600'>
+								{t('right_answers')}: {data.correct_answer}
+							</p>
+							<p className='text-red-600'>
+								{t('incorrect_answers')}: {data.wrong_answer}
+							</p>
+							<p className='text-white'>
+								{t('skipped_questions')}: {data.skipped_answer}
+							</p>
+						</div>
+					</>
+				)}
 				<Button onClick={handleClick}>
 					{t('main_menu')}
 				</Button>

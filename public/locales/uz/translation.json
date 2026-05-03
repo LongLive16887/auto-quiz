@@ -32,5 +32,9 @@
 	"is_random": "Саволларни аралаш чиқиши",
 	"delete": "Ўчириш",
 	"all_delete": "Хаммасини ўчириш",
-	"marathon_test": "Марафон Тестлар"
+	"marathon_test": "Марафон Тестлар",
+	"exam_failed_title": "Афсус",
+	"exam_failed_desc": "Имтиҳондан йиқилдингиз",
+	"exam_passed_title": "Табриклаймиз",
+	"exam_passed_desc": "Имтиҳондан ўтдингиз"
 }

@@ -84,7 +84,7 @@ export const useQuizStore = create<QuizStore>()(
 			},
 			loadMarathonQuiz: (limit, page) => {
 				api
-					.get(`/api/v1/question??is_random=false&page=${page}&size=${limit}`)
+					.get(`/api/v1/question?is_random=false&page=${page}&size=${limit}`)
 					.then(res => {
 						set({ quiz: res.data.data.results })
 					})
