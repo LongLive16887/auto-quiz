@@ -52,8 +52,8 @@ const Dashboard = () => {
 			<div className='flex flex-col gap-3.5'>
 				<div className='grid gap-3.5 justify-center [grid-template-columns:repeat(auto-fill,150px)]'>
 					<div className='col-span-full bg-yellow-400/15 border border-yellow-400/40 rounded-lg px-4 py-2.5 text-yellow-300 text-sm'>
-						<span className='font-bold text-yellow-200'>Ogohlantirish❗️</span>{' '}
-						Express kursga har kuni darsga kelish kerak. 5 kundan ko'p sababsiz dars qoldirgan o'quvchilar o'qishdan haydaladi, o'qishni davom etirish uchun qayta to'lov qilishga to'g'ri keladi! Avtoshkolada o'qish mudati 2,5 oy, o'qish tugagandan so'ng avtomatik tarzda login parol o'chib ketadi qayta ochib berilmaydi, o'qish davomida kelib tayyorlanish shart!
+						<span className='font-bold text-yellow-200'>Ogohlantirish❗️</span>{' '} <br />
+						Express kursga har kuni darsga kelish kerak. 5 kundan ko'p sababsiz dars qoldirgan o'quvchilar o'qishdan haydaladi, o'qishni davom etirish uchun qayta to'lov qilishga to'g'ri keladi! <br /> Avtoshkolada o'qish mudati 2,5 oy, o'qish tugagandan so'ng avtomatik tarzda login parol o'chib ketadi qayta ochib berilmaydi, o'qish davomida kelib tayyorlanish shart!
 					</div>
 					{!allStatsAreZero && (
 						<div className='col-span-full flex justify-end'>
