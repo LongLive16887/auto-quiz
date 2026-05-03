@@ -50,13 +50,19 @@ const Dashboard = () => {
 	return (
 		<MainLayout>
 			<div className='flex flex-col gap-3.5'>
-				{!allStatsAreZero && (
-					<Button className='self-end' size={'sm'} onClick={handleCleanStats}>
-					{t('clean_stats')}
-						<Eraser />
-					</Button>
-				)}
-				<div className='flex justify-center flex-wrap gap-3.5'>
+				<div className='grid gap-3.5 justify-center [grid-template-columns:repeat(auto-fill,150px)]'>
+					<div className='col-span-full bg-yellow-400/15 border border-yellow-400/40 rounded-lg px-4 py-2.5 text-yellow-300 text-sm'>
+						<span className='font-bold text-yellow-200'>Ogohlantirish❗️</span>{' '}
+						Express kursga har kuni darsga kelish kerak. 5 kundan ko'p sababsiz dars qoldirgan o'quvchilar o'qishdan haydaladi, o'qishni davom etirish uchun qayta to'lov qilishga to'g'ri keladi! Avtoshkolada o'qish mudati 2,5 oy, o'qish tugagandan so'ng avtomatik tarzda login parol o'chib ketadi qayta ochib berilmaydi, o'qish davomida kelib tayyorlanish shart!
+					</div>
+					{!allStatsAreZero && (
+						<div className='col-span-full flex justify-end'>
+							<Button size={'sm'} onClick={handleCleanStats}>
+								{t('clean_stats')}
+								<Eraser />
+							</Button>
+						</div>
+					)}
 					{statistics.map((item, index) => (
 						<TestBlock data={item} key={index} />
 					))}
