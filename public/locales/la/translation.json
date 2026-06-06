@@ -30,6 +30,7 @@
 	"user_not_found": "Foydalanuvchi topilmadi",
 	"block": "Qism",
 	"is_random": "Savollarni aralash chiqishi",
+	"show_keywords": "Kalit so'zlarni ko'rsatish",
 	"delete": "O'chirish",
 	"all_delete": "Hammasini o'chirish",
 	"marathon_test": "Marafon Testlar",

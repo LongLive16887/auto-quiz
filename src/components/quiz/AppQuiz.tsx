@@ -191,13 +191,20 @@ const AppQuiz = () => {
 
 
 
+  const showKeywords = localStorage.getItem('show_keywords') !== 'false';
+
   // Helper Functions
   const getTranslationHTML = (
     prefix: "question" | "question_description" | "answer",
-    obj: Question | Answer
+    obj: Question | Answer,
+    isAnswered = false
   ) => {
-    const langKey = `${prefix}_${i18n.language}` as keyof typeof obj;
-    const text = obj[langKey] || "";
+    const record = obj as Record<string, unknown>;
+    if (isAnswered && showKeywords) {
+      const colored = record[`${prefix}_${i18n.language}_colored`] as string | null;
+      if (colored) return { __html: colored };
+    }
+    const text = (record[`${prefix}_${i18n.language}`] as string) || "";
     return { __html: text };
   };
 
@@ -444,7 +451,8 @@ const AppQuiz = () => {
           className="w-full text-white text-center"
           dangerouslySetInnerHTML={getTranslationHTML(
             "question",
-            currentQuestion
+            currentQuestion,
+            !!userAnswers[currentQuestion.id]
           )}
         />
       </div>
@@ -501,7 +509,8 @@ const AppQuiz = () => {
                     <div
                       dangerouslySetInnerHTML={getTranslationHTML(
                         "answer",
-                        answer
+                        answer,
+                        isAnswered
                       )}
                     />
                   </Label>

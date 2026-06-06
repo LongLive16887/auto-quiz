@@ -3,6 +3,9 @@ export type Answer = {
 	answer_ru: string
 	answer_uz: string
 	answer_la: string
+	answer_ru_colored: string | null
+	answer_uz_colored: string | null
+	answer_la_colored: string | null
 	is_correct: boolean
 }
 
@@ -13,6 +16,9 @@ export type Question = {
 	question_ru: string
 	question_uz: string
 	question_la: string
+	question_ru_colored: string | null
+	question_uz_colored: string | null
+	question_la_colored: string | null
 	order_number: number
 	is_reverse: boolean
 	question_description_ru: string

@@ -11,6 +11,7 @@ import {
     DialogHeader,
     DialogTitle,
 } from '@/components/ui/dialog'
+import { Switch } from '@/components/ui/switch'
 
 const MarathonParts = () => {
     const { limit } = useParams<{ limit: string }>()
@@ -21,6 +22,14 @@ const MarathonParts = () => {
     const numericLimit = Number(limit)
     const [selectedPage, setSelectedPage] = useState<number | null>(null)
     const [open, setOpen] = useState(false)
+    const [showKeywords, setShowKeywords] = useState(
+        () => localStorage.getItem('show_keywords') !== 'false'
+    )
+
+    const handleShowKeywordsChange = (val: boolean) => {
+        setShowKeywords(val)
+        localStorage.setItem('show_keywords', String(val))
+    }
 
     const squaresCount = useMemo(() => {
         if (numericLimit === 300) return 5
@@ -60,6 +69,10 @@ const MarathonParts = () => {
                         <DialogHeader>
                             <DialogTitle>{t('start')}</DialogTitle>
                         </DialogHeader>
+                        <div className='flex flex-row items-center justify-start gap-2'>
+                            <p>{t('show_keywords')}</p>
+                            <Switch checked={showKeywords} onCheckedChange={handleShowKeywordsChange} />
+                        </div>
                         <DialogFooter>
                             <div className='flex items-center gap-2'>
                                 <Button variant='secondary' onClick={() => setOpen(false)}>
