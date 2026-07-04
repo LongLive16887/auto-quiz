@@ -6,7 +6,7 @@ import {
 	SelectValue,
 } from '@/components/ui/select'
 import { useUserStore } from '@/store/user'
-import { LogOutIcon, ReceiptText, Split, TrafficCone, TrainFrontTunnel } from 'lucide-react'
+import { LogOutIcon, ReceiptText, Split, TrafficCone } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { Button } from './ui/button'
 import { SidebarTrigger } from './ui/sidebar'
