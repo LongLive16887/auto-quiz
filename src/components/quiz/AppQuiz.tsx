@@ -191,7 +191,7 @@ const AppQuiz = () => {
 
 
 
-  const showKeywords = localStorage.getItem('show_keywords') !== 'false';
+  const showKeywords = TypeParam === "highlight";
 
   // Helper Functions
   const getTranslationHTML = (
@@ -201,8 +201,9 @@ const AppQuiz = () => {
   ) => {
     const record = obj as Record<string, unknown>;
     if (isAnswered && showKeywords) {
-      const colored = record[`${prefix}_${i18n.language}_colored`] as string | null;
-      if (colored) return { __html: colored };
+      const suffix = TypeParam === "highlight" ? "highlight" : "colored";
+      const enhanced = record[`${prefix}_${i18n.language}_${suffix}`] as string | null;
+      if (enhanced) return { __html: enhanced };
     }
     const text = (record[`${prefix}_${i18n.language}`] as string) || "";
     return { __html: text };
@@ -304,7 +305,7 @@ const AppQuiz = () => {
       return;
     }
 
-    if (TypeParam === "wishlist" || TypeParam === "marathon") {
+    if (TypeParam === "wishlist" || TypeParam === "marathon" || TypeParam === "highlight") {
 
       const updatedData: TrickBlockData = {
         id: Number(id),

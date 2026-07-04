@@ -6,6 +6,7 @@ import {
 	BookOpen,
 	Dumbbell,
 	Lightbulb,
+	Star,
 	User,
 	UserCog,
 	MessageCircleQuestionIcon,
@@ -43,11 +44,11 @@ const AppSidebar = () => {
 		{ title: t('digital_test'), url: '/digital-test', icon: FileDigit },
 		{ title: t('marathon_test'), url: '/marathon-test', icon: Waypoints },
 		{
-			title:
-				wishlist.length > 0 ? `${t('saved')} (${wishlist.length})` : t('saved'),
+			title: wishlist.length > 0 ? `${t('saved')} (${wishlist.length})` : t('saved'),
 			url: '/wishlist',
 			icon: Bookmark,
 		},
+		{ title: t('muhim'), url: '/highlight', icon: Star },
 	]
 
 	if (userRoles.includes('WRITE')) {

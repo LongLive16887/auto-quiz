@@ -19,17 +19,9 @@ import { Switch } from "./ui/switch";
 export function FanTestBlock({ data }: { data: BlockData }) {
   const [open, setOpen] = useState(false);
   const [isRandom, setIsRandom] = useState(true);
-  const [showKeywords, setShowKeywords] = useState(
-    () => localStorage.getItem('show_keywords') !== 'false'
-  );
   const navigate = useNavigate();
   const { loadFanQuiz } = useQuizStore();
   const { t, i18n } = useTranslation();
-
-  const handleShowKeywordsChange = (val: boolean) => {
-    setShowKeywords(val);
-    localStorage.setItem('show_keywords', String(val));
-  };
 
   const getLanguageName = () => {
     switch (i18n.language) {
@@ -102,10 +94,6 @@ export function FanTestBlock({ data }: { data: BlockData }) {
         <div className="flex flex-row items-center justify-start gap-2">
           <p>{t("is_random")}</p>
           <Switch checked={isRandom} onCheckedChange={setIsRandom} />
-        </div>
-        <div className="flex flex-row items-center justify-start gap-2">
-          <p>{t("show_keywords")}</p>
-          <Switch checked={showKeywords} onCheckedChange={handleShowKeywordsChange} />
         </div>
         <DialogFooter>
           <div className="flex items-center gap-2">

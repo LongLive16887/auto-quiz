@@ -6,7 +6,6 @@ import {
 	DialogHeader,
 	DialogTitle,
 } from '@/components/ui/dialog'
-import { Switch } from '@/components/ui/switch'
 import { useQuizStore } from '@/store/quiz'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -16,17 +15,9 @@ import MainLayout from '../../layouts/MainLayout'
 const SinovTestDashboard = () => {
 	const [open, setOpen] = useState(false)
 	const [selectedValue, setSelectedValue] = useState('')
-	const [showKeywords, setShowKeywords] = useState(
-		() => localStorage.getItem('show_keywords') !== 'false'
-	)
 	const { t } = useTranslation()
 	const { loadTestQuiz } = useQuizStore()
 	const navigate = useNavigate()
-
-	const handleShowKeywordsChange = (val: boolean) => {
-		setShowKeywords(val)
-		localStorage.setItem('show_keywords', String(val))
-	}
 
 	const handleStartTest = () => {
 		setOpen(false)
@@ -66,10 +57,6 @@ const SinovTestDashboard = () => {
 						<DialogHeader>
 							<DialogTitle>{t('start')}</DialogTitle>
 						</DialogHeader>
-						<div className='flex flex-row items-center justify-start gap-2'>
-							<p>{t('show_keywords')}</p>
-							<Switch checked={showKeywords} onCheckedChange={handleShowKeywordsChange} />
-						</div>
 						<DialogFooter>
 							<div className='flex items-center gap-2'>
 								<Button variant='secondary' onClick={() => setOpen(false)}>

@@ -6,7 +6,7 @@ import {
 	SelectValue,
 } from '@/components/ui/select'
 import { useUserStore } from '@/store/user'
-import { LogOutIcon, ReceiptText, Split } from 'lucide-react'
+import { LogOutIcon, ReceiptText, Split, TrafficCone, TrainFrontTunnel } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { Button } from './ui/button'
 import { SidebarTrigger } from './ui/sidebar'
@@ -27,6 +27,7 @@ const AppNav = () => {
 	const { i18n, t } = useTranslation()
 	const [open, setOpen] = useState(false)
 	const [openFirstPdf, setOpenFirstPdf] = useState(false)
+	const [openPdf, setOpenPdf] = useState(false)
 	const [openSecondPdf, setSecondFirstPdf] = useState(false)
 	const [openThirdPdf, setThirdFirstPdf] = useState(false)
 
@@ -59,6 +60,7 @@ const AppNav = () => {
 						<img className='w-8 h-8' src='/telegram.svg' alt='' />
 					</a>
 				</div> */}
+				<PdfModal open={openPdf} onClose={setOpenPdf} pdfUrl='/pdf/way_light.pdf' icon={TrafficCone} className='hidden md:block'/>
 				<PdfModal open={openFirstPdf} onClose={setOpenFirstPdf} pdfUrl='/pdf/way_signs.pdf' icon={OctagonMinus} />
 				<PdfModal open={openSecondPdf} onClose={setSecondFirstPdf} pdfUrl='/pdf/way_lines.pdf' icon={Split} />
 				<PdfModal open={openThirdPdf} onClose={setThirdFirstPdf} pdfUrl='/pdf/way_terms.pdf' icon={ReceiptText} />

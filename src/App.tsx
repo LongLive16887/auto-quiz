@@ -14,6 +14,7 @@ import { useUserStore } from './store/user'
 import { useEffect } from 'react'
 import MarathonDashboard from './views/marathon/MarathonDashboard'
 import MarathonParts from './views/marathon/MarathonParts'
+import HighlightDashboard from './views/highlight/HighlightDashboard'
 
 const router = createBrowserRouter([
 	{
@@ -67,6 +68,10 @@ const router = createBrowserRouter([
 			{
 				path: '/wishlist',
 				element: <Wishlist />,
+			},
+			{
+				path: '/highlight',
+				element: <HighlightDashboard />,
 			},
 			{
 				path: '/students',

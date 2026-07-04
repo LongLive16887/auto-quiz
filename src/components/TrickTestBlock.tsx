@@ -14,21 +14,12 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "./ui/dialog";
-import { Switch } from "./ui/switch";
 
 export function TrickTestBlock({ data }: { data: TrickBlockData }) {
   const [open, setOpen] = useState(false);
-  const [showKeywords, setShowKeywords] = useState(
-    () => localStorage.getItem('show_keywords') !== 'false'
-  );
   const navigate = useNavigate();
   const { loadTrickQuiz } = useQuizStore();
   const { t } = useTranslation();
-
-  const handleShowKeywordsChange = (val: boolean) => {
-    setShowKeywords(val);
-    localStorage.setItem('show_keywords', String(val));
-  };
 
   const handleStartTest = () => {
     setOpen(false);
@@ -77,10 +68,6 @@ export function TrickTestBlock({ data }: { data: TrickBlockData }) {
         <DialogHeader>
           <DialogTitle>{t("start")}</DialogTitle>
         </DialogHeader>
-        <div className="flex flex-row items-center justify-start gap-2">
-          <p>{t("show_keywords")}</p>
-          <Switch checked={showKeywords} onCheckedChange={handleShowKeywordsChange} />
-        </div>
         <DialogFooter>
           <div className="flex items-center gap-2">
             <Button variant="secondary" onClick={() => setOpen(false)}>

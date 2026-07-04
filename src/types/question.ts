@@ -6,6 +6,9 @@ export type Answer = {
 	answer_ru_colored: string | null
 	answer_uz_colored: string | null
 	answer_la_colored: string | null
+	answer_ru_highlight?: string | null
+	answer_uz_highlight?: string | null
+	answer_la_highlight?: string | null
 	is_correct: boolean
 }
 
@@ -29,5 +32,9 @@ export type Question = {
 	web_media: string | null
 	mobile_media: string | null
 	answers: Answer[]
-	audio_id?:string|null
+	audio_id?: string | null
+	is_highligh: boolean
+	question_la_highlight?: string | null
+	question_ru_highlight?: string | null
+	question_uz_highlight?: string | null
 }

@@ -20,17 +20,9 @@ import { Switch } from './ui/switch'
 export function TestBlock({ data }: { data: BlockData }) {
 	const [open, setOpen] = useState(false)
 	const [isRandom, setIsRandom] = useState(true);
-	const [showKeywords, setShowKeywords] = useState(
-		() => localStorage.getItem('show_keywords') !== 'false'
-	)
 	const { t } = useTranslation()
 	const navigate = useNavigate()
 	const { loadQuiz } = useQuizStore()
-
-	const handleShowKeywordsChange = (val: boolean) => {
-		setShowKeywords(val)
-		localStorage.setItem('show_keywords', String(val))
-	}
 
 	const handleStartTest = () => {
 		setOpen(false)
@@ -83,10 +75,6 @@ export function TestBlock({ data }: { data: BlockData }) {
 				<div className="flex flex-row items-center justify-start gap-2">
 					<p>{t("is_random")}</p>
 					<Switch checked={isRandom} onCheckedChange={setIsRandom} />
-				</div>
-				<div className="flex flex-row items-center justify-start gap-2">
-					<p>{t("show_keywords")}</p>
-					<Switch checked={showKeywords} onCheckedChange={handleShowKeywordsChange} />
 				</div>
 				<DialogFooter>
 					<div className='flex items-center gap-2'>
